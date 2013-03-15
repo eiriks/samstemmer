@@ -1,0 +1,96 @@
+
+{% extends "default.html" %}
+{% load storting_extras %}
+{% block page_title %}
+Samstemmer - nysgjerrigper
+{% endblock page_title %}
+{% block content %}
+
+
+
+
+<div class="grid_24">
+
+	<h2>Nysgjerrigper</h2>
+	<p>Hvem stiller oftest spørsmål til hvem? Hvem må støtt svare for seg fra samme nysgjerriper?</p>
+
+	<p style="float:left;">Tabellen viser sesjonen <strong>{{ result_sesjon }}</strong></p>
+
+
+
+<form style=" float:left;padding-left:40px;">
+	<select>
+		<option value="">Velg sesjon</option>
+		{% for s in sesjoner %}
+	  		<option value="{{ s }}">{{ s }}</option>
+		{% endfor %}
+	</select>
+</form>
+
+
+</div>
+
+
+
+<div class="clear"></div>
+
+  <table id="nysgjerrigper_tabell" class="tablesorter">
+    <thead>
+      <tr> <th>Spørsmålsstiller</th> <th>Blir stilt spørsmål</th> <th>Antall spørsmål</th> </tr>        
+    </thead>
+    <tbody> 
+	{% for r in results %}
+  <tr>
+
+
+     <td><a href="{{ STATIC_URL }}/person/{{r.sporsmal_fra_id}}"> {{ r.sporsmal_fra_id__fornavn }} {{ r.sporsmal_fra_id__etternavn }}</a> {{ r.sporsmal_fra_id__parti }} {{ r.sporsmal_fra_id__fylke__navn }}</td> 
+     <td><a href="{{ STATIC_URL }}/person/{{r.sporsmal_til_id}}">{{ r.sporsmal_til_id__fornavn }} {{ r.sporsmal_til_id__etternavn }}</a> {{ r.sporsmal_til_id__parti }} {{ r.sporsmal_til_id__fylke__navn }}</td> 
+     <td class="">{{ r.value }}</td>
+
+  </tr>
+  {% endfor %}
+</tbody> 
+  </table>
+
+
+<div class="clear"></div>
+
+
+
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+{% endblock %}
+
+
+{% block css %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}/static/js/tablesorter/themes/blue/style.css" />
+<style type="text/css">
+
+</style>
+{% endblock css %}
+
+{% block javascript %}
+<script type="text/javascript" src="{{ STATIC_URL }}/static/js/tablesorter/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() { 
+  // [3,1] -> 4th col desc. [[3,1][0,0]] -> 4th desc, 1st asc
+  $("#nysgjerrigper_tabell").tablesorter({sortList:[[2,1]], widgets: ['zebra']}); 
+});
+
+
+
+$("select").change(function(){
+	goToPage()
+    //$('select :first-child').attr('selected','selected');
+});
+    function goToPage() {
+      var baseUrl = '{{ STATIC_URL }}/nysgjerrigper/';
+      window.location.href = baseUrl + $('select').val()
+     }
+
+
+</script>
+{% endblock javascript %}
+
+

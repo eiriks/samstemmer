@@ -1,4 +1,9 @@
 *.log
 *.pot
 *.pyc
+*.sql
+*.zip
+design/
+migrations/
+scripts/
 local_settings.py

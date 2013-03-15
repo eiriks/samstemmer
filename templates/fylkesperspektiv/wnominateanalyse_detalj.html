@@ -1,0 +1,246 @@
+{% extends "default.html" %}
+{% load storting_extras %}
+
+{% block page_title %}
+Samstemmer - representantkart
+{% endblock page_title %}
+
+
+{% block content %}
+
+
+{# {{ resultater }} #}
+<div class="grid_24">
+<h2>Optimal Classification </h2>
+<p> Analysert den {{ analyser.0.dato|date:"d/m-Y" }} .  {{ analyser.0.materiale }} pre= {{ analyser.0.pre }} cc={{ analyser.0.correctly_classified }}
+</p>
+
+</div>
+
+<div class="clear"></div>
+<div id="oc" class="grid_16">
+
+</div>
+<div class="grid_8">
+	<ul>
+	{% for a in resultater %}
+		<li id="f_{{a.representant}}" class="representant_detalj"> <a href="{{ STATIC_URL }}/person/{{a.representant}}">{{a.representant__fornavn}} {{a.representant__etternavn}}</a><br />{{a.representant__parti__id}}, {{a.representant__fylke__navn}} </li>
+	{% endfor %}
+	</ul>
+</div>
+
+<div class="clear"></div>
+<div>
+	<h3>Ikke nok data på disse {{ ikke_med.count }}:</h3>
+{% for i in ikke_med %}
+	<a href="{{ STATIC_URL }}/person/{{ i.representant }}">{{ i.representant__fornavn }} {{ i.representant__etternavn }}</a> {{i.representant__parti__id}} {{i.representant__Voteringsresultat__votering_avgitt.count }} , 
+{% endfor %}
+
+</div>
+
+
+
+{% regroup ikke_stats by representant_id as ikke_med_list %}
+{% for i in ikke_med_list %}
+	{{ i.grouper }}
+		{{i.list.0.representant_id__fornavn}} {{i.list.0.count}} {{i.list.1.count}} {{i.list.2.count}}
+	<li>{{i}} {{ i.representant_id }}</li>
+{% endfor %}
+
+{# <ul> #}
+{# {% for a in resultater %} #}
+{# 	<li><b>{{a.representant}}</b> x:{{a.x}} z:{{a.y}} (<a href="{{a.id}}">se detaljer</a>)</li> #}
+{# {% endfor %} #}
+{# <ul> #}
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+
+{% endblock %}
+
+
+{% block javascript %}
+	<script src="{{ STATIC_URL }}/static/d3.v2.min.js" charset="utf-8"></script>	
+	<script type="text/javascript" charset="utf-8">
+	//$("li.representant_detalj").hide()
+	
+	var partifarger = {} 				// aka new Object()
+	partifarger['A'] 	= '#da383f'; 	//'#fd0000' fra logo
+	partifarger['ALP'] 	= '#f6f6f6';	// finnes ikke lenher
+	partifarger['B'] 	= '#008140'; 	// samme som Sp
+	partifarger['DNF'] 	= '#f6f6f6';	// finnes ikke lenher. Det Nye Folkepartiet het også det liberale forlepartiet og nye venste. 
+	partifarger['FFF'] 	= '#f6f6f6';	// finnes ikke lenher
+	partifarger['FrP'] 	= '#393d87';
+	partifarger['H'] 	= '#0f658d';
+	partifarger['Kp'] 	= '#286d6d'; 	//'#f6f6f6'	// finnes ikke lenher, stilte dog til valg i 2011 ...
+	partifarger['KrF'] 	= '#efae52';
+	partifarger['NKP'] 	= '#e40202'; 	// fra logo
+	partifarger['RV'] 	= '#a61e20';
+	partifarger['SF'] 	= '#f6f6f6';	// finnes ikke lenher
+	partifarger['Sp'] 	= '#008767'; 	//'#008140'
+	partifarger['SV'] 	= '#bb234a'; 	//'#cf0036'
+	partifarger['SVf'] 	= '#f6f6f6';	// finnes ikke lenher
+	partifarger['TF'] 	= '#f6f6f6';	// finnes ikke lenher
+	partifarger['Uav'] 	= '#f6f6f6';	// finnes ikke lenher
+	partifarger['V'] 	= '#81b45f'; 	//'#006c6e' // de under her hadde NRK med i 2011-valget, selv om de ikke kom inn
+	partifarger['DEMN'] = '#003366';	 // demokratene er ikke inne
+	partifarger['PP'] 	= '#000000'; 	// pensjonistpartiet er ikke inne
+	partifarger['MDG'] 	= '#3b7346'; 	// miljøpartiet de grønne er ikke inne
+	partifarger['R'] 	= '#7c2629'; 	// rødt er ikke inne
+	
+	var w = 600,
+	    h = 600,
+		padding = 40;
+		
+	var svg = d3.select("#oc")
+	    .append("svg")
+	    .attr("width", w + padding)
+	    .attr("height",h + padding)
+		.attr("id", "chart")
+	  .append('svg:g')
+	    .attr('transform', 'translate(15,15)');
+		
+	// calculate max/min for x and y here if necessary
+	var xScale = d3.scale.linear()
+	             .domain([-1, 1])
+	             .range([0,w]);
+
+	var yScale = d3.scale.linear()
+	             .domain([1, -1])
+	             .range([0,h]);
+
+	var rules = svg.append("svg:g").classed("rules", true)
+		
+	function make_x_axis() {
+	  return d3.svg.axis()
+	      .scale(xScale)
+	      .orient("bottom")
+	      .ticks(16)
+	}
+	rules.append("svg:g").classed("grid x_grid", true)
+	    .attr("transform", "translate(0,"+h+")")
+	    .call(make_x_axis()
+	      .tickSize(-h,0,-h)
+	      .tickFormat("")
+	    )
+	function make_y_axis() {
+	  return d3.svg.axis()
+	      .scale(yScale)
+	      .orient("left")
+	      .ticks(16)
+	}
+	rules.append("svg:g").classed("grid y_grid", true)
+	    .attr("transform", "translate("+w+", 0)")
+	    .call(make_y_axis()
+	      .tickSize(w,0,w)
+	      .tickFormat("")
+	    )
+			
+
+
+
+	d3.json('{{ STATIC_URL }}/oc/data/{{ resultater.0.analyse }}/json/', function (jsondata) {		//console.log(jsondata)
+
+	var circle = svg.selectAll("circle")
+		.data(jsondata)
+	  .enter()
+		.append("svg:circle")
+		.attr("cx", function(d) {
+			//console.log(d.x, d.y, d)
+			if (d.x == null) {return xScale(d.x+1) } else { return xScale(d.x)} ;
+			//return xScale(d.x); 
+		})
+		.attr("cy", function(d) {
+			if (d.y == null) {return yScale(1)} else { return yScale(d.y)} ;
+			//return yScale(d.y); 
+		})
+		.attr("id", function(d){
+			return d.representant
+		})
+		.style("fill", function(d) { return partifarger[d.representant__parti__id] } )
+		.attr("r",6);
+	
+		svg.append("svg:g")
+		    .attr("class", "brush")
+		    .call(d3.svg.brush().x(xScale).y(yScale)
+		    .on("brushstart", brushstart)
+		    .on("brush", brush)
+		    .on("brushend", brushend));
+			
+			function brushstart() {
+				//console.log("brushstart")
+				svg.classed("selecting", true);
+				$("li.representant_detalj:visible").hide();
+			}
+	
+			function brush() {
+				// hvis koordinatene for det trukne rektaglet overlapper med en circle, sett class til selected.
+				var e = d3.event.target.extent();
+				circle.classed("selected", function(d) {
+					return e[0][0] <= d.x && d.x <= e[1][0]
+					    && e[0][1] <= d.y && d.y <= e[1][1];
+					// return e[0][0] <= d[0] && d[0] <= e[1][0]
+					//     && e[0][1] <= d[1] && d[1] <= e[1][1];
+				});
+			}
+			
+			function show_details(list){
+				//console.log(list[0])				
+				for(var i=0; i<list[0].length; i++){
+					$("#f_"+list[0][i].id).show()
+				}
+			}
+			function brushend() {
+				show_details(d3.selectAll("circle.selected"))
+				svg.classed("selecting", !d3.event.target.empty());
+			}
+			
+
+
+
+	});
+	
+	</script>
+		
+{% endblock %}
+
+{% block css %}
+	<style type="text/css" media="screen">
+	circle{
+		stroke: gray;
+	}
+	.selecting circle {
+	  fill-opacity: .2;
+	}
+	.selecting circle.selected {
+/*	  stroke: gray;*/
+	}
+	.axis path, .axis line {
+	  fill: none;
+	  stroke: #000;
+	  shape-rendering: crispEdges;
+	}
+	.brush .extent {
+	  fill-opacity: .3;
+	  stroke: #fff;
+	  shape-rendering: crispEdges;
+	}		
+	.rules line, .rules path {
+		shape-rendering: crispEdges;
+		stroke: #000;
+	}
+	.rules .tick {}
+	.rules .minor {	stroke: #BBB;	}
+	.rules .domain { fill: none;	}
+	.grid .tick {	stroke: #CCC;	}
+	#nominate{
+		background-color: white ; /*Powderblue*/
+		width:800px;
+	}
+	#nominate ul{float:right; width:250px;}
+	#chart {/*		float:left;*/}
+	.hidden{ display:none;}
+	.show{ display:block; }
+	</style>
+	
+{% endblock %}

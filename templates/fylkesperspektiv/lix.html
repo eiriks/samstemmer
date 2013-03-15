@@ -1,0 +1,93 @@
+{% extends "default.html" %}
+{% load storting_extras %}
+{% block page_title %}
+Samstemmer - LIX, Lesbarhetsindeks
+{% endblock page_title %}
+
+
+{% block content %}
+
+    <div class="grid_24">
+      <h2>Dagens represententer etter lesbarhet</h2>
+      <p>Tabellen kan rangeres via tabellens overskrifter. <a href="#lix">Info</a></p>
+    </div>
+
+    <div class="grid_24">
+      <table id="lix_tabell" class="tablesorter">
+        <thead>
+          <tr> <th>Navn</th> <th>Parti</th> <th>Materiale</th> <th>LIX-Verdi</th> </tr>        
+        </thead>
+        <tbody> 
+      {% for rep in lix_list %} 
+      <tr>
+         <td><a href="{{ STATIC_URL }}/person/{{rep.person.id}}">{{ rep.person }}</a></td> <td>{{ rep.person.parti }}</td> 
+         <td>{{ rep.materiale }}</td> <td class="{{ rep.value|lixcategory }}">{{ rep.value }}</td>
+      </tr>
+      {% endfor %}
+    </tbody> 
+      </table>
+    </div>
+
+    <div class="clear"></div>
+
+     <h2 id="lix">LIX: Lesbarhetsindeks</h2>
+      <p>Disse verdiene er basert på representantens skriftlige spørsmål, og beskriver kun hvor lettlest spørsmålstekstene er. <a href="http://no.wikipedia.org/wiki/Lesbarhetsindeks"></a>LIX</a> er omdiskutert, og er ikke et mål for kvalitet. Se <a href="{{ STATIC_URL }}/metode#lix">metodesiden</a> for mer info.</p>
+
+      <h4>Fargekoder:</h4>
+      <div class="avhandling fargekode">
+      avhandling &gt; 60
+      </div>
+      <div class="fagtekst fargekode">
+      fagtekst 50 - 60
+      </div>
+      <div class="sakinformation fargekode">
+      sakinformation 40 - 50
+      </div>
+      <div class="normaltekst fargekode">
+      normaltekst 30 - 40
+      </div>
+      <div class="lettlest fargekode">
+      lettlest 25 - 30
+      </div>
+      <div class="barnebok fargekode">
+      barnebok &lt;25
+      </div>
+      <div class="ukategorisert fargekode">
+      ukategorisert
+      </div>
+
+      <div class="clear"></div>
+      <br />
+
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript" src="{{ STATIC_URL }}/static/js/tablesorter/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() { 
+  // [3,1] -> 4th col desc. [[3,1][0,0]] -> 4th desc, 1st asc
+  $("#lix_tabell").tablesorter({sortList:[[3,1]], widgets: ['zebra']}); 
+});
+</script>
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}/static/js/tablesorter/themes/blue/style.css" />
+<style type="text/css" media="screen">
+.fargekode{
+  font-size: 0.95em;
+   float:left;
+   min-width:20px;
+   height:20px;
+   background-color: #CDCDCD;
+   padding: 2px;
+   margin: 2px;
+   border:2px solid #CDCDCD;
+   color: #3D3D3D;
+}
+
+</style>
+
+
+  
+{% endblock css %}

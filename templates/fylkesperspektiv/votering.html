@@ -1,0 +1,79 @@
+{# {% load storting_extras %} #}
+
+{% extends "default.html" %}
+
+{% block content %}
+
+
+<div class="pagination">
+    <span class="step-links">
+        {% if votering.has_previous %}
+            <a href="?page={{ votering.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ votering.number }} of {{ votering.paginator.num_pages }}.
+        </span>
+
+        {% if votering.has_next %}
+            <a href="?page={{ votering.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+
+<h2>Voteringer</h2>
+{% for vo in votering.object_list %}
+	<li class="vedtatt_{{vo.vedtatt}}"><b>{{vo.sak}}</b> {{vo.object_list.sak.korttittel}} 
+		<a href="{{ SITE_URL }}/fylke/sak/{{vo.sak.id}}">Sak</a>
+		<br />{{vo.sak.korttittel}}<br /><br />
+		{{vo.votering_tema}}
+	{{vo.votering_tid}}
+	{% if vo.antall_for != -1 and vo.antall_mot != -1 and vo.antall_ikke_tilstede != -1 %}
+	<input type="range" id="rangeinput" max="{{ vo.antall_for|add:vo.antall_mot}}" min="0" step="0" value="{{vo.antall_for}}"/> (f/imot/ikke til stede 		{{vo.antall_for}}/{{vo.antall_mot}}/{{vo.antall_ikke_tilstede}})
+	{% endif %}
+
+</li>
+{% endfor %}
+
+
+
+{% if person %}
+<h1>{{ person.fornavn }}  {{ person.etternavn }} ({{person.parti.id}})</h1>
+Født: {{ person.foedselsdato|date:"D d M Y" }} - {{  person.doedsdato }} 
+fylke: <a href="/fylke/{{person.fylke_id}}">{{person.fylke}}</a>
+
+{% if "0001-01-01 00:00:00" == person.doedsdato %} ikke død {% endif %} 
+{# dette bør gjøres i viewet, ikke her - http://stackoverflow.com/questions/3798812/how-to-compare-dates-in-django #}
+<!-- {{ sf }} -->
+der
+
+{# her #}
+
+{#  #}
+{# <h2>Voteringer</h2> #}
+{# {% for vo in page %} #}
+{# 	<li><b>{{vo.votering_avgitt}}</b> {{vo.votering.sak.korttittel}} <br /> #}
+{# 	{{vo.votering_tid}}</li> #}
+{# {% endfor %} #}
+{#  #}
+{#  #}
+{#  #}
+
+
+
+ 
+<h2>Spørsmål fra {{ rep.person.fornavn }}  {{ rep.person.etternavn }} ({{ sf.count }} stk)</h2>
+
+{% endif %}
+
+
+{# {% for vot in votering %} #}
+{#  #}
+{# 	<li>{{ vot.vedtatt }} - {{ vot.votering_tema}} <a href="/fylke/sak/{{ vot.sak.id }}">{{ vot.sak.id}}</a></li> #}
+{# {% endfor %} #}
+
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+{% endblock %}

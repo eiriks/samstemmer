@@ -1,0 +1,265 @@
+/*
+colors:
+red 	-> #d10000
+green 	-> #008b89
+purple	-> #5d758e
+gray	-> #6b6f73
+yellow	-> #e7ea2f
+*/
+header{
+	margin: 30px 0 30px 0;
+	border-bottom: 1px solid #000;
+}
+header h1{
+	font-size: 2em;
+	font-weight: lighter;
+	margin:0;
+}
+#sam{
+	font-weight: bolder;
+}
+nav ul {
+	list-style-type:none;
+	margin:20px 0 0 0;
+	padding:0;
+}
+nav ul li{
+	display:inline;
+}
+nav ul li a{
+	font-weight:bolder;
+	text-transform:capitalize;
+}
+
+body{
+	color: #6b6f73;
+	font-size: 16px;
+	height: auto;
+/*	padding-bottom: 20px;*/
+
+/*    background-color: rgb(235, 233, 226);*/
+
+}
+
+h1{color:#3b4044;}
+
+h2 {
+	color:#44494c;
+}
+
+#topmenu li{
+	margin-left: 10px;
+}
+
+p.voteringsres{
+	margin-left: 15px;
+	padding-left: 15px;
+}
+.vedtatt{
+	border-left: 1px solid green;
+
+}
+.nedstemt{
+	border-left: 1px solid red;
+}
+
+#main {
+/*	width:800px;*/
+	background-color: #fff;
+}
+a {
+  color: #5d758e;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+footer{
+/*	background-color: rgb(64, 64, 64);*/
+	padding-top: 20px;
+	line-height: 1.8em;
+	background-color:#5D758E;
+	text-shadow: 1px 1px 1px #111111;
+	color:#fff;
+	font-size: 1.1em;
+	clear: both;
+	border-top: 3px solid black;
+	margin-top: 40px;
+}
+footer p {
+  padding: 10px 0 0 20px;
+
+}
+footer h2 {
+	margin: 0 0 0 20px;
+}
+footer a{
+	color:white;
+	font-weight: bold;
+}
+
+
+
+table{
+	border-collapse: separate;
+	border-spacing: 2px;
+}
+
+td {
+	padding:2px;
+}
+/*thead td {
+	background-color: #6b6f73;
+	color: #d10000;
+}*/
+
+#dagens_rep{
+	float:left;
+}
+.headerlink{
+	margin-left: 10px;
+}
+.vedtatt_true{
+	border-right: 1px solid green;
+}
+.vedtatt_false{
+	border-right: 1px solid red;
+}
+
+
+
+#wordcloud span{
+	margin:3px;
+    float: left;
+}
+.size-1 { font-size: 2em; color:#080000; }
+.size-2 { font-size: 1.9em;  color:#194756;}
+.size-3 { font-size: 1.8em; color:#54736E;}
+.size-4 { font-size: 1.7em; color:#1e4c58; }
+.size-5 { font-size: 1.6em; color:#335b5f; }
+.size-6 { font-size: 1.5em ; color:#4a6c69;}
+.size-7 { font-size: 1.4em ;color:#8ea08a;}
+.size-8 { font-size: 1.3em; color:#afb999; }
+.size-9 { font-size: 1.2em; color: #dfdeb1; }
+.size-10 { font-size: 1.1em; color:#F2EABC; }
+
+.map_highlited {
+	fill: #080000 !important;
+}
+.list_highlighted{
+	list-style-type: square;
+}
+.list_highlighted a{
+	color:#080000;
+	font-weight: bold;
+}
+
+.sitert {
+float:right;
+color: gray}
+
+.sporsmaal{
+	clear: both;
+}
+blockquote {
+	color: black;
+	line-height:1em;
+	font-size: 1.1em;
+	margin:10px;
+}
+
+.sporsmaal blockquote:before{ /*”*/
+	content:'“';
+	color: #194756;
+	font-size:7em;
+	float:left;
+	position: relative;
+	top:-20px;
+	left:-10px;
+	line-height:1em;
+/*	font-family: Baskerville, "Baskerville Old Face", "Hoefler Text", Garamond, "Times New Roman", serif;*/
+	font-family: "Big Caslon", "Book Antiqua", "Palatino Linotype", Georgia, serif;
+} 
+
+blockquote.stort{
+	font-size: 2.1em;	
+	line-height: 1.3em;
+}
+
+.container_24 {
+/*  background-image: url(../img/24_col.gif);*/
+}
+
+#fylkesvalg {
+/*    margin: 1em 0;*/
+    position:relative;
+    padding-right: 4em;
+ }
+
+#norge {
+	position: absolute;
+}
+#norgeskart{
+	position: absolute;
+	top: -10px;
+	right: -20px;
+}
+
+#norge path {
+	cursor:pointer;
+}
+
+/* allow room for 3 columns */
+#fylkesvalg ul {
+	float:left;
+    width: 30em;
+}  /* float & allow room for the widest item */
+#fylkesvalg ul li {
+    float: left;
+    width: 9em;
+  }  /* stop the float */
+#fylkesvalg br {
+    clear: left;
+  }  /* separate the list from subsequent markup */
+
+
+ul.kolonner{
+/*  width: 30em;*/
+}
+ul.kolonner li
+  {
+    float: left;
+    width: 250px;
+    margin-bottom: 15px;
+  }  /* stop the float */
+
+.kolonner li em{
+	color: black;
+}
+
+span.bracket{
+	color: black;
+	font-size: 1.2em;
+}
+/*  #1f77b4 #ff7f0e #2ca02c #d62728 #9467bd #8c564b #e377c2 #7f7f7f #bcbd22 #17becf
+rgba(31, 119, 180, 0.2)
+rgba(255, 127, 14, 0.2)
+rgba(44, 160, 44, 0.2)
+rgba(214, 39, 40, 0.2)
+rgba(148, 103, 189, 0.2)
+rgba(140, 86, 75, 0.2)
+rgba(227, 119, 194, 0.2)
+rgba(127, 127, 127, 0.2)
+rgba(188, 189, 34, 0.2)
+rgba(23, 190, 207, 0.2)
+*/
+
+.avhandling{background-color:rgba(31, 119, 180, 0.2) !important;}
+.fagtekst{background-color:rgba(255, 127, 14, 0.2) !important;}
+.sakinformation{background-color:rgba(222,241,35,0.3) !important;}
+.normaltekst{background-color:rgba(148, 103, 189, 0.2) !important;}
+.lettlest{background-color:rgba(222,241,35,0.3) !important;}
+.barnebok {background-color:rgba(188, 189, 34, 0.2) !important;}
+.ukategorisert{background-color:rgba(127, 127, 127, 0.2) !important;}

@@ -1,0 +1,63 @@
+{% extends "default.html" %}
+
+
+
+{% block content %}
+
+
+<table border="1" cellspacing="5" cellpadding="5">
+
+	<tr><td>REP</td><td>REP</td><td>REP</td><td>REP</td><td>REP</td><td>REP</td><td>169stk</td></tr>
+	<tr><td>hver men får farge etter parti, men ordnes etter grupper: for, imot , ikke tilstede</td></tr>
+</table>
+
+
+{% for avtemningsnummer, stemmer in resultater.iteritems %}
+	 <li>{{ avtemningsnummer }} </li>
+	 {% for rep, egenskaper in stemmer.items %}
+	 {{ rep }} - {{ egenskaper.vot }}  @ {{egenskaper.parti}}<br />
+	 {% endfor %}
+{% endfor %}
+<hr />
+
+{% block javascript %}
+	<script src="{{ STATIC_URL }}/static/d3.v2.min.js" charset="utf-8"></script>
+	
+	{# lag select som dette: http://mbostock.github.com/d3/ex/splom.html #}
+	
+	<script type="text/javascript" charset="utf-8">
+	var data['123'] = [4, 8, 15, 16, 23, 42];
+
+	function drawVoteGraph(){
+		var chart = d3.select("body").append("div")
+			.attr("class", "chart");
+	}
+	</script>
+		
+{% endblock %}
+
+
+{# {{ res }} #}
+{{ resultater }}
+{# {% for v in voteringer %} #}
+{# 	{{v}} - {{v}} #}
+{# {% endfor %} #}
+{#  #}
+{#  #}
+
+
+<hr />
+{{ voteringer }}
+
+<h2>Voteringsresultat:</h2>
+
+{% for r in res %}
+	<li>{{r.votering}} - {{r.representant_id}}</li>
+{% endfor %}
+
+
+{{ res }}
+
+
+
+{% endblock %}

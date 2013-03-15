@@ -1,0 +1,105 @@
+{% extends "default.html" %}
+{% load storting_extras %}
+{% block page_title %}Samstemmer - {{komite}} {% endblock page_title %}
+
+
+
+
+
+{% block content %}
+
+
+
+<div class="grid_12">
+
+  <h1>{{komite}}</h1>
+
+  <p>Kan jeg si noe om folk i denne komiteen stemmer mot komiteens egne saker?</p>
+
+
+  <h2>Voteringer over saker komiteen har jobbet med</h2>
+  {% for v in votering %}
+
+  {% ifchanged %}<h4>Sak: <a href="{{ STATIC_URL }}/sak/{{ v.sak.id }}"> {{ v.sak.tittel }}</a></h4>{% endifchanged %}
+    <p class="voteringsres {% if v.vedtatt == 'true' %} vedtatt {% else %} nedstemt {% endif %}">
+   Votering om: <strong>{{ v.votering_tema }}</strong>
+   <br />
+    {% if v.votering_resultat_type != 'enstemmig_vedtatt' %}
+      {% if v.vedtatt == 'true' %} Vedtatt {% else %} Nedstemt {% endif %}
+      {{ v.antall_for }} mot {{ v.antall_mot }} ({{ v.antall_ikke_tilstede }} var ikke tilstedese)
+      {% else %}
+      {{ v.votering_resultat_type_tekst }}
+    {% endif %}
+  ({{ v.votering_tid|timesince }} siden)
+  </p>
+  {% endfor %}
+</div>
+
+
+<div class="grid_12 tidligere">
+<h2>Medlemer ({{ personer.count }})</h2>
+{% for p in personer %}
+    <li><a href="{{ STATIC_URL }}/person/{{ p.id }}">{{ p }}</a> ({{ p.parti_id }} - {{ p.fylke }})</li>
+{% endfor %}
+</div>
+
+<div class="clear"></div>
+
+
+
+<div class="gird_24">
+  <h2>Saker {{komite}} har jobbet med denne sesjonen: ({{ saker.count }})</h2>
+
+      <table id="saks_tabell" class="tablesorter">
+        <thead>
+          <tr> 
+            <th>Tittel</th> 
+            <th>Status</th> 
+            <th>Sist oppdatert</th> 
+            <th>Saksordfører(e)</th> 
+            <th>Dokumentgruppe</th>
+            <th>Type</th>
+            <th>Sesjon</th>
+            <th>Henvisning</th>
+          </tr>        
+        </thead>
+        <tbody> 
+      {% for s in saker %} 
+      <tr>
+        <td>{{ s.tittel }}</td> 
+        <td>{{ s.status }}</td> 
+        <td>{{ s.sist_oppdatert_dato|date:"d/m/y" }}</td>
+        <td> {% for o in s.saksordforer.all %}
+                  <a href="{{ STATIC_URL }}/person/{{o.id}}">{{ o }}</a>
+             {% endfor %}
+        </td>
+        <td>{{ s.dokumentgruppe }}</td> 
+        <td>{{ s.type }}</td> 
+        <td>{{ s.behandlet_sesjon_id }}</td>
+        <td>{{ s.henvisning }}</td> 
+      </tr>
+      {% endfor %}
+    </tbody> 
+      </table>
+</div>
+
+
+
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript" src="{{ STATIC_URL }}/static/js/jquery-expander/jquery.expander.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}/static/js/tablesorter/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() { 
+  // [3,1] -> 4th col desc. [[3,1][0,0]] -> 4th desc, 1st asc
+  $("#saks_tabell").tablesorter({sortList:[[2,1]], widgets: ['zebra']}); 
+});
+</script>
+
+{% endblock javascript %}
+
+
+{% block css %}
+      <link rel="stylesheet" href="{{ STATIC_URL }}/static/js/tablesorter/themes/blue/style.css" />
+{% endblock css %}

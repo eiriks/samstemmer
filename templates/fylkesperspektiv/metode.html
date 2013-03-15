@@ -1,0 +1,177 @@
+
+{% extends "default.html" %}
+{% load storting_extras %}
+{% block page_title %}
+Samstemmer - metode
+{% endblock page_title %}
+{% block content %}
+
+<div class="grid_5"><span class="text_icon">!42</span></div>
+<div class="grid_15" id="metode2">
+	<div></div>
+	<h1 id="metode" title="her">Metode aka "nerdesiden"</h1>
+	<p>Det er ikke alltid klart hvordan en datamaskin kommer fram til svaret den gir oss. 42 er som kjent svaret på Spørsmålet om livet, universet og alt mulig, i følge <em>Haikerens guide til galaksen.</em> Ikke bare er spørsmålt uklart, men metoden er også ukjent og umulig å etterprøve. </p>
+	<p>På denne siden finner du beskrivelser av hvordan denne nettsiden regner seg fram til de svarene den gir.</p>
+</div>
+
+<div class="clear"></div> 
+
+<div class="grid_5"><img src="{{ STATIC_URL }}/static/img/excel.png" style="float:right">
+</div>
+<div class="grid_15" id="data" >
+	<h2 id="">Data</h2>
+	<p>Data som brukes kan lastes ned <a href="{{ STATIC_URL }}/nedlastinger">her</a> (i csv-format som kan åpnes i f.eks. Excel) og fra <a href="http://data.stortinget.no/">data.stortinget.no</a> for de mer teknisk orienterte.</p>
+	<p>Inneholder data under Norsk lisens for offentlige data (NLOD) tilgjengeliggjort av Stortingets datatjeneste.</p>
+</div>
+
+<div class="clear"></div> 
+<br />
+<div class="grid_5"><span class="text_icon">OC</span></div>
+<div class="grid_15" id="oc">
+	<h2>Optimal klassifisering</h2>
+	<a href="http://voteview.com/optimal_classification.htm">lenke</a>
+
+	<h3>PRE</h3>
+	feilmargin? 
+	<h3>CC</h3>
+	correctly_classified
+	<h3>Alle er ikke med!</h3>
+	<p>Nei.</p>
+	<ol>
+		<li>Folk vi gjerne skulle ha hatt med er statsrådene, men de sitter som kjent ikke på tinget, men i regjeringen.</li>
+		<li>Det mangler fortsatt noen!
+			<ul>
+				<li>For å minske feilmarginen til metoden lukes representanter som ikke stemmer ofte nok (har ikke stemt i mer enn n (20?) avstemninger i materialet som analyseres. <br />
+					Likeledes lukes saker som det er stor enighet (mindre enn 5% oposisjon) ut, slik at det er forskeldene, ikke likhetene som undersøkes.</li>
+
+			</ul></li>
+	</ol>
+ 
+</div>
+
+
+<div class="clear"></div> 
+<div class="grid_5"><span class="text_icon">LIX</span></div>
+<div class="grid_15" id="lix">
+	<h2>LIX: Lesbarhetsindeks</h2>
+	<p>Lesbarhetsindekstall på denne siden lages basert på skriftlige spørsmål.</p>
+	<ul>
+
+
+	<li>Les om metoden her <a href="http://no.wikipedia.org/wiki/Lesbarhetsindeks">no.wikipedia.org/wiki/Lesbarhetsindeks</a></li>
+
+	<li><a href="http://www.sprakrad.no/nb-no/klarsprak/sprakhjelp/skriverad/om-liksberegning/">Språkrådets tekst om lix</a></li>
+
+	<li>Implementasjonen som er brukt er basert på kode (og erfaringer) fra <a href="http://www.mortengoodwin.net/publicationfiles/webmining_2007_reportgroup6.pdf">Thomas Jakobsen og Thomas Skardal </a>, nå som en del av <a href="https://github.com/nltk/nltk_contrib/tree/master/nltk_contrib/readability">nltk_contrib</a>.<br /> (min kode på github er skrevet om til å forvente unicode tekst)</li>
+		</ul>
+</div>
+
+
+
+<div class="clear"></div> 
+<div class="grid_5"><span class="text_icon">©?</span></div>
+<div class="grid_15" id="floss">
+	<h2>Kildekode &amp; copyright </h2>
+	<p>Data fra stortinget er lisensiert under <a href="http://data.norge.no/nlod/en">Norsk lisens for offentlige data (NLOD)</a>, som betyr at  kardemommebyloven gjelder, og Stortinget skal ha kudos for å dele!</p>
+	<p>Kildekoden denne siden består av er åpen kildekode så lenge ikke noe annet er rimelig å tolke. Koden er å finne på github.</p>
+
+</div>
+
+
+<div class="clear"></div> 
+<div class="grid_5"><span class="text_icon">@</span></div>
+<div class="grid_15" id="samstemmer">
+	<h2>samstemmer.net</h2>
+	<p>Musikalitet er ikke forbeholdt musikkere, og også politikere må forventes både å forholde seg til takt, tone og stemmeapparater (dog kanskje ikke gafler) 
+
+	</p>
+	<p><strong>samstemme</strong> harmonere, godkjenne, tiltre (Norske synonymer)</p>
+	[...]
+	<p> <strong>samstemme</strong> stemme overens:, erklære seg enig: (Norsk ordbok)<br />
+	<strong>samstemme</strong></p>
+	<ol>
+	<li>stemme overens: vitneforklaringene samstemte ikke / samstemte instrumenter / tekst og musikk var godt samstemt</li>
+	<li>erklære seg enig: alle de andre samstemte i dette / samstemme med en i noe</li>
+	</ol>
+	[...]
+
+	<p><strong>sam|stemme</strong> mest i adj. pf. pt. mus. bringe (instrumenter) (Norsk Riksmålsordbok (hist.))</p>
+	<strong>sam|stemme</strong> (verb) <br />
+	<p>Bøyningsformer:</p>
+
+	<p>1 <br />
+	a <span class="green">mus.</span> bringe (instrumenter) til å klinge rent sammen.<br />
+	samstemte instrumenter<br />
+	<br />
+	b <span class="green">litt.</span> bringe til å harmonere, stemme overens.<br />
+	tekst og musikk var godt samstemt<br />
+	den beaandede, fint samstemte tolkning (Nat. 1931/111/3/4)</p>
+
+	<p>2 <br />
+	a <span class="green">mus.</span>, sj., (om toner, instrumenter) klinge harmonisk sammen.
+	mest i adj. pr. pt. samstemmende toner</p>
+
+	<p>b <span class="green">litt.</span> stemme overens (med).<br />
+	varslerne talte og skrifterne samstemte med dem (Ibs. K. G. 450)</p>
+
+	<p>c <span class="green">litt.</span> erklære sig enig.<br />
+	jeg håber sikkert at de tre herrer samstemmer med mig (Ibs. Samf. 201)<br />
+	de andre samstemte i dette (Asbj. Fo. Hu.ev. 106)<br />
+	jf. også (J. Lie Rutl. 164)
+	</p>
+	<p>Kilde: www.ordnett.no, 2013</p>
+
+</div>
+
+<hr />
+
+
+
+
+
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+{% endblock %}
+
+
+{% block css %}
+<style type="text/css">
+.text_icon{
+	font-size:5em;float:right;font-weight:bold;color:#54736E;margin-right:10px;
+}
+.green{color:green;}
+</style>
+{% endblock css %}
+
+{% block javascript %}
+<script>
+    // for each div with an id inside #main
+    $('div#main div[id]').each(function() {
+    	var denne = $(this).find(':header:first')
+    	$('<a class="headerlink">\u00B6</a>').
+      	attr('href', '#' + this.id).
+      	attr('title', 'Permalink to this headline').
+      	appendTo(denne);
+    });
+
+    // hide all inline links
+    $('.headerlink').hide();
+
+    // hover to show links
+    $('.headerlink').parent().hover(function() {
+    	$(this).find(':hidden:first').show();
+    }, function(){
+    	console.log(this)
+    	$(this).find(':first').hide();
+    });
+
+
+</script>
+
+
+
+
+{% endblock javascript %}
+
+

@@ -1,0 +1,184 @@
+{% extends "default.html" %}
+{% load storting_extras %}
+{% block page_title %}Spørsmål: fra {{ sporsmal.sporsmal_fra }} til {{ sporsmal.sporsmal_til }} {% endblock page_title %}
+
+{% block content %}
+
+
+{{ STATIC_URL }}
+<div class='gallery' id='chart'> .</div>
+
+
+<ul class="">
+{% for s in spor.object_list %}
+	<li>{{ s.sporsmal_til }}{{ s.tittel }} <a href="{{ STATIC_URL }}/sporsmaal/{{ s.id }}">les mer</a></li>
+{% endfor %}
+</ul>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if spor.has_previous %}
+            <a href="?page={{ spor.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ spor.number }} of {{ spor.paginator.num_pages }}.
+        </span>
+
+        {% if spor.has_next %}
+            <a href="?page={{ spor.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+
+{% endblock content %}
+
+{% block javascript %}
+
+<script src="{{ STATIC_URL }}/static/d3.v2.min.js" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+// var partifarger = {} 				// aka new Object()
+// partifarger['A'] 	= '#da383f'; 	//'#fd0000' fra logo
+// partifarger['ALP'] 	= '#f6f6f6';	// finnes ikke lenher
+// partifarger['B'] 	= '#008140'; 	// samme som Sp
+// partifarger['DNF'] 	= '#f6f6f6';	// finnes ikke lenher. Det Nye Folkepartiet het også det liberale forlepartiet og nye venste. 
+// partifarger['FFF'] 	= '#f6f6f6';	// finnes ikke lenher
+// partifarger['FrP'] 	= '#393d87';
+// partifarger['H'] 	= '#0f658d';
+// partifarger['Kp'] 	= '#286d6d'; 	//'#f6f6f6'	// finnes ikke lenher, stilte dog til valg i 2011 ...
+// partifarger['KrF'] 	= '#efae52';
+// partifarger['NKP'] 	= '#e40202'; 	// fra logo
+// partifarger['RV'] 	= '#a61e20';
+// partifarger['SF'] 	= '#f6f6f6';	// finnes ikke lenher
+// partifarger['Sp'] 	= '#008767'; 	//'#008140'
+// partifarger['SV'] 	= '#bb234a'; 	//'#cf0036'
+// partifarger['SVf'] 	= '#f6f6f6';	// finnes ikke lenher
+// partifarger['TF'] 	= '#f6f6f6';	// finnes ikke lenher
+// partifarger['Uav'] 	= '#f6f6f6';	// finnes ikke lenher
+// partifarger['V'] 	= '#81b45f'; 	//'#006c6e'   // de under her hadde NRK med i 2011-valget, selv om de ikke kom inn
+// partifarger['DEMN'] = '#003366';	 // demokratene er ikke inne
+// partifarger['PP'] 	= '#000000'; 	// pensjonistpartiet er ikke inne
+// partifarger['MDG'] 	= '#3b7346'; 	// miljøpartiet de grønne er ikke inne
+// partifarger['R'] 	= '#7c2629'; 	// rødt er ikke inne
+
+
+
+// var width = 960,
+//     height = 500;
+	
+// var color = d3.scale.category20();
+
+// var force = d3.layout.force()
+//     .charge(-100)
+//     .linkDistance(100)
+//     .size([width, height]);
+
+
+// var svg = d3.select("#chart").append("svg")
+//     .attr("width", width)
+//     .attr("height", height);
+
+
+// var node_hash = [];
+// var type_hash = [];
+
+
+// //d3.json("miserables.json", function(json) {
+// d3.json("{{ STATIC_URL }}/fylke/sporsmaal/json/", function(json) {
+	
+// 	console.log("vi er i gang")
+// 	//console.log(json.nodes.length)
+// 	//console.log(json.links)
+	
+// 	json.nodes.forEach(function(d, i) {
+// 		node_hash[d.name] = d;
+// 		type_hash[d.group] = d.group;
+// 	});
+	
+// 	json.links.forEach(function(d, i) {
+// 		//console.log(d, i)
+// 		//console.log(d, d.source, d.target)
+// 		d.source = node_hash[d.source];
+// 		d.target = node_hash[d.target];
+// 		// if (d.sourceId == focalNodeID)	
+// 		// 	{ d.direction = "OUT"; }
+// 		// else
+// 		// 	{ d.direction = "IN"; }
+// 		});
+
+	
+// 	force
+// 	  .nodes(json.nodes)
+// 	  .links(json.links)
+// 	  .start();
+	
+// 	// console.log("her?")
+// 	// 	
+// 	// console.log("mista turen?")	
+// 	//console.log(json.links)
+
+
+	  	  
+//   var link = svg.selectAll("line.link")
+//       .data(json.links)
+//     .enter().append("line")
+//       .attr("class", "link")
+//       .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+
+
+
+	  
+	  
+//   var node = svg.selectAll("circle.node")
+//       .data(json.nodes)
+//     .enter().append("circle")
+//       .attr("class", "node")
+//       .attr("r", 5)
+// 	  .style("fill", function(d){ return partifarger[d.group]; })
+//       //.style("fill", function(d) { return color(d.group); })
+//       .call(force.drag);
+
+//   node.append("title")
+//       .text(function(d) { return d.name; });
+ 
+//   node.append("text")
+//       .attr("dx", 12)
+//       .attr("dy", ".35em")
+//       .text(function(d) { return d.fornavn + ' ' + d.etternavn; });
+
+
+//   force.on("tick", function() {
+//     link.attr("x1", function(d) { return d.source.x; })
+//         .attr("y1", function(d) { return d.source.y; })
+//         .attr("x2", function(d) { return d.target.x; })
+//         .attr("y2", function(d) { return d.target.y; });
+
+//     node.attr("cx", function(d) { return d.x; })
+//         .attr("cy", function(d) { return d.y; });
+//   });
+// });
+</script>
+{% endblock javascript %}
+
+{% block css %}
+
+	<style type="text/css" media="screen">
+/*	#chart{ background-color:gray}*/
+	circle.node {
+	  stroke: #fff;
+	  stroke-width: 1.5px;
+	}
+
+	line.link {
+	  stroke: #999;
+	  stroke-opacity: .6;
+	}
+	.node text {
+	  pointer-events: none;
+	  font: 10px sans-serif;
+	}
+	
+	</style>
+	
+{% endblock css %}

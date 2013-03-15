@@ -1,0 +1,6 @@
+id,"dato","polarity1_id","polarity2_id","materiale",correctly_classified,pre
+1,"2013-03-02 15:31:26","AESO","AESO","Analysen erbasert på de 200 siste avstemningene i stortinget. ",99.36,0.98
+2,"2013-03-02 15:31:58","ANA","ANA","Analysen erbasert på de 200 siste avstemningene i stortinget. ",99.35,0.98
+3,"2013-03-04 15:11:51","BÅH","BÅH","Analysen erbasert på de 200 siste avstemningene i stortinget. ",99.35,0.98
+4,"2013-03-07 15:07:09","AGES","AGES","Analysen erbasert på de 200 siste avstemningene i stortinget. ",99.35,0.98
+5,"2013-03-11 12:05:58","CT","CT","Analysen erbasert på de 200 siste avstemningene i stortinget. ",99.31,0.98

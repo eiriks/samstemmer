@@ -1,0 +1,173 @@
+id,"navn","er_hovedtema","versjon",hovedtema_id
+1,"DEN NORSKE KIRKE","false","1.0",105
+2,"KOMMUNIKASJON","true","1.0",0
+3,"POST","false","1.0",2
+4,"ENERGI","true","1.0",0
+5,"ARBEIDSLIV","true","1.0",0
+6,"KULTUR","true","1.0",0
+7,"SYSSELSETTING","false","1.0",5
+8,"FISKERIER","true","1.0",0
+9,"FANGST","false","1.0",8
+10,"SOSIALVESEN","true","1.0",0
+11,"RETTSVESEN","true","1.0",0
+12,"DOMSTOLER","false","1.0",11
+13,"SIVILRETT","false","1.0",11
+14,"STRAFFERETT","false","1.0",11
+15,"REDNINGSTJENESTE","false","1.0",11
+16,"KRIMINALOMSORG","false","1.0",11
+17,"PERSONVERN","false","1.0",11
+18,"INNVANDRERE","false","1.0",184
+19,"FENGSLER","false","1.0",11
+20,"HANDEL","false","1.0",113
+21,"FORURENSNING","false","1.0",139
+22,"INTERNASJONALT SAMARBEID","false","1.0",173
+23,"NATURVERN","false","1.0",139
+24,"LIKESTILLING","false","1.0",40
+25,"REGJERINGEN","false","1.0",151
+26,"STORTINGSREPRESENTANTER","false","1.0",151
+28,"RETTFERDSVEDERLAG","false","1.0",151
+29,"RIKSREVISJONEN","false","1.0",151
+30,"VALG","false","1.0",151
+31,"SKOLER","false","1.0",32
+32,"UTDANNING","true","1.0",0
+33,"PRIVATSKOLER","false","1.0",32
+34,"SPESIALUNDERVISNING","false","1.0",32
+35,"UNIVERSITETER","false","1.0",32
+36,"STUDIEFINANSIERING","false","1.0",32
+37,"FYLKER","false","1.0",184
+38,"BOLIGSAKER","false","1.0",184
+39,"SAMER","false","1.0",184
+40,"FAMILIE","true","1.0",0
+41,"BARN","false","1.0",40
+42,"BARNEHAGER","false","1.0",40
+43,"BARNEVERN","false","1.0",40
+44,"STATENS PERSONALPOLITIKK","false","1.0",155
+45,"FORSKNING","true","1.0",0
+46,"LANDBRUK","true","1.0",0
+47,"VEGTRAFIKK","false","1.0",2
+48,"ELDREOMSORG","false","1.0",10
+49,"FUNKSJONSHEMMEDE","false","1.0",61
+50,"FORSIKRING","false","1.0",187
+51,"DEPARTEMENTER","false","1.0",155
+52,"KOMMUNER","false","1.0",184
+53,"SKATTEADMINISTRASJON","false","1.0",187
+54,"SKATTEAVTALER","false","1.0",187
+57,"SKATTEFRADRAG","false","1.0",187
+58,"SKATTER","false","1.0",187
+59,"FORSVAR","true","1.0",0
+60,"FORSVARSMATERIELL","false","1.0",59
+61,"HELSEVESEN","true","1.0",0
+62,"HELSEINSTITUSJONER","false","1.0",61
+63,"SYKEHUS","false","1.0",61
+64,"HELSEPERSONELL","false","1.0",61
+65,"SVANGERSKAP","false","1.0",61
+66,"SYKDOMMER","false","1.0",61
+67,"BIBLIOTEK OG LITTERATUR","false","1.0",6
+68,"KUNST","false","1.0",6
+69,"LANDBRUKSPRODUKTER","false","1.0",46
+70,"KRINGKASTING","false","1.0",6
+71,"ELEKTRISITET","false","1.0",4
+72,"ATOMKRAFT","false","1.0",4
+73,"VASSDRAGSREGULERING","false","1.0",4
+74,"OLJE","false","1.0",4
+75,"OLJEOMSETNING","false","1.0",4
+80,"AVGIFTER","false","1.0",187
+81,"MERVERDIAVGIFT","false","1.0",187
+82,"TOLL","false","1.0",187
+83,"PRISER OG KONKURRANSEFORHOLD","false","1.0",187
+86,"STATSLÅN","false","1.0",187
+87,"BANKER","false","1.0",187
+88,"NORGES BANK","false","1.0",187
+89,"STATSBANKER","false","1.0",187
+91,"FISKEOMSETNING","false","1.0",8
+92,"HAVBRUK","false","1.0",8
+93,"ATOMVÅPEN","false","1.0",59
+94,"ARBEIDSVILKÅR","false","1.0",5
+95,"LØNN","false","1.0",5
+97,"VAREHANDEL","false","1.0",113
+98,"FORBRUKERSAKER","false","1.0",113
+99,"UTENRIKSHANDEL","false","1.0",113
+105,"TROSSAMFUNN","true","1.0",0
+106,"SAMFERDSEL","false","1.0",2
+107,"JERNBANER","false","1.0",2
+109,"LUFTFART","false","1.0",2
+111,"FERGER","false","1.0",2
+112,"REISELIVSNÆRING","false","1.0",113
+113,"NÆRINGSLIV","true","1.0",0
+114,"NÆRINGSUTVIKLING","false","1.0",113
+115,"BERGVERK","false","1.0",113
+119,"STATSBEDRIFTER","false","1.0",113
+121,"KULTURVERN","false","1.0",6
+122,"MASSEMEDIER","false","1.0",6
+124,"SPRÅK","false","1.0",6
+125,"UNGDOMSARBEID","false","1.0",6
+126,"NORSK RIKSKRINGKASTING","false","1.0",6
+127,"IDRETT","false","1.0",6
+128,"JORDBRUK","false","1.0",46
+129,"HUSDYR","false","1.0",46
+131,"NATURSKADER","false","1.0",139
+132,"REINDRIFT","false","1.0",46
+133,"VETERINÆRVESEN","false","1.0",46
+134,"FYLKESKOMMUNENES ØKONOMI","false","1.0",184
+135,"KOMMUNENES ØKONOMI","false","1.0",184
+136,"BYGNINGSVESEN","false","1.0",184
+138,"HUSBANKEN","false","1.0",184
+139,"MILJØVERN","true","1.0",0
+140,"KARTVERK","false","1.0",139
+141,"POLITI OG PÅTALEMYNDIGHET","false","1.0",11
+142,"LOTTERI OG SPILL","false","1.0",6
+143,"SJØFART","true","1.0",0
+145,"SJØFOLK","false","1.0",143
+146,"SIKKERHET TIL SJØS","false","1.0",143
+147,"HAVNER","false","1.0",143
+148,"BARNETRYGD","false","1.0",10
+151,"STATSFORFATNING","true","1.0",0
+153,"STORTINGETS OMBUDSMANN FOR FORVALTNINGEN","false","1.0",151
+154,"POLITISKE PARTIER","false","1.0",151
+155,"STATSFORVALTNING","true","1.0",0
+157,"STATSEIENDOMMER","false","1.0",155
+158,"VIDEREGÅENDE SKOLER","false","1.0",32
+159,"HØYERE UTDANNING","false","1.0",32
+160,"HØGSKOLER","false","1.0",32
+163,"UTENRIKSSAKER","true","1.0",0
+165,"GRENSESPØRSMÅL","false","1.0",173
+166,"TRAKTATER","false","1.0",173
+167,"MENNESKERETTIGHETER","false","1.0",173
+168,"FN","false","1.0",173
+169,"FN-STYRKER","false","1.0",173
+170,"EUROPARÅDET","false","1.0",173
+171,"NORDISK SAMARBEID","false","1.0",173
+172,"ØKONOMISK SAMARBEID","false","1.0",173
+173,"EFTA/EU","true","1.0",0
+174,"UTVIKLINGSHJELP","false","1.0",173
+175,"POLAROMRÅDER","false","1.0",173
+176,"SVALBARD","false","1.0",173
+177,"NATO","false","1.0",173
+178,"STATOIL ASA","false","1.0",4
+179,"TELEKOMMUNIKASJONER","false","1.0",2
+180,"FREDSARBEID","false","1.0",173
+181,"SIVIL BEREDSKAP","false","1.0",11
+182,"KONGEN","false","1.0",151
+183,"GRUNNSKOLE","false","1.0",32
+184,"LOKALFORVALTNING","true","1.0",0
+185,"STATSBUDSJETTET","false","1.0",187
+186,"TRYGDER","false","1.0",10
+187,"FINANSER","true","1.0",0
+188,"FOLKEHELSE","false","1.0",61
+189,"VEGVESEN","false","1.0",2
+190,"OLJEUTVINNING","false","1.0",4
+191,"SÆRAVGIFTER","false","1.0",187
+192,"AKSJER","false","1.0",187
+193,"MILITÆRT PERSONELL","false","1.0",59
+195,"VERFTSINDUSTRI","false","1.0",113
+196,"SKOGBRUK","false","1.0",46
+198,"SIVILE VERNEPLIKTIGE","false","1.0",11
+200,"INTERNASJONAL RETT","false","1.0",173
+203,"STORTINGET","false","1.0",151
+205,"ARBEIDSMILJØ","false","1.0",5
+211,"RUSMIDLER","false","1.0",10
+212,"VOKSENOPPLÆRING","false","1.0",32
+220,"DISTRIKTSPOLITIKK","false","1.0",184
+221,"GRUNNLOVEN","false","1.0",151
+222,"STORTINGETS FORRETNINGSORDEN","false","1.0",151
+223,"INDUSTRI","false","1.0",113

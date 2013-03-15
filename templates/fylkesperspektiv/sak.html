@@ -1,0 +1,12 @@
+{% extends "default.html" %}
+
+{% block content %}
+	her er saker
+	{% for sak in saker %}
+		<li>{{ sak.dokumentgruppe }} {{ sak.korttittel|truncatewords:6 }}<a href="{{sak.id}}">{{sak.id}}</a> {{sak.status}}</li>  {#   |slice:":30"  |truncatechars:30 #}
+	{% endfor %}
+
+{% endblock %}
+
+
+

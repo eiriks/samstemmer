@@ -1,0 +1,62 @@
+{% extends "default.html" %}
+{% load storting_extras %}
+{% block page_title %}Samstemmer - sak {{sak.tittel}} {% endblock page_title %}
+
+
+
+{% block content %}
+
+<h1>{{ sak.korttittel }} (#{{ sak.id }})</h1>
+
+<p>{{sak.tittel}}
+<br />
+Emner:
+{% for s in sak.emne.all %}
+	{{ s.navn|lower|capfirst }},
+{% endfor %}
+</p>
+
+
+    <dl id="left">
+    	<dt>Status:</dt>
+    	<dd>{{ sak.status }}</dd>
+    	<dt>Siste oppdatert:</dt>
+    	<dd>{{ sak.sist_oppdatert_dato|timesince }} siden ({{ sak.behandlet_sesjon_id }} sesjonen)</dd>
+    	<dt>Type:</dt>
+    	<dd>{{ sak.type }}</dd>
+    	<dt>dokumentgruppe:</dt>
+    	<dd>{{ sak.dokumentgruppe }}</dd>
+    	<dt>Henvisning:</dt>
+    	<dd>{{ sak.henvisning }}</dd>
+    	<dt>Komite:</dt>
+    	<dd> <a href="{{ STATIC_URL }}/komite/{{ sak.komite.id }}">{{ sak.komite }}</a></dd>
+    	{% for s in  sak.saksordforer.all %}
+			<dt>Saksordfører: </dt><dd><a href="{{ static }}/person/{{ s.id }}">{{ s }}</a> ({{ s.parti_id }} {{ s.fylke }})</dd>	
+		{% endfor %}
+		{# {{ sak.innstilling_id }} #}
+		{# {{ sak.sak_fremmet_id}} #}
+    </dl>
+
+
+
+<div class="clear"></div>
+
+
+<h2>NB:</h2>
+<p>Mer info <a href="http://www.stortinget.no/no/Saker-og-publikasjoner/Saker/Sak/?p={{ sak.id }}"> i stortinget.nos system</a></p>
+
+
+
+
+{% endblock %}
+
+
+{% block css %}
+<style type="text/css">
+
+dl { width: 625px; }
+dt { width: 150px; text-align: right; float: left; clear: both; color:black;}
+dd { width: 450px; margin: 0; float: left; padding-left: 5px; }
+
+</style>
+{% endblock css %}

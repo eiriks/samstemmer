@@ -1,0 +1,134 @@
+<!doctype html>
+{% load i18n %}
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!-- Consider adding a manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="no"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+    {# <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/> #}
+    <title>{% block page_title %}{% trans "Project Name" %}{% endblock %}</title>
+    
+    <meta name="description" content="{% block meta_description %}{% endblock %}" />
+    <meta name="author" content="{% block meta_author %}{% endblock %}" />
+    <meta name="viewport" content="width=device-width" />
+
+    <link rel="stylesheet" href="{{ STATIC_URL }}/static/960css/reset.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}/static/960css/text.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}/static/960css/960_24_col.css" />
+ <!--    <link rel="stylesheet" href="{{ STATIC_URL }}/static/960css/demo.css" /> -->
+
+    <link rel="stylesheet" href="{{ STATIC_URL }}/static/css/style.css" />
+    {% block css %}{% endblock %}
+    
+    {# // <script src="{{ STATIC_URL }}js/libs/modernizr-2.5.2.min.js"></script> #}
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+{% block body %}
+    <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+    <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+    <div id="main" class="container_24">
+    <header>
+            <div class="grid_6">
+               
+                <h1><a href="{{ STATIC_URL }}/"><span id="sam">Sam</span>stemmer</a></h1>
+            </div>
+            
+            <div class="grid_18">
+                <nav>
+                <ul id="topmenu">
+                    <li><a href="{{STATIC_URL}}/oc/">folkerepresentasjonskart</a></li>
+                    <li><a href="{{STATIC_URL}}/lix/">lix</a></li>
+                    <li><a href="{{ STATIC_URL }}/kantgraf">Spørsmålsgraf</a></li>
+                    <li><a href="{{ STATIC_URL }}/nysgjerrigper">Nysgjerrigper</a></li>
+                    <li> <a href="{{STATIC_URL}}/nedlastinger/"> Nedlastinger</a></li>
+                    <li><a href="{{STATIC_URL}}/metode/">metode</a></li>
+
+                </ul>
+                </nav>
+<!--                       Her skal vi vell ha dagens storting
+        <a href="{{STATIC_URL}}/avstemninger/">avstemninger</a>
+        <a href="{{STATIC_URL}}/sporsmaal/">sporsmaal</a> -->
+            </div>
+
+
+
+    <div class="clear"></div>
+    </header>
+
+
+
+    <div id="ting">
+        {% block content %}
+
+		{% endblock content %}
+    </div>
+	
+    <div class="clear"></div>
+	<footer>
+		<div class="grid_8">
+            <h2>Om</h2>
+            <p>Dette er en prototype på et verktøy som automatisk samler inn og behandler data om stortingspolitikere. Den er laget av meg, <a href="http://www.uib.no/personer/Eirik.Stavelin">Eirik Stavelin</a>, UiB-stipendiat ved <a href="http://www.uib.no/infomedia">infomedia</a>, som et forsøk på å eksemplifisere hva denne typen data kan brukes til, og for å oppmuntre andre til å finne andre bruksområder til den. 
+            </p>
+            <p>Inneholder data under Norsk lisens for offentlige data (NLOD) tilgjengeliggjort av Stortingets datatjeneste.</p>
+        </div>
+        <div class="grid_8">
+            <h2>Kritikk!</h2>
+            <p>Det er alltid rom for uenighet rundt politikk, metode og journalistikk. Derfor er koden til denne nettside åpen kildekode, og om du mener jeg gjør noe feil, ønsker å gjøre ting annerledes selv eller bare bygge på det jeg har gjort, så finnes koden på github.</p>
+
+            <p>
+                Du kan også kontakte meg på <a href="mailto:Eirik.Stavelin@infomedia.uib.no">epost</a>, hvis du har noe på hjertet, og <a href="/metode/">lese mer om metode her</a>
+            </p>
+        </div>
+        <div class="grid_8">
+    		<h2>crons</h2>
+    		<ul>
+        		<li>You should cron up a ./manage.py update_index job at whatever interval works best for your site (using --age=<num_hours> reduces the number of things to update).<a href="http://django-haystack.readthedocs.org/en/latest/tutorial.html">link</a></li>
+                <li>http://www.partifinansiering.no/</li>
+                <li>holderdeord.no</li>
+                <li>http://tablesorter.com/docs/#Examples</li>
+                <li>http://apps4norge.no/regler-konkurransen</li>
+                <li>http://plugins.learningjquery.com/expander/index.html#getting-started</li>
+    		</ul>
+        </div>
+        <div class="clear"></div>
+        <div class="grid_24">
+            
+        </div>
+        <div class="clear"></div>
+    </footer>
+    </div> <!-- end wrapping div -->
+    
+    
+    {# {% if debug %}{% include 'includes/debug.html' %}{% endif %} #}
+
+    <script type="text/javascript" src="{{ STATIC_URL }}/static/jquery.min.js"></script>
+    
+    {% block javascript_library %}
+    {# // <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script> #}
+    <script>window.jQuery || document.write('<script src="{{ STATIC_URL }}/static/jquery.min.js"><\/script>')</script>
+    {# // <script src="{{ STATIC_URL }}js/plugins.js"></script> #}
+    {# // <script src="{{ STATIC_URL }}js/script.js"></script> #}
+	<script type="text/javascript" src="{{ STATIC_URL }}/static/csrf.js"></script> {# STATIC_PREFIX #}
+
+	{% endblock %}
+
+    {% block javascript %}{% endblock %}
+    <!-- Asynchronous Google Analytics snippet. Change UA-XXXXX-X to be your site's ID.
+       mathiasbynens.be/notes/async-analytics-snippet -->
+    <script>
+    // var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+    // (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+    // g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+    // s.parentNode.insertBefore(g,s)}(document,'script'));
+   </script>
+{% endblock %}
+
+
+
+</body>
+</html>

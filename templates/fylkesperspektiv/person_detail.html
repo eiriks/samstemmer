@@ -1,0 +1,417 @@
+
+{% extends "default.html" %}
+{% load storting_extras %}
+{% block page_title %}person: {{ person.fornavn }}  {{ person.etternavn }} ({{person.parti.id}}) {% endblock page_title %}
+
+{% block content %}
+
+<div class="grid_5">
+<h1>{{ person.fornavn }}  {{ person.etternavn }} ({{person.parti.id}}) </h1>
+</div>
+<div class="grid_19">
+	<p><span class="bracket">Stikkord: {</span> 
+		{% if person.doedsdato|safe != "0001-01-01 00:00:00" %} Gikk bort: {{  person.doedsdato }} {% endif %}
+		{{person.kjoenn|capfirst}}<span class="bracket">, </span>
+		{{person.foedselsdato|timesince}}<span class="bracket">, </span>
+		<a href="{{ STATIC_URL }}/fylke/{{person.fylke_id}}">{{person.fylke}}</a><span class="bracket">, </span>
+		{{ v|length }} avstemninger  ({{deltegelse}}% oppmøte)<span class="bracket">, </span>
+		Medlem av:	{% for k in  person.komiteer.all %}
+			<a href="{{ STATIC_URL }}/komite/{{ k.id }}">{{ k }}</a>		
+			{% endfor %}<span class="bracket">, </span>
+		{{ rep.count }} 
+		{% if rep.count > 1 %}
+			perioder {% else %} periode
+		{% endif %}
+		: ( 
+		{% for r in rep %}
+			{% if r.fast_vara_for %}
+				Fast vara for <a href="{{ STATIC_URL }}/person/{{ r.fast_vara_for.id }}">{{ r.fast_vara_for }}</a>
+			{% endif %}
+
+			{% if r.vara_for %}
+				Vara for {{ r.vara_for }}
+			{% endif %}		
+			{{ r.stortingsperiode.fra|date:"Y" }} - {{ r.stortingsperiode.til|date:"Y" }}<span class="bracket">, </span>
+		
+
+		
+
+
+		{% endfor %}
+		)
+
+	<span class="bracket">}</span>
+	</p>
+</div>
+
+
+
+
+<div class="clear"></div>
+
+<div class="grid_8">
+<h2>Stemmer mest som:</h2>
+<ol>
+{% for h in holmgang|slice:":6"  %}
+	{% if h.deltager1 != h.deltager2 %}
+		<li> <a href="{{ STATIC_URL }}/person/{{ h.deltager2.id }}">{{ h.deltager2 }}</a>  ({{ h.deltager2.parti_id }}) {{ h.prosentlikhet }}%</li>
+	{% endif %}
+
+{% endfor %}
+</ol>
+
+<h2>Stemmer minst som:</h2>
+<ol>
+{% for h in holmgang|dictsort:"prosentlikhet"|slice:"5" %} {# reversed|slice:":7" #}
+	{% if h.deltager1 != h.deltager2 %}
+		<li> <a href="{{ STATIC_URL }}/person/{{ h.deltager2.id }}">{{ h.deltager2 }}</a> ({{ h.deltager2.parti_id }}) {{ h.prosentlikhet }}%</li>
+	{% endif %}
+{% endfor %}
+</ol>
+</div>
+
+
+<div class="grid_8">
+<h2>Stemmer overens med parti</h2>
+	<ol>
+		{% for p in partilikhet %}
+		<li>{{ p.parti }} {{ p.prosentlikhet }}</li>	
+		{% endfor %}
+	</ol>
+
+	<h3>På kartet</h3>
+	<a href="{{ STATIC_URL }}/oc"><div id="oc"></div></a>
+		<p>Se <a href="{{ STATIC_URL }}/oc">interaktivt kart</a></p>
+	</div>
+
+
+<div class="grid_8">
+<h2>Stemmer overens med fylke</h2>
+<ol>
+	{% for f in fylkeikhet %}
+	<li> <a href="{{ STATIC_URL }}/fylke/{{ f.fylke.id }} ">{{ f.fylke }}</a> {{ f.prosentlikhet }}%</li>
+	{% endfor %}
+</ol>
+</div>
+
+
+<div class="clear"></div>
+
+
+
+
+<div class="grid_9">
+
+</div>
+
+
+
+
+
+<div class="clear"></div>
+
+
+<div class="grid_12">
+	<h3>Stiller spørsmål ({{ sf.count }} stk)</h3>
+	{% if sf %}
+		<div class="morelink">
+		{% for s in sf %}
+			<li><em>{{ s.tittel|truncatewords:10 }}</em> til <a href="{{ STATIC_URL }}/person/{{ s.sporsmal_til.id }}">{{ s.sporsmal_til }} </a> {{ s.status}}. <a href="{{ STATIC_URL }}/sporsmaal/{{ s.id }}">Les mer</a>
+
+			</li>
+		{% endfor %}
+		</div>
+	{% else %}
+		<p>Har ikke stillt noen spørsmål</p>
+	{% endif %}
+</div>
+
+<div class="grid_12">
+	<h3>Blir stillt spørsmål ({{st.count}} stk)</h3>
+	{% if st %}
+		<div class="morelink">
+		{% for s in st %}
+			<li><em>{{ s.tittel|truncatewords:10 }}</em>
+				fra <a href="{{ STATIC_URL }}/person/{{ s.sporsmal_fra.id }}">{{ s.sporsmal_fra }}</a> {{ s.status}}
+
+
+			</li>
+		{% endfor %}
+		</div>
+	{% else %}
+		<p>Har ikke blitt stilt noen spørsmål</p>
+	{% endif %}
+</div>
+
+<div class="clear"></div>
+
+
+
+
+
+
+<h2>Ordbruk</h2>
+
+
+<div id="wordcloud">
+
+	<div class="grid_4">
+	{% if lix %}
+	<h3>LIX: {{lix.value}}</h3>
+	<p>{{lix.person}} har en <a href="{{ STATIC_URL }}/lix/">lix-verdi</a> på <em>{{lix.value}}</em>, som er typisk for tekster som <em>{{lix.value|lixcategory}}</em>, basert på {{lix.materiale}}. Beregnet den {{lix.dato|date:"d/m-Y"}}</p>
+	{% endif %}
+	</div>
+
+	<div class="grid_10">
+	<h3>Frekvente ord</h3>
+	{{person.top_words_in_questions|safe}}
+	</div>
+
+	<div class="grid_10">
+	<h3>Typiske ord</h3>
+	{{person.top_tfidf_words_in_questions|safe}}
+	</div>
+	
+
+
+</div>
+
+
+<div class="clear"></div>
+
+<h2>Voteringer</h2>
+<p>{{ person.fornavn }}  {{ person.etternavn }} har tjestesgjort ved {{ v|length }} avstemninger, og har gitt sin stemme ved {{deltegelse}} % av disse. </p>
+
+
+<!--{% for vo in v %}
+	<li><b>{{vo.votering_avgitt}}</b> {{vo.votering.sak.korttittel}}</li>
+{% endfor %}-->
+
+
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+
+
+
+{% endblock %}
+
+
+
+
+{% block javascript %}
+<script type="text/javascript" src="{{ STATIC_URL }}/static/js/jquery-expander/jquery.expander.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}/static/jquery.svg.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}/static/jquery.svgdom.min.js"></script>
+
+<script src="{{ STATIC_URL }}/static/d3.v2.min.js" charset="utf-8"></script>	
+
+<script type="text/javascript" charset="utf-8">
+$("li.representant_detalj").hide()
+
+var partifarger = {} 				// aka new Object()
+partifarger['A'] 	= '#da383f'; 	//'#fd0000' fra logo
+partifarger['ALP'] 	= '#f6f6f6';	// finnes ikke lenher
+partifarger['B'] 	= '#008140'; 	// samme som Sp
+partifarger['DNF'] 	= '#f6f6f6';	// finnes ikke lenher. Det Nye Folkepartiet het også det liberale forlepartiet og nye venste. 
+partifarger['FFF'] 	= '#f6f6f6';	// finnes ikke lenher
+partifarger['FrP'] 	= '#393d87';
+partifarger['H'] 	= '#0f658d';
+partifarger['Kp'] 	= '#286d6d'; 	//'#f6f6f6'	// finnes ikke lenher, stilte dog til valg i 2011 ...
+partifarger['KrF'] 	= '#efae52';
+partifarger['NKP'] 	= '#e40202'; 	// fra logo
+partifarger['RV'] 	= '#a61e20';
+partifarger['SF'] 	= '#f6f6f6';	// finnes ikke lenher
+partifarger['Sp'] 	= '#008767'; 	//'#008140'
+partifarger['SV'] 	= '#bb234a'; 	//'#cf0036'
+partifarger['SVf'] 	= '#f6f6f6';	// finnes ikke lenher
+partifarger['TF'] 	= '#f6f6f6';	// finnes ikke lenher
+partifarger['Uav'] 	= '#f6f6f6';	// finnes ikke lenher
+partifarger['V'] 	= '#81b45f'; 	//'#006c6e' // de under her hadde NRK med i 2011-valget, selv om de ikke kom inn
+partifarger['DEMN'] = '#003366';	 // demokratene er ikke inne
+partifarger['PP'] 	= '#000000'; 	// pensjonistpartiet er ikke inne
+partifarger['MDG'] 	= '#3b7346'; 	// miljøpartiet de grønne er ikke inne
+partifarger['R'] 	= '#7c2629'; 	// rødt er ikke inne
+
+var w = 260,
+    h = 260,
+	padding = 40;
+	
+var svg = d3.select("#oc")
+    .append("svg")
+    .attr("width", w + padding)
+    .attr("height",h + padding)
+	.attr("id", "chart")
+  .append('svg:g')
+    .attr('transform', 'translate(15,15)');
+	
+// calculate max/min for x and y here if necessary
+var xScale = d3.scale.linear()
+             .domain([-1, 1])
+             .range([0,w]);
+
+var yScale = d3.scale.linear()
+             .domain([1, -1])
+             .range([0,h]);
+
+var rules = svg.append("svg:g").classed("rules", true)
+	
+function make_x_axis() {
+  return d3.svg.axis()
+      .scale(xScale)
+      .orient("bottom")
+      .ticks(16)
+}
+rules.append("svg:g").classed("grid x_grid", true)
+    .attr("transform", "translate(0,"+h+")")
+    .call(make_x_axis()
+      .tickSize(-h,0,-h)
+      .tickFormat("")
+    )
+function make_y_axis() {
+  return d3.svg.axis()
+      .scale(yScale)
+      .orient("left")
+      .ticks(16)
+}
+rules.append("svg:g").classed("grid y_grid", true)
+    .attr("transform", "translate("+w+", 0)")
+    .call(make_y_axis()
+      .tickSize(w,0,w)
+      .tickFormat("")
+    )
+
+d3.selection.prototype.moveToFront = function() { 
+  return this.each(function() { 
+    this.parentNode.appendChild(this); 
+  }); 
+};
+
+d3.json('{{ STATIC_URL }}/oc/data/{{ nyeste_analyse_id.id }}/json/', function (jsondata) {		//console.log(jsondata)
+
+
+var circle = svg.selectAll("circle")
+	.data(jsondata)
+  .enter()
+	.append("svg:circle")
+	.attr("cx", function(d) {
+		//console.log(d.x, d.y, d)
+		if (d.x == null) {return xScale(d.x+1) } else { return xScale(d.x)} ;
+		//return xScale(d.x); 
+	})
+	.attr("cy", function(d) {
+		if (d.y == null) {return yScale(1)} else { return yScale(d.y)} ;
+		//return yScale(d.y); 
+	})
+	.attr("id", function(d){
+		return d.representant
+	})
+	.style("fill", function(d) { return partifarger[d.representant__parti__id] } )
+	.attr("r", function(d) {
+		if (d.representant == '{{ person.id }}') {return 5} else {return 5};
+	})
+	.attr("class", function(d) {
+		if (d.representant == '{{ person.id }}') {return "see_this"};
+	});
+
+	svg.selectAll("text")
+	    .data(jsondata)
+	    .enter()
+	    .append("text")
+	    .text(function(d){
+		if (d.representant == '{{ person.id }}') {return '{{ person.fornavn }} {{ person.etternavn }}'};
+	    })
+	    .attr("x", function(d) {
+			return 100;//xScale(d.x);
+		})
+	    .attr("y", function(d) {
+	        return 15;//yScale(d.y)+(padding/2);
+		})
+
+d3.select('circle#{{ person.id }}').moveToFront()
+	$('circle#{{ person.id }}').attr('cy');
+	console.log($("circle#{{ person.id }}").attr('cy'));
+	console.log($('circle#LRE').attr("cy"));
+
+	var x2 = $('circle#{{ person.id }}').attr('cx');
+	var y2 = $('circle#{{ person.id }}').attr('cy'); 
+
+	console.log(x2, y2)
+
+
+	var myLine = svg.append("svg:line")
+	    .attr("x1", xScale(0))
+	    .attr("y1", yScale(0.9))
+	    .attr("x2", x2) 
+	    .attr("y2", y2) 
+	    .style("stroke", "rgb(6,120,155)");
+
+var sel = d3.select('circle#{{ person.id }}');
+sel.moveToFront()
+
+}); // end json call
+
+
+
+</script>
+
+<script>
+$(document).ready(function() {
+ 
+  $('div.morelink').expander({
+    slicePoint:       400,  // default is 100
+    expandPrefix:     ' ', // default is '... '
+    expandText:       'vis flere', // [...]default is 'read more'
+    collapseTimer:    5000, // re-collapses after 5 seconds; default is 0, so no re-collapsing
+    userCollapseText: 'vis færre'  // [^] default is 'read less'
+  }); 
+
+}); // end documen ready
+</script>
+
+{% endblock javascript %}
+
+
+{% block css %}
+<style type="text/css" media="screen">
+
+.see_this{
+	stroke: black;
+}
+circle{
+	stroke: gray;
+}
+.selecting circle {
+  fill-opacity: .2;
+}
+.selecting circle.selected {
+/*	  stroke: gray;*/
+}
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.brush .extent {
+  fill-opacity: .3;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}		
+.rules line, .rules path {
+	shape-rendering: crispEdges;
+	stroke: #000;
+}
+.rules .tick {}
+.rules .minor {	stroke: #BBB;	}
+.rules .domain { fill: none;	}
+.grid .tick {	stroke: #CCC;	}
+#nominate{
+	background-color: white ; /*Powderblue*/
+	width:800px;
+}
+#nominate ul{float:right; width:250px;}
+#chart {/*		float:left;*/}
+.hidden{ display:none;}
+.show{ display:block; }
+</style>
+{% endblock css %}

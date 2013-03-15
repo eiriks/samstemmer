@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="no">
+<head> 
+	<meta charset="utf-8" /> 
+	<title>Scatter!</title>
+	<style type="text/css" media="screen">
+	.axis path,
+	.axis line {
+	    fill: none;
+	    stroke: black;
+	    shape-rendering: crispEdges;
+	}
+
+	.axis text {
+	    font-family: sans-serif;
+	    font-size: 11px;
+	}
+	.highlight{
+		fill:green;
+	}
+	.infobox {
+	        position: absolute;
+	        width: 200px;
+	        padding: 10px;
+	        background-color: rgba(255,255,255,.75);
+	}
+	</style>
+
+	<script src="{{ STATIC_URL }}/static/d3.v2.min.js" charset="utf-8"></script>
+
+</head>
+		<div class="infobox">
+			<p>Bruk musepekeren til å identifisere de folkevalgte. Avdøde preresententer er marker med svake farger.</p>
+		</div>
+		
+<body id="sporsmal">
+	<div class='gallery' id='chart'></div>
+</body>
+
+
+<script type="text/javascript" charset="utf-8">
+
+// ===============================
+// = først litt mouse-funksjoner =
+// ===============================
+
+var myMouseOverFunction = function() {
+	var circle = d3.select(this);
+	circle.attr("fill", "red" );
+	// console.log(circle.attr("fill-opacity"))
+	// 
+	// if (circle.attr("fill-opacity")==="0.1") {
+	// 	dead = "(er død)";
+	// }else{
+	// 	dead='';
+	// };
+	
+	console.log(circle);
+
+	// show infobox div on mouseover.
+	// block means sorta "render on the page" whereas none would mean "don't render at all"
+	d3.select(".infobox").style("display", "block");	
+	// add test to p tag in infobox
+	d3.select("p").html("Representant <strong>" + circle.attr("title")+ "</strong> på tinget. ");
+}
+
+var myMouseOutFunction = function() {
+	var circle = d3.select(this);
+	circle.attr("fill", "steelblue" );
+
+	// display none removes element totally, whereas visibilty in last example just hid it
+	d3.select(".infobox").style("display", "none");	
+}
+
+var myPositionFunction = function() {
+	return Math.random() * w;
+}
+
+// this should be called when the mouse is moved
+// we will attach it to our svg area so that it detects mouse movement on our entire visualization
+// we are trying to get the infobox to move with the mouse
+var myMouseMoveFunction = function() {
+	// save selection of infobox so that we can later change it's position
+	var infobox = d3.select(".infobox");
+	// this returns x,y coordinates of the mouse in relation to our svg canvas
+	var coord = d3.svg.mouse(this)
+	// now we just position the infobox roughly where our mouse is
+	infobox.style("left", coord[0] + 25  + "px" );
+	infobox.style("top", coord[1] -20 + "px");
+}
+
+
+
+
+var format = d3.time.format("%Y-%m-%d %H:%M:%S"); // "1951-05-13 00:00:00"
+
+function getAge(dateString) {
+    var today = new Date();
+    //var birthDate = new Date(dateString);
+	//var birthDate = new Date(Date.parse(dateString,"yyyy-MM-dd HH:mm:ss"));
+    var birthDate = format.parse(dateString);
+	var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+}
+
+
+var w = 1100;
+var h = 400;
+var padding = 40;
+
+var svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h)
+			.on('mousemove', myMouseMoveFunction); //så dette funker hele tiden: https://gist.github.com/1437516
+
+var xScale = d3.scale.linear()
+	.range([padding, w-padding*2]);		// pixel 0 til 500
+
+var yScale = d3.scale.linear()
+	.range([h-padding, padding]);
+
+var xAxis = d3.svg.axis()
+                  .scale(xScale)
+                  .orient("bottom")
+				  .ticks(10);
+
+var yAxis = d3.svg.axis()
+                .scale(yScale)
+                .orient("left");
+              //  .ticks(1);
+
+var fill = d3.scale.category20();
+
+var partifarger = {} 				// aka new Object()
+partifarger['A'] 	= '#da383f'; 	//'#fd0000' fra logo
+partifarger['ALP'] 	= '#f6f6f6';	// finnes ikke lenher
+partifarger['B'] 	= '#008140'; 	// samme som Sp
+partifarger['DNF'] 	= '#f6f6f6';	// finnes ikke lenher. Det Nye Folkepartiet het også det liberale forlepartiet og nye venste. 
+partifarger['FFF'] 	= '#f6f6f6';	// finnes ikke lenher
+partifarger['FrP'] 	= '#393d87';
+partifarger['H'] 	= '#0f658d';
+partifarger['Kp'] 	= '#286d6d'; 	//'#f6f6f6'	// finnes ikke lenher, stilte dog til valg i 2011 ...
+partifarger['KrF'] 	= '#efae52';
+partifarger['NKP'] 	= '#e40202'; 	// fra logo
+partifarger['RV'] 	= '#a61e20';
+partifarger['SF'] 	= '#f6f6f6';	// finnes ikke lenher
+partifarger['Sp'] 	= '#008767'; 	//'#008140'
+partifarger['SV'] 	= '#bb234a'; 	//'#cf0036'
+partifarger['SVf'] 	= '#f6f6f6';	// finnes ikke lenher
+partifarger['TF'] 	= '#f6f6f6';	// finnes ikke lenher
+partifarger['Uav'] 	= '#f6f6f6';	// finnes ikke lenher
+partifarger['V'] 	= '#81b45f'; 	//'#006c6e'   // de under her hadde NRK med i 2011-valget, selv om de ikke kom inn
+partifarger['DEMN'] = '#003366';	 // demokratene er ikke inne
+partifarger['PP'] 	= '#000000'; 	// pensjonistpartiet er ikke inne
+partifarger['MDG'] 	= '#3b7346'; 	// miljøpartiet de grønne er ikke inne
+partifarger['R'] 	= '#7c2629'; 	// rødt er ikke inne
+
+
+
+// 
+// A	1.0	Arbeiderpartiet
+// ALP	1.0	Anders Langes Parti
+// B	1.0	Bondepartiet
+// DNF	1.0	Det Nye Folkepartiet
+// FFF	1.0	Framtid for Finnmark
+// FrP	1.0	Fremskrittspartiet
+// H	1.0	Høyre
+// Kp	1.0	Kystpartiet
+// KrF	1.0	Kristelig Folkeparti
+// NKP	1.0	Norges Kommunistiske Parti
+// RV	1.0	Rød Valgallianse
+// SF	1.0	Sosialistisk Folkeparti
+// Sp	1.0	Senterpartiet
+// SV	1.0	Sosialistisk Venstreparti
+// SVf	1.0	Sosialistisk Valgforbund
+// TF	1.0	Tverrpolitisk Folkevalgte (Kystpartiet)
+// Uav	1.0	Uavhengig representant
+// V	1.0	Venstre
+
+
+d3.json('{{ STATIC_URL }}/scatter/json/', function (jsondata) {
+	//console.log(jsondata);
+	// var data = jsondata.map(function(d) { return d.Value; });
+	// console.log(data);
+	console.log(d3.max(jsondata, function(d) { d3.max(getAge(d.foedselsdato)) }));
+	console.log(d3.max(jsondata, function(d){ return getAge(d.foedselsdato) } ))
+	
+	xScale
+		.domain([d3.min(jsondata, function(d) { return getAge(d.foedselsdato)}), d3.max(jsondata, function(d) { return getAge(d.foedselsdato) }) ]); 
+		// fra yngeste til "eldste" i settet (de eldste er døde)
+	
+	yScale
+		.domain([0, d3.max(jsondata, function(d) { return d.perioder }) ]) // fra 0 - 8 perioder
+
+	svg.selectAll("circle")
+		.data(jsondata)
+		.enter()
+		.append("circle")
+		.on("mouseover", function() { d3.select(d3.event.target).classed("highlight", true); })
+		.on("mouseout", function() { d3.select(d3.event.target).classed("highlight", false); })
+		//.style("fill", function(d) { return fill(d.parti_id) } ) // dette er men d3 farge skala. min er håndplukket.
+		.style("fill", function(d) { return partifarger[d.parti_id] } )
+		.style("fill-opacity", function(d) { return ('0001-01-01 00:00:00' === d.doedsdato) ? "1" : "0.1"})
+		.style("stroke", function(d) { return ('0001-01-01 00:00:00' === d.doedsdato) ? "#000" : "#fff"})		
+
+		.attr("title", function(d) {return d.fornavn + ' ' + d.etternavn + ' (' + d.parti_id + ') ' + d.perioder + ' perioder'})
+		.attr("cx", function(d) {
+		//	console.log(d, d[0], d[1], d.perioder, format.parse(d.foedselsdato), getAge(d.foedselsdato))
+			//console.log(d.doedsdato)
+		        return xScale( getAge(d.foedselsdato) );
+		   })
+		   .attr("cy", function(d) {
+		        return yScale( d.perioder );
+		   })
+		   .attr("r", function(d) {
+		       return d.perioder +1 // Math.sqrt(h - d.perioder);
+			   console.log(Math.sqrt(h - d.perioder))
+		   })
+		.on("mouseover", myMouseOverFunction)
+		.on("mouseout", myMouseOutFunction); 
+		   
+	// svg.selectAll("text")
+	//   .data(jsondata)
+	//   .enter()
+	//   .append("text")
+	//   .text(function(d) {
+	//        return d.fornavn + "," + d.etternavn + '('+d.perioder+')';
+	//   })
+	//   .attr("x", function(d) {
+	// 		    return xScale( getAge(d.foedselsdato) );
+	//   })
+	//   .attr("y", function(d) {
+	// 	  		return yScale( d.perioder );
+	//   })
+	//   .attr("font-family", "sans-serif")
+	//   .attr("font-size", "11px")
+	//   .attr("fill", "red");
+
+	svg.append("g")
+		.attr("class", "axis")
+		.attr("transform", "translate(0," + (h - padding) + ")")
+		.call(xAxis);
+
+	svg.append("g")
+	    .attr("class", "axis")
+	    .attr("transform", "translate(" + padding + ",0)")
+	    .call(yAxis);
+		
+	svg.append("text")
+	     .attr("class", "y_label")
+	     .attr("text-anchor", "middle")
+	     .attr("transform", "translate(" + (padding - 24) + "," + (padding+50) + "), rotate(-90)")
+	     .text("Stortingsperioder");
+
+ 	svg.append("text")
+ 	     .attr("class", "x_label")
+ 	     .attr("text-anchor", "middle")
+ 	     .attr("transform", "translate(" + (w - 125) + "," + (h-5) + ")")
+ 	     .text("År siden fødsel");
+	
+
+
+});
+
+</script>
+
+
+</html>

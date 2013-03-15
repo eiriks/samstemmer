@@ -1,0 +1,96 @@
+{% extends "default.html" %}
+{% load storting_extras %}
+{% block page_title %}Spørsmål: fra {{ sporsmal.sporsmal_fra }} til {{ sporsmal.sporsmal_til }} {% endblock page_title %}
+
+{% block content %}
+
+
+
+
+
+<div class="grid_17">
+ <blockquote class="stort" cite="{{ sporsmal.sporsmal_fra }}">
+	 {{ sporsmal.tittel|stip_underscore }}
+	 <br /><span class="sitert">-{{ sporsmal.sporsmal_fra }}</span>
+ </blockquote>
+
+ {% for e in sporsmal.emne.all %}
+	{{ e.navn|lower|capfirst }},
+{% endfor %}
+</div>
+
+
+
+<div class="grid_7">
+	<h2>Fra</h2>
+	<ul>
+		<li><a href="{{ STATIC_URL }}/person/{{ sporsmal.sporsmal_fra.id }}">{{ sporsmal.sporsmal_fra }}</a> ({{ sporsmal.sporsmal_fra.parti.id }})</li>
+		{% if sporsmal.fremsatt_av_annen %}
+			<li>{{ sporsmal.fremsatt_av_annen }} </li>			
+		{% endif %}
+
+
+		<li>Sendt: {{ sporsmal.sendt_dato|date:"d-m/Y" }} ({{ sporsmal.sendt_dato|tid_siden }} siden)</li>
+		<li>Datert: {{ sporsmal.datert_dato|date:"d-m/Y" }} ({{ sporsmal.datert_dato|tid_siden }} siden)</li>
+		{% if sporsmal.status == 'besvart' %}
+			<li>Besvart: {{ sporsmal.besvart_dato|date:"d-m/Y" }} ({{ sporsmal.besvart_dato|tid_siden }} siden)</li>	
+		{% endif %}
+		<li>	{{ sporsmal.type|stip_underscore }} </li>
+		<li>{{ sporsmal.status|stip_underscore }}</li>
+		<li>Sesjon: {{ sporsmal.sesjonid }}</li>
+
+	</ul>
+
+</div>
+
+
+<div class="grid_7">
+		<h2>Til</h2>
+	<li><a href="{{ STATIC_URL }}/person/{{ sporsmal.sporsmal_til.id }}"> {{ sporsmal.sporsmal_til }}</a>
+{# 	{{ sporsmal.sporsmal_til_minister_id }} #}
+	<br />{{ sporsmal.sporsmal_til_minister_tittel }} </li>
+
+	{% if sporsmal.flyttet_til != "ikke_spesifisert" %}
+	<h3>Feil mottager</h3>
+	<p>
+		Spørsmålet ble flyttet til {{ sporsmal.flyttet_til|stip_underscore }}, {{ sporsmal.rette_vedkommende_minister_tittel }}, som er <a href="{{ STATIC_URL }}/person/{{ sporsmal.rette_vedkommende.id }}">{{ sporsmal.rette_vedkommende }}</a>. 
+
+		{# {% if sporsmal.rette_vedkommende.kjoenn == 'kvinne' %} Hun {% else %} Han {% endif %} er {{ sporsmal.rette_vedkommende_minister_tittel }}  #}
+{# 			{{ sporsmal.rette_vedkommende_minister_id }} <br /> #}
+	</p>
+	{% endif %}
+</div>
+
+<div class="grid_7">
+	<h2>Besvart av</h2>
+	<ul>
+		<li><a href="{{ STATIC_URL }}/person/{{ sporsmal.besvart_av.id }}">{{ sporsmal.besvart_av }}</a> 
+		{# <li>{{ sporsmal.besvart_av_minister_id }}</li> #}
+		<br />{{ sporsmal.besvart_av_minister_tittel }}</li>
+		{% if sporsmal.besvart_pa_vegne_av %}
+			<li>Besvart på vegne av: {{ sporsmal.besvart_pa_vegne_av }}</li>
+			<li>På vegne av minister: {{ sporsmal.besvart_pa_vegne_av_minister_id }} {{ sporsmal.besvart_pa_vegne_av_minister_tittel }} </li>
+		{% endif %}
+	</ul>
+</div>
+
+<div class="clear"></div>
+
+
+<div>
+	<h2>{{ sporsmal.sporsmal_fra }} har stillt {{ sporsmal.sporsmal_til }} {{ ivrig.count }} spørsmål i alt</h2>
+	<ul class="kolonner">
+	{% for i in ivrig %}
+		<li> <em>{{ i.tittel|truncatewords:15 }}</em><br />{{ i.type|stip_underscore|capfirst }} den {{ i.sendt_dato|date:"d-m/Y" }} ({{ i.sendt_dato|tid_siden }}) <a href="{{ STATIC_URL }}/sporsmaal/{{ i.id }}"> Les hele</a></li>
+	{% endfor %}
+	</ul>
+	<br style="clear:left;" />
+</div>
+
+
+	{{ sporsmal.id }}
+	{{ sporsmal.sporsmal_nummer }} 
+	{{ sporsmal.sesjonid }} 
+
+
+{% endblock %}

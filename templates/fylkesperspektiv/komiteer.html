@@ -1,0 +1,38 @@
+{% extends "default.html" %}
+
+{% block css %}
+	<style type="text/css" media="screen">
+	</style>
+{% endblock %}
+
+{% block content %}
+
+
+
+<h2>Komiteer</h2>
+{{ dagens_komiteer }}
+<div id="komiteer">
+	<ul>
+	{% for d in dagens_komiteer %}
+		<li id="d_{{d.id}}" class="representant_detalj"><a href="{{d.id}}">{{d.navn}}</a></li>
+	{% endfor %}
+	</ul>
+</div>
+
+
+{# <ul> #}
+{# {% for a in resultater %} #}
+{# 	<li><b>{{a.representant}}</b> x:{{a.x}} z:{{a.y}} (<a href="{{a.id}}">se detaljer</a>)</li> #}
+{# {% endfor %} #}
+{# <ul> #}
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+
+{% endblock %}
+
+
+{% block javascript %}
+	<script src="{{ STATIC_URL }}/static/d3.v2.min.js" charset="utf-8"></script>
+	</script>
+{% endblock %}

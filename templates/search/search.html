@@ -1,0 +1,48 @@
+{% extends "default.html" %}
+
+{% block content %}
+    <h2>Search</h2>
+
+    <form method="get" action=".">
+        <table>
+            {{ form.as_table }}
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <input type="submit" value="Search">
+                </td>
+            </tr>
+        </table>
+
+        {% if query %}
+            <h3>Results</h3>
+			
+			query: {{ query }} <br />
+			page: {{ page }} <br />
+			treff: {{ page.object_list.count }}
+			
+            {% for result in page.object_list %}
+                <p>
+                    <a href="/fylke/sporsmaal{{ result.object.get_absolute_url }}">{{ result.object.tittel }}</a> <br />
+					{{ result.object.sporsmal_til_minister_tittel }}<br />
+					{{ result.object.body }}<br />
+					{{ result.object.author}}<br />
+					{{ result.object.datert_dato }}<br />
+					
+                </p>
+            {% empty %}
+                <p>No results found.</p>
+            {% endfor %}
+
+            {% if page.has_previous or page.has_next %}
+                <div>
+                    {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
+                    |
+                    {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
+                </div>
+            {% endif %}
+        {% else %}
+            {# Show some example queries to run, maybe query syntax, something else? #}
+        {% endif %}
+    </form>
+{% endblock %}
