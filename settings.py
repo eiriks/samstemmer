@@ -1,4 +1,4 @@
-# Django settings for stortingsstalker project.
+# Django settings for samstemmer project.
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
