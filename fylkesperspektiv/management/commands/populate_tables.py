@@ -1041,7 +1041,7 @@ class Command(BaseCommand):
 
 
         
-        end = start-datetime.now()
+        end = datetime.now()-start
         self.stdout.write('Ferdig med innsamling av data, det tok: %s \n') % (end)
 
 
