@@ -88,6 +88,7 @@ class Command(BaseCommand):
                 # prosent = antall avstemninger der de to stemmer likt og mp1s stemme ikke er ikke_tilstede / siste200 * 100
                 #                                                                                               |
                 #                                                                                          burde være avtemninger der de begge var..
+
                 
                 prosentlikhet = round(float(len([(i,j) for i,j in zip(mp_vector[mp],mp_vector[mp2]) if i==j and i!=0])) / len(mp_vector[mp]) * 100, self.desimaler)
 

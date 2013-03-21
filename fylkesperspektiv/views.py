@@ -9,7 +9,8 @@ from django.utils import simplejson # if the returned json is odd: http://stacko
 from django.http import HttpResponse
 
 
-from django.core import serializers
+#from django.core import serializers
+
 from django.core.serializers.json import DjangoJSONEncoder
 import json
 
@@ -32,6 +33,8 @@ from django.template.defaultfilters import slugify
 import inspect  # to check if a something is of type class.
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+from django.views.decorators.csrf import csrf_exempt # to define views that is not protected by csrf
 
 
 #import pdb; pdb.set_trace()     # http://stackoverflow.com/questions/1118183/how-to-debug-in-django-the-good-way
@@ -368,10 +371,7 @@ def komite(request, kom_id):
     votering = Votering.objects.filter(sak__in=saker).order_by('-votering_tid')
     return render_to_response('fylkesperspektiv/komite.html', {'votering':votering, 'saker': saker, 'personer':personer, 'komite': komite})
 
-
-
-
-
+@csrf_exempt
 def sporsmal_detail_data(request):
     #csrf(request)
     # denne brukes bare til å få detaljer om en person via ajax, stemmer?
@@ -408,7 +408,8 @@ def sporsmal_detail_data(request):
             #print temp_dict #len(inn), len(ut)
     #print temp_ut_dict, temp_inn_dict
     #return HttpResponse(json.dumps({'person': persondata, 'inn': temp_inn_dict, 'ut' : temp_ut_dict}), mimetype='application/javascript')
-    return HttpResponse(json.dumps({'person': persondata, 'stiller': len(stiller), 'blir_stillt': len(blir_stillt), 'sesjon':str(sesjon)}), mimetype='application/javascript', context_instance=RequestContext(request))
+    return HttpResponse(json.dumps({'person': persondata, 'stiller': len(stiller), 'blir_stillt': len(blir_stillt), 'sesjon':str(sesjon)}), mimetype='application/javascript')
+
 
 def question_json2(request, format):
     # denne lager data til kant-grafen 

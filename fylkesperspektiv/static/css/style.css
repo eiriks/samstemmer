@@ -198,9 +198,12 @@ blockquote.stort{
     padding-right: 4em;
  }
 
-#norge {
+#norge { /* blir overskrevet på forsiden..*/
+/*	float:right;*/
 	position: absolute;
+	
 }
+
 #norgeskart{
 	position: absolute;
 	top: -10px;

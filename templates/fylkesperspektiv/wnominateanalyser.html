@@ -7,8 +7,8 @@ Samstemmer - representantkart
 {% block content %}
 
 
-<h2>Optimal Classification </h2>
-<p> Analysert den {{ analyser.0.dato|date:"d/m-Y" }}.  {{ analyser.0.materiale }} pre= {{ analyser.0.pre }} cc={{ analyser.0.correctly_classified }}
+<h2>Folkerepresentasjonskart</h2>
+<p>Analysert den {{ analyser.0.dato|date:"d/m-Y" }}. Metoden er brukes heter <em>Optimal Classification</em>.  {{ analyser.0.materiale }} pre= {{ analyser.0.pre }} cc={{ analyser.0.correctly_classified }}. Du kan lese mer om metoden under <a href="{{ STATIC_URL }}/metode/#oc">metode</a>.
 </p>
 
 <div class="clear"></div>
@@ -27,15 +27,15 @@ Samstemmer - representantkart
 
 <div id="info" class="grid_16">
 	<h2>Hva kan jeg lese ut av dette?</h2>
-	<p>Denne grafen viser representantenes prefferanser i forhold til hverandre basert på hva de stemmer, ikke hva de sier.</p>
-	<p>Representantkartet viser representantenes preffererte posisjon i forhold til hverandre. Metoden har vist seg å fange opp høyre-venstre dimensjonen i politikk på x-aksen og andre (ulike) dimensjoner på y-aksen. Det vil si at representanten lengst til venstre i grafen er den som stemmer lengs til venstre politisk (og vise versa). </p>
-	<p>y-aksen fanger opp den 2. mest forklarende dimensjonen i datasettet. Pr 12/3-2013 ligger enkelte KrF-representanter lengt nede i grafen, Dette gjenspeiler et saksområde som skiller KRF fra de andre partiene.</p>
-	<p>En nevneverdig karakteristikk ved norske data sammenliknet ved andre land (metoden er utviklet av amerikanere, men brukt i mange land, så vell som i EU og FN), er at partiene stemmer svært likt, "partipisken" i Norge er svært sterk.</p>
+	<p>Denne grafen viser representantenes preferanser i forhold til hverandre basert på hva de stemmer, ikke hva de sier.</p>
+	<p>Representantkartet viser representantenes prefererte posisjon i forhold til hverandre. Metoden har vist seg å fange opp høyre-venstre dimensjonen i politikk på x-aksen og andre (ulike) dimensjoner på y-aksen. Det vil si at representanten lengst til venstre i grafen er den som stemmer lengs til venstre politisk (og vice versa). </p>
+	<p>Y-aksen fanger opp den nest (nr2) mest forklarende dimensjonen i datasettet. Pr 12/3-2013 ligger enkelte KrF-representanter langt nede i grafen. Dette gjenspeiler et saksområde som skiller KRF fra de andre partiene.</p>
+	<p>En nevneverdig karakteristikk ved norske data sammenliknet med andre land (metoden er utviklet av amerikanere, men brukt i mange land, så vell som i EU og FN), er at partiene stemmer svært likt, "partipisken" i Norge er svært sterk.</p>
 	<p>Les mer under <a href="{{ STATIC_URL }}/metode#oc">metode</a>.</p>
 </div>
 
 <div class="grid_8">
-<h2>Tidligere utgregninger</h2>
+<h2>Tidligere utregninger</h2>
 {% for a in analyser %}
 	<li><b>{{a.dato}}</b> {{a.id}} (<a href="{{a.id}}">se detaljer</a>)</li>
 {% endfor %}
