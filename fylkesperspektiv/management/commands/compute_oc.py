@@ -9,8 +9,16 @@ import math
 import rpy2.robjects as robjects
 import numpy as np
 
+# import rpy2
+# print rpy2.__version__
+
 import rpy2.robjects.numpy2ri
 rpy2.robjects.numpy2ri.activate()   # http://stackoverflow.com/questions/2447454/converting-python-objects-for-rpy2
+
+# http://stackoverflow.com/questions/2447454/converting-python-objects-for-rpy2 (lengre nede)
+#import rpy2.robjects as ro
+#from rpy2.robjects.numpy2ri import numpy2ri
+#robjects.conversion.py2ri = numpy2ri
 
 
 class Command(BaseCommand):
@@ -124,7 +132,10 @@ class Command(BaseCommand):
 
         # create np array of that list (it turnes out that np-array to rpy2 works, while python dict fails..)
         np_data_list = np.array(data_list)
+        
 
+        #print np_data_list  # er ting fortsatt i unicode?? ja: [[u'B\xc5H' u'B\xe5rd Hoksrud' u'Fremskrittspartiet' ..., u'0' u'0' u'0']
+        
         # create r object in python
         r = robjects.r
         #print r.sessionInfo()
@@ -137,11 +148,13 @@ class Command(BaseCommand):
             suppressMessages(library(MASS))
             suppressMessages(library(foreign))
             suppressMessages(library(basicspace))
-            suppressMessages(library(rgl))
-            suppressMessages(library(effects))
+            # suppressMessages(library(rgl)) # a 3D viz device needed? 
+            # suppressMessages(library(effects)) # http://cran.r-project.org/web/packages/effects/
             suppressMessages(library(lattice))
             suppressMessages(library(oc))
             suppressMessages(library(wnominate))
+            
+            #print(Encoding(data)) # unknown ...
             
             legisname <- data[,1]
             legisname <- as.character(legisname)
@@ -180,6 +193,7 @@ class Command(BaseCommand):
             #print(suma)
 
             calculated_values <- list("legisname" = legisname, "partyname" = partyname, "partycode" = partycode, "oc1" = oc1, "oc2" = oc2, "raw_result" = result2)
+            # print(calculated_values)
             return(calculated_values)
         }
         
@@ -202,7 +216,7 @@ class Command(BaseCommand):
             # print data_list[int(np.where(np_data_list==conservative_1D.representant.id)[0][0])]
             # print data_list[int(np.where(np_data_list==conservative_2D.representant.id)[0][0])]    
 
-            # overvrite variables:
+            # overvrite variables: (aka finner posisjonen i rekken av folk)
             conservative_1D =  int(np.where(np_data_list==conservative_1D.representant.id)[0][0])
             conservative_2D =  int(np.where(np_data_list==conservative_2D.representant.id)[0][0])
             # print "finn deres posisjon i dataen:"
@@ -215,11 +229,12 @@ class Command(BaseCommand):
             print "NB: using backup conservatives"
 
         # make conservatives r-variables
-        r.assign('r_conservative_1D', conservative_1D+1)  # add one for non 0-indexed r-lists?
-        r.assign('r_conservative_2D', conservative_2D+1)
+        r.assign('r_conservative_1D', conservative_1D+1)    # add one for non 0-indexed r-lists?
+        r.assign('r_conservative_2D', conservative_2D+1)    # distorts the first time around guy, but he's random anyhow.. 
         # run function
+        
         a = r('calculate_oc_values(r_data_list, r_conservative_1D, r_conservative_2D)')
-
+        
 
         # convert numeric person to real person object
         #print     # python object is 0-indexed..
@@ -231,18 +246,23 @@ class Command(BaseCommand):
         correctly_classified = round(a[5][4][0]*100, 2)
         pre = round(a[5][4][1], 3)
         materiale = "Analysen erbasert på de %s siste avstemningene i stortinget. " % self.number_of_votes
-        w_analyse, created = Wnominateanalyser.objects.get_or_create(polarity1=conservative_1D, polarity2=conservative_1D, materiale=materiale, correctly_classified=correctly_classified, pre=pre)
+        w_analyse, created = Wnominateanalyser.objects.get_or_create(polarity1=conservative_1D, polarity2=conservative_1D, materiale=materiale, correctly_classified=str(correctly_classified), pre=str(pre))
         #print created # True if insert, false is update 
 
 
         # loop through results and create objects
-
-
+        #print a
+        # print type(a)
+        # print a[0], len(a[0]), type(a[0])        
+        # print a[0][0], len(a[0][0]), type(a[0][0])
+        
+        
         for mp in range(len(a[0])):
+            #print type(a[0][mp])
             rep= Personer.objects.get(id=a[0][mp])
             # handle nans
-            x = None if math.isnan(a[3][mp]) else a[3][mp]
-            y = None if math.isnan(a[4][mp]) else a[4][mp]
+            x = None if math.isnan(a[3][mp]) else str(a[3][mp])
+            y = None if math.isnan(a[4][mp]) else str(a[4][mp])
 
 
             Wnominateanalyserposisjoner.objects.get_or_create(analyse=w_analyse, representant=rep, x=x, y=y)
@@ -325,8 +345,8 @@ class Command(BaseCommand):
         #     # finn personen (skal alltid finnes)
         #     person = Personer.objects.get(pk=str(person_id))
         
-        data = self.construct_dataset(self.number_of_votes)
-
+        data = self.construct_dataset(self.number_of_votes) # returns dict of lists where text is in unicode..
+        
 
         self.oc(data)
         self.stdout.write('Successfully computed OC from last %s votes\n' % (self.number_of_votes))

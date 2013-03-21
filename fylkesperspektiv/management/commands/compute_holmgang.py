@@ -9,6 +9,9 @@ from datetime import datetime
 
 class Command(BaseCommand):
     help = """Compute top word from perspn './manage.py holmgang' """
+    
+    # denne modulen må skrives om slik at den ikke sammenlikner to folk som ikke har vært på noen av de samme avstemningene som svært ulike 
+    # de er ulike, men det er urettferdig å si at de er uenige, da de ikke har stemt det motsatte av hverandre (bare ikke vært der samtidig)
 
     lookup = {}
     lookup['for'] = 1
@@ -78,9 +81,21 @@ class Command(BaseCommand):
                 #print created # True if insert, false is update 
                 holmgang.materiale = materiale
                 # compute prosentlikhet
-                prosentlikhet = round(float(len([(i,j) for i,j in zip(mp_vector[mp],mp_vector[mp2]) if i==j])) / len(mp_vector[mp]) * 100, self.desimaler)
 
-                holmgang.prosentlikhet = prosentlikhet
+
+                #prosentlikhet = round(float(len([(i,j) for i,j in zip(mp_vector[mp],mp_vector[mp2]) if i==j])) / len(mp_vector[mp]) * 100, self.desimaler)
+                # justerte ikke slik at å ikke være der samtidig ikke betyr enighet...
+                # prosent = antall avstemninger der de to stemmer likt og mp1s stemme ikke er ikke_tilstede / siste200 * 100
+                #                                                                                               |
+                #                                                                                          burde være avtemninger der de begge var..
+                
+                prosentlikhet = round(float(len([(i,j) for i,j in zip(mp_vector[mp],mp_vector[mp2]) if i==j and i!=0])) / len(mp_vector[mp]) * 100, self.desimaler)
+
+                #print [(i,j) for i,j in zip(mp_vector[mp],mp_vector[mp2]) if i==j ]
+                #print [(i,j) for i,j in zip(mp_vector[mp],mp_vector[mp2]) if i==j and i != 0] # and mp was there
+
+
+                holmgang.prosentlikhet = str(prosentlikhet) # funker ikke uten str i python 2.6
                 holmgang.save()
                 self.stdout.write('Successfully computed homgang for %s og %s, likhet: " %s "\n' % (deltager1, deltager2, holmgang.prosentlikhet))
 

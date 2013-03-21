@@ -83,22 +83,21 @@
         </div>
         <div class="grid_8">
             <h2>Kritikk!</h2>
-            <p>Det er alltid rom for uenighet rundt politikk, metode og journalistikk. Derfor er koden til denne nettside åpen kildekode, og om du mener jeg gjør noe feil, ønsker å gjøre ting annerledes selv eller bare bygge på det jeg har gjort, så finnes koden på github.</p>
+            <p>Det er alltid rom for uenighet rundt politikk, metode og journalistikk. Derfor er koden til denne nettside åpen kildekode, og om du mener jeg gjør noe feil, ønsker å gjøre ting annerledes selv eller bare bygge på det jeg har gjort, så finnes <a href="https://github.com/eiriks/samstemmer">koden på github</a>.</p>
 
             <p>
-                Du kan også kontakte meg på <a href="mailto:Eirik.Stavelin@infomedia.uib.no">epost</a>, hvis du har noe på hjertet, og <a href="/metode/">lese mer om metode her</a>
+                Du kan også kontakte meg på <a href="mailto:Eirik.Stavelin@infomedia.uib.no">epost</a>, hvis du har noe på hjertet, og <a href="/metode/">lese mer om metode her</a>.
             </p>
         </div>
         <div class="grid_8">
-    		<h2>crons</h2>
-    		<ul>
-        		<li>You should cron up a ./manage.py update_index job at whatever interval works best for your site (using --age=<num_hours> reduces the number of things to update).<a href="http://django-haystack.readthedocs.org/en/latest/tutorial.html">link</a></li>
-                <li>http://www.partifinansiering.no/</li>
-                <li>holderdeord.no</li>
-                <li>http://tablesorter.com/docs/#Examples</li>
-                <li>http://apps4norge.no/regler-konkurransen</li>
-                <li>http://plugins.learningjquery.com/expander/index.html#getting-started</li>
-    		</ul>
+    		<h2>Hjelp</h2>
+			<p>
+				samstemmer.net trenger ideer og tilbakemeldinger på hva denne dataen burde best brukes til. Intensjonen er en webapp for journalister som dekker politikk, og de operasjonene websiden gjør pr i dag er kun ment som eksemlper, det er så mye som <em>kan gjøres</em>, men hva <em>burde gjøres</em>?
+			</p>
+			<p>Last <a href="http://samstemmer.net/nedlastinger/">ned data i Excel format</a> (.csv) og fortell meg (på <a href="mailto:Eirik.Stavelin@infomedia.uib.no?subject=samstemmer">epost</a>) hva du synes burde gjøres med dataen for å gi gode, presise og interessante observasjoner!
+			</p>
+			
+			<!-- apps4norge http://apps4norge.no/regler-konkurransen -->
         </div>
         <div class="clear"></div>
         <div class="grid_24">
@@ -125,11 +124,18 @@
     {% block javascript %}{% endblock %}
     <!-- Asynchronous Google Analytics snippet. Change UA-XXXXX-X to be your site's ID.
        mathiasbynens.be/notes/async-analytics-snippet -->
-    <script>
-    // var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-    // (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-    // g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-    // s.parentNode.insertBefore(g,s)}(document,'script'));
+	<script type="text/javascript">
+
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-39451123-1']);
+	  _gaq.push(['_trackPageview']);
+
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+
    </script>
 {% endblock %}
 

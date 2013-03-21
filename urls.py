@@ -10,46 +10,47 @@ import settings
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns('samstemmer.fylkesperspektiv.views',
 
-    url(r'^$', include('fylkesperspektiv.urls')),
-    url(r'^lix/$','fylkesperspektiv.views.lix'),
-    url(r'^person/(?P<rep_id>\w+)/$', 'fylkesperspektiv.views.person_detail'),  # [ÆØÅæøåA-Z ] denne må takle ÆØÅ eller så må noe endres.. [A_ZÆØÅ] ? .. har ikke prøvd. 
+    url(r'^$', 'index'),
+    #url(r'^$', include('samstemmer.fylkesperspektiv.urls')),
+    url(r'^lix/$','lix'),
+    url(r'^person/(?P<rep_id>\w+)/$', 'person_detail'),  # [ÆØÅæøåA-Z ] denne må takle ÆØÅ eller så må noe endres.. [A_ZÆØÅ] ? .. har ikke prøvd. 
 #    url(r'^person/(?P<rep_id>\w+)/$', 'person_detail'),
 
-    url(r'^fylke/(?P<fylke_id>\w+)/$', 'fylkesperspektiv.views.fylke'),                  # denne tar hvilke som helst bokstaver som akseptert input. katastrofe. 
-    url(r'^nedlastinger/$', 'fylkesperspektiv.views.nedlastinger'),
-    url(r'^nedlastinger/(?P<hva>\w+)/$', 'fylkesperspektiv.views.nedlastinger2'),
-    url(r'^export/', 'fylkesperspektiv.views.export'),
+    url(r'^fylke/(?P<fylke_id>\w+)/$', 'fylke'),                  # denne tar hvilke som helst bokstaver som akseptert input. katastrofe. 
+    url(r'^nedlastinger/$', 'nedlastinger'),
+    url(r'^nedlastinger/(?P<hva>\w+)/$', 'nedlastinger2'),
+    url(r'^export/', 'export'),
     #url(r'^nedlastinger', 'django.views.generic.simple.direct_to_template', {'template': 'path/to/about_us.html'}),
 
 
-    url(r'^komite/(?P<kom_id>\w+)/$', 'fylkesperspektiv.views.komite'),    
-    url(r'^sak/(?P<sak_id>\d+)/$', 'fylkesperspektiv.views.sak_detail'),
+    url(r'^komite/(?P<kom_id>\w+)/$', 'komite'),    
+    url(r'^sak/(?P<sak_id>\d+)/$', 'sak_detail'),
 
-    url(r'^oc/$', 'fylkesperspektiv.views.oc'),
-    url(r'^oc/(?P<analyse_id>\d+)/$', 'fylkesperspektiv.views.oc_detalj'),    
-    url(r'^oc/data/(?P<analyse_id>\d+)/(?P<format>\w+)/$', 'fylkesperspektiv.views.oc_data'),    
+    url(r'^oc/$', 'oc'),
+    url(r'^oc/(?P<analyse_id>\d+)/$', 'oc_detalj'),    
+    url(r'^oc/data/(?P<analyse_id>\d+)/(?P<format>\w+)/$', 'oc_data'),    
 
-    url(r'^metode/$', 'fylkesperspektiv.views.metode'),
+    url(r'^metode/$', 'metode'),
 
-    url(r'^sporsmaal/type_by_year/(?P<format>\w+)/$', 'fylkesperspektiv.views.question_type_by_year'), # question_type_by_year
-    url(r'^sporsmaal/$', 'fylkesperspektiv.views.sporsmal'),
-    url(r'^sporsmaal/(?P<sporsmal_id>\d+)/$', 'fylkesperspektiv.views.sporsmal_detail'),
+    url(r'^sporsmaal/type_by_year/(?P<format>\w+)/$', 'question_type_by_year'), # question_type_by_year
+    url(r'^sporsmaal/$', 'sporsmal'),
+    url(r'^sporsmaal/(?P<sporsmal_id>\d+)/$', 'sporsmal_detail'),
 
-    url(r'^sak/$', 'fylkesperspektiv.views.sak'),
+    url(r'^sak/$', 'sak'),
 
     #url(r'^votering/$', 'fylkesperspektiv.views.votering'),
     #url(r'^avstemninger/$', 'fylkesperspektiv.views.avstemninger'),
 
     # http://stackoverflow.com/questions/6492952/how-can-i-pass-optional-arguments-in-django-view
-    url(r'^nysgjerrigper/(?P<sesjon>\d{4}-\d+)/$', 'fylkesperspektiv.views.nysgjerrigper'),
-    url(r'^nysgjerrigper/$', 'fylkesperspektiv.views.nysgjerrigper'),
+    url(r'^nysgjerrigper/(?P<sesjon>\d{4}-\d+)/$', 'nysgjerrigper'),
+    url(r'^nysgjerrigper/$', 'nysgjerrigper'),
 
 
-    url(r'^kantgraf/$', 'fylkesperspektiv.views.sporsmal2'),
-    url(r'^kantgraf/detaljer/$', 'fylkesperspektiv.views.sporsmal_detail_data'), # brukes til kantgrafen
-    url(r'^kantgraf/(?P<format>\w+)/$','fylkesperspektiv.views.question_json2'),
+    url(r'^kantgraf/$', 'sporsmal2'),
+    url(r'^kantgraf/detaljer/$', 'sporsmal_detail_data'), # brukes til kantgrafen
+    url(r'^kantgraf/(?P<format>\w+)/$','question_json2'),
 
 
     # scatterplot utgår

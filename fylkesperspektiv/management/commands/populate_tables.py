@@ -11,11 +11,12 @@ from datetime import datetime
 from django.db import connection    # the sql lib
 
 from django.core.management.base import BaseCommand #, CommandError
-from fylkesperspektiv.models import Fylker, Emne, Partier, Komiteer, Sesjoner, Stortingsperioder,Personer,Representanter,KomiteeMedlemskap,Sporsmal,Saker,Votering,Voteringsresultat,Voteringsforslag,Voteringsvedtak#, Fylkeikhet, Partilikhet,  #, 
+from fylkesperspektiv.models import Fylker, Emne, Partier, Komiteer, Sesjoner, Stortingsperioder,Personer,Representanter, KomiteeMedlemskap,Sporsmal,Saker,Votering,Voteringsresultat,Voteringsforslag,Voteringsvedtak#, Fylkeikhet, Partilikhet,  #, 
 
 from django.core import management      # for å kunne kjøre commandoer
 from optparse import make_option
 
+import gc
 
 class Command(BaseCommand):
     #args = '<poll_id poll_id ...>'
@@ -205,6 +206,8 @@ class Command(BaseCommand):
                 rep_obj = Representanter(person=person_obj.id, stortingsperiode=stortingsperiode_obj)
                 rep_obj.save()
                 nye_representanter +=1
+        
+        soup.decompose() # http://stackoverflow.com/questions/11284643/python-high-memory-usage-with-beautifulsoup
         print "fant %s nye personer og %s nye representanter" % (nye_personer, nye_representanter)
 
 
@@ -338,6 +341,8 @@ class Command(BaseCommand):
         # if len(stemt_inn)>0:
         #     print "Nye folk:"
         #     print stemt_inn
+        
+        soup.decompose() # http://stackoverflow.com/questions/11284643/python-high-memory-usage-with-beautifulsoup
 
         for gamlis in stemt_ut:
             skal_ut = Representanter.objects.filter(person=gamlis.split("_")[0],dagens_representant=1)
@@ -474,7 +479,6 @@ class Command(BaseCommand):
                 besvart_av_obj.save()
 
 
-
             if spor.sporsmal_fra.id.text:
                 try:
                     sporsm_fra_fylke = Fylker.objects.get(id=spor.sporsmal_fra.fylke.id.text)
@@ -497,7 +501,6 @@ class Command(BaseCommand):
                 sporsmal_fra_obj.save()
 
 
-
             if spor.sporsmal_til.id.text: # folk som får spørsmål til seg, men som ikke finnes i personer er MINISTRE
                 try:
                     sporsmal_til_fylke = Fylker.objects.get(id=spor.sporsmal_til.fylke.id.text)
@@ -517,7 +520,6 @@ class Command(BaseCommand):
                     sporsmal_til_obj = Personer.objects.get(id=spor.sporsmal_til.id.text)
                 # do updates? 
                 sporsmal_til_obj.save()
-
 
             if fremsatt_av_annen:
                 try:
@@ -572,7 +574,6 @@ class Command(BaseCommand):
                 besvart_pa_vegne_av_obj.save()
             else:
                 besvart_pa_vegne_av_obj = False
-
 
 
             sporsmal_id = spor.find("id", recursive=False).text
@@ -636,8 +637,17 @@ class Command(BaseCommand):
                     spor_obj.emne.add(emne_obj)
 
             spor_obj.save()
+            # her...
 
+            
+            # free some memory..
+            del sporsmal_fra_obj, besvart_av_obj
+            del sporsmal_til_obj, fremsatt_av_annen_obj
+            del rette_vedkommende_obj, besvart_pa_vegne_av_obj
+            del spor_obj
+            spor.decompose() # er dette en tabbe? (eller genialt..)            
 
+        soup.decompose()    # http://stackoverflow.com/questions/11284643/python-high-memory-usage-with-beautifulsoup
         print "Ferdig med %s for sesjon %s. %s nye funnet." % (sporsmalstype, sesjonid, teller)
         return nye_sporsmal_fra
 
@@ -732,6 +742,8 @@ class Command(BaseCommand):
                 ny_sak_obj.komite=komite_obj
 
             ny_sak_obj.save()
+
+        soup.decompose()    # http://stackoverflow.com/questions/11284643/python-high-memory-usage-with-beautifulsoup
         print "ferdig med å sette inn %s nye saker for sesjonen %s" % (teller, sesjonid.encode('utf8')) # hvofor må denne encodes?
         return nye_saker
 
@@ -772,6 +784,7 @@ class Command(BaseCommand):
                 #else:
                     # updates? no.
                     # vot_obj = Votering.objects.get(sak=s,votering_id=vot.votering_id.text)
+            soup.decompose() # http://stackoverflow.com/questions/11284643/python-high-memory-usage-with-beautifulsoup
 
     def get_voteringsresultat(self, quantity="new"): # new/all. all is bootstrap to populate table first time
         if quantity=="new":
@@ -862,10 +875,24 @@ class Command(BaseCommand):
                 # lagre denne
                 #print ny_votering
                 ny_votering.save()
+                # free some memory..
+                if fast_vara_for:
+                    del fast_vara_for_obj
+
+                if vara_for:
+                    del vara_for_obj
+                
+
+                del representant_obj, ny_votering #, vara_for_obj, fast_vara_for_obj # disse finnes ikke alltid..
+                votr.decompose()
+                
+
+            soup.decompose() # http://stackoverflow.com/questions/11284643/python-high-memory-usage-with-beautifulsoup
         print  "fant %s nye voteringsresultat. %s ersoner har nye voteringer" % (teller, len(personer_med_nye_voteringer))
         return personer_med_nye_voteringer
 
     def get_voteringsforslag(self):
+        print "henter voteringsforslag:"
         voteringer = Votering.objects.all()
         for v in voteringer:
             url = "http://data.stortinget.no/eksport/voteringsforslag?voteringid=%s" % (v.votering_id)
@@ -906,6 +933,7 @@ class Command(BaseCommand):
                     vtor_forslag_obj.save()
 
     def get_voteringsvedtak(self):
+        print "henter voteringsvedtak: "
         voteringer = Votering.objects.all()
         teller = 0
         for v in voteringer:
@@ -925,42 +953,72 @@ class Command(BaseCommand):
         print "Fant %s nye voteringsvedtak" % (teller)
 
     def populate_empty_tables(self):
-        """...her er det ikke så viktg med hva som returneres fra funksjonene, aka kalkuleringer gjøres på nytt uansett.."""
+        """...her er det ikke så viktg med hva som returneres fra funksjonene, aka kalkuleringer gjøres på nytt uansett..
+        for å f dette til å kjøre på en sever med lite minne måtte jeg dele dette opp ved å kommentere ut deler av listen
+        og kjøre det flere ganger...
+        """
         self.get_basics()
+        #gc.collect()        # does this help?
         # # # data that depends on stortingsperioder
         self.batch_fetch_based_on_stortingsperioder(self.get_representanter)
         # # data based on sesjon_id
-        nye_komiteer = self.batch_fetch_stuff_by_sessjon(self.get_kommiteer, 'komiteer')
-        print nye_komiteer
-        nye_partier = self.batch_fetch_stuff_by_sessjon(self.get_partier, 'partier')
-        print nye_partier
+        #nye_komiteer = 
+        self.batch_fetch_stuff_by_sessjon(self.get_kommiteer, 'komiteer')
+        #print nye_komiteer
+        #nye_partier = 
+        self.batch_fetch_stuff_by_sessjon(self.get_partier, 'partier')
+        #print nye_partier
         self.get_dagensrepresentanter() # trenger Personer, Representanter, Komiteer, KomiteeMedlemskap
+        #gc.collect()        # does this help?
+        
         # dette tar lang tid.. 
-        personer_med_nye_sporsmal = self.batch_fetch_stuff_by_sessjon(self.get_sporsmal, 'sporretimesporsmal')
-        personer_med_nye_sporsmal1 = self.batch_fetch_stuff_by_sessjon(self.get_sporsmal, 'skriftligesporsmal')
-        personer_med_nye_sporsmal2 = self.batch_fetch_stuff_by_sessjon(self.get_sporsmal, 'interpellasjoner')
-        print personer_med_nye_sporsmal, personer_med_nye_sporsmal1, personer_med_nye_sporsmal2
-        nye_saker = self.batch_fetch_stuff_by_sessjon(self.get_saker, 'saker')
-        print nye_saker
-        # # Krever saks-id:
+        self.batch_fetch_stuff_by_sessjon(self.get_sporsmal, 'sporretimesporsmal')
+        #gc.collect()        # does this help?
+        self.batch_fetch_stuff_by_sessjon(self.get_sporsmal, 'skriftligesporsmal')
+        #gc.collect()        # does this help?
+        self.batch_fetch_stuff_by_sessjon(self.get_sporsmal, 'interpellasjoner')
+        #gc.collect()        # does this help?
 
+
+        # personer_med_nye_sporsmal = self.batch_fetch_stuff_by_sessjon(self.get_sporsmal, 'sporretimesporsmal')
+        # gc.collect()        # does this help?
+        # personer_med_nye_sporsmal1 = self.batch_fetch_stuff_by_sessjon(self.get_sporsmal, 'skriftligesporsmal')
+        # gc.collect()        # does this help?
+        # personer_med_nye_sporsmal2 = self.batch_fetch_stuff_by_sessjon(self.get_sporsmal, 'interpellasjoner')
+        # gc.collect()        # does this help?
+        #print personer_med_nye_sporsmal, personer_med_nye_sporsmal1, personer_med_nye_sporsmal2
+        #nye_saker = 
+        #self.batch_fetch_stuff_by_sessjon(self.get_saker, 'saker')
+        #print nye_saker
+        
+        #gc.collect()        # does this help?
+        
+        # # Krever saks-id:
+        
         # fra saker som er behandlet.. og nyere enn 2007ish
         self.get_voteringer()
 
-        nye_voteringer = self.get_voteringsresultat('all') # new/all all tar lang tid
-        print nye_voteringer
-
+        #nye_voteringer = 
+        print "get_voteringsresultat"
+        self.get_voteringsresultat('all') #('new') # new/all all tar lang tid (kjørte ikke all her på djangoeurope-serveren, burde kanskje fikse dette..)
+        #print nye_voteringer
+        
+        print "get_voteringsforslag"
         self.get_voteringsforslag()
+        print "get_voteringsvedtak"
         self.get_voteringsvedtak()
         
         #
         # compute values
         #
-        management.call_command('compute_top_words', bootstrap = True) # aka compute_top_words -all 
-        management.call_command('compute_holmgang')
+        print "begynner kalkuleringer"
         management.call_command('compute_lix', bootstrap = True) # aka compute_top_words -all 
-        management.call_command('oc')
         management.call_command('compute_sim', bootstrap = True)
+        management.call_command('compute_holmgang')
+        
+        management.call_command('compute_top_words', bootstrap = True) # aka compute_top_words -all 
+        management.call_command('compute_oc')
+
 
 
 

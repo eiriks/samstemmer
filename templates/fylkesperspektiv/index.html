@@ -227,39 +227,84 @@ Samstemmer - stortingsdata under lupen
 
 <div class="clear"></div>
 
-<div class="grid_9">
+<div class="grid_8">
   <h3>Siste spørsmål</h3>
  {% for s in siste_sporsmal %}
   <div class="sporsmaal">
     <blockquote>{{ s.tittel|truncatewords:15  }}</blockquote>
-    fra <a href="{{ STATIC_URL }}/person/{{ s.sporsmal_fra.id }}">{{ s.sporsmal_fra }}</a> til <a href="{{ STATIC_URL }}/person/{{ s.sporsmal_til.id }}">{{ s.sporsmal_til }}</a> datert {{ s.datert_dato|tid_siden }} siden. Spørsmålet er {{ s.status|stip_underscore}}. <a href="sporsmaal/{{ s.id }}">id</a>
+    <a href="{{ STATIC_URL }}/person/{{ s.sporsmal_fra.id }}">{{ s.sporsmal_fra }}</a> spurte <a href="{{ STATIC_URL }}/person/{{ s.sporsmal_til.id }}">{{ s.sporsmal_til }}</a> for {{ s.datert_dato|tid_siden }} siden. <a href="sporsmaal/{{ s.id }}">Spørsmålet er {{ s.status|stip_underscore}}</a>.
   </div>
   {% endfor %}
-  <a href="{{ STATIC_URL }}/sporsmal">se alle</a>
+  <!--<a href=" STATIC_URL /sporsmal">se alle</a>-->
 </div>
 
+<div class="grid_8">
+	<h3>Spørsmålsgraf</h3>
+	<a href="{{ STATIC_URL }}/kantgraf"><img src="{{ STATIC_URL }}/static/img/kantgraf_corner.png"></a>
+</div>
+
+<div class="grid_8">
+	<h3>Nysgjerrigper </h3>
+	<a href="{{ STATIC_URL }}/nysgjerrigper"><img src="{{ STATIC_URL }}/static/img/nysgjerrigper.png"></a>
+</div>
+
+<!--  
+
+  http://samstemmer.net/kantgraf/
+    klikking funker ikke crsf...
+  
+  fylker
+    css bug
+
+  /oc
+    prferanse skal med en f. x2
+    med andfe land / ved andre land
+    2. -> "andre"  dimensjon nr 2.
+    lengt / langt
+    komma i stede for punktum.
+  vice versa.
+  Analysert den 19/03-2013. Analysen er "??!" basert på de 200 siste avstemningene i stortinget. pre= 0,98 cc=99,32
+
+  utgregninger -> utregninger
+
+  /persondetaljer
+  tjenestegjort.. sf
+
+
+  /lix
+    preprsetentene
+
+  /oc
+    ny overskrift (ikke Optimal calssification)
+    (så oc som underoverskrift og metode intro)
+    - strortinget med stor S
+
+
+  / kantgraf
+    klikk på linjer og se kommuniké
+
+  cron job
+
+  download dagens storting (feiler litt på andre maskiner...)
+
+  ordsky med full db støtte.
+
+/ mtode
+  musikker med en k?
+  
+  ikke bare er spørsmålet uklart...
 
 
 
-<!--{% for s in siste_saker %}
-  <li>{{ s }}</li>
-{% endfor %} -->
-<h3>Spørsmålsgraf</h3>
-<a href="{{ STATIC_URL }}/kantgraf"><img src="{{ STATIC_URL }}/static/img/kantgraf_corner.png"></a>
+  søkefunksjon...
 
-<ul>
-  <li>oppmøte liste (som lix)</li>
-  <li>Nyskjerrigper, hvem spiller hvem ofte spørsmål.</li>
-  <li>vps (djangoeurope.com)</li>
-  <li>domene (done)</li>
-  <li>rename til samstemmer</li>
-  <li>github</li>
-  <li>fiks sammenlikning mellom folk og BARE folk som er på samme votering</li>
-</ul>
 
-  {% for rep in current_reps.person_set.all %}
-    <li>{{ rep }} her</li>
-  {% endfor %}
+
+
+-->
+
+<div class="clear"></div>
+
 
 {% endblock %}
 

@@ -7,6 +7,7 @@ from fylkesperspektiv.models import Lix, Personer, Sporsmal, Representanter
 import textanalyzer_no  # my rewritten module
 from optparse import make_option
 
+from decimal import *   # http://modeldev.blogspot.no/2009/10/django-cannot-convert-float-to-decimal.html
 def LIX(text = ''):
     lang = "no"
     t = textanalyzer_no.Textanalyzer(lang)
@@ -69,6 +70,9 @@ class Command(BaseCommand):
 
                 if len(only_text)>0:
                     lix_value = LIX(only_text)   
+                    lix_value = Decimal(str(lix_value))
+                    
+                    #print lix_value
 
                     try:
                         lix = Lix.objects.get(person=person)

@@ -40,12 +40,12 @@ Samstemmer - representantkart
 
 
 
-{% regroup ikke_stats by representant_id as ikke_med_list %}
+<!-- {% regroup ikke_stats by representant_id as ikke_med_list %}
 {% for i in ikke_med_list %}
 	{{ i.grouper }}
 		{{i.list.0.representant_id__fornavn}} {{i.list.0.count}} {{i.list.1.count}} {{i.list.2.count}}
 	<li>{{i}} {{ i.representant_id }}</li>
-{% endfor %}
+{% endfor %} -->
 
 {# <ul> #}
 {# {% for a in resultater %} #}

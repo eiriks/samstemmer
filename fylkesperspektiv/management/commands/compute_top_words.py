@@ -127,7 +127,7 @@ class Command(BaseCommand):
                 person.top_tfidf_words_in_questions = tfidf
                 person.save()
                 #print freq_words, tfidf
-                self.stdout.write('Successfully computed words for: "%s" \n' % (person_id))
+                self.stdout.write('Successfully computed words for: "%s" \n' % (person_id.encode("utf8")))
         else:
             print "ingen personer? prøv å sende med -aa for å ta alle.."
 

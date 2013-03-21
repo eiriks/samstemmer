@@ -146,13 +146,13 @@ INSTALLED_APPS = (
 )
 
 #   whoosh index            http://django-haystack.readthedocs.org/en/latest/tutorial.html
-import os
-HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
-    },
-}
+# import os
+# HAYSTACK_CONNECTIONS = {
+#     'default': {
+#         'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+#         'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+#     },
+# }
 
 
 # A sample logging configuration. The only tangible logging

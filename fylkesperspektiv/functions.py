@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # encoding: utf-8
-from fylkesperspektiv.models import Sesjoner
+from samstemmer.fylkesperspektiv.models import Sesjoner
 
 def get_stopwords():
-    stop_word_lines = open("fylkesperspektiv/stop2.txt", "r")
+    stop_word_lines = open("samstemmer/fylkesperspektiv/stop2.txt", "r")
     stop_words = []
     for word in stop_word_lines:
         stop_words.append(unicode(word.strip().lower(), 'utf8'))            # end of line chars are included. does strip() removed those??

@@ -3,10 +3,10 @@
 
 from django.conf.urls.defaults import patterns, include, url
 
-urlpatterns = patterns('fylkesperspektiv.views',
+urlpatterns = patterns('samstemmer.fylkesperspektiv.views',
     url(r'^$', 'index'),
 
-    url(r'^search/', include('haystack.urls')),
+    #url(r'^search/', include('haystack.urls')),
 
 
 

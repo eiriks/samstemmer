@@ -1,5 +1,0 @@
-{{ object.tittel }}
-{{ object.sporsmal_til_minister_tittel }}
-{{ object.body }}
-{{ object.author}}
-{{ object.datert_dato }}

@@ -1,6 +1,6 @@
 # encoding: utf-8
 #from fylkesperspektiv.models import Representanter, Sporsmal, Fylker, Personer, Komiteer, Votering, Voteringsresultat, Saker, Wnominateanalyser, Wnominateanalyserposisjoner, Lix, Holmgang, Partilikhet, Fylkeikhet
-from fylkesperspektiv.models import *
+from samstemmer.fylkesperspektiv.models import *
 # from fylkesperspektiv.models import * # ? ville ikke det være like lurt? 
 
 from django.shortcuts import render_to_response, get_object_or_404
@@ -48,6 +48,7 @@ def index(request):
 
     nyeste_analyse_id = Wnominateanalyser.objects.values('id').latest('dato')
     
+    #return render_to_response('fylkesperspektiv/index.html', {'siste_saker':siste_saker, 'siste_sporsmal':siste_sporsmal, 'current_reps': current_reps, 'fylker': fylker })
     return render_to_response('fylkesperspektiv/index.html', {'nyeste_analyse_id':nyeste_analyse_id, 'siste_saker':siste_saker, 'siste_sporsmal':siste_sporsmal, 'current_reps': current_reps, 'fylker': fylker })
 
 def metode(request):
@@ -127,7 +128,7 @@ def export(qs, fields=None):
         for field in headers:
             if field in headers:
                 val = getattr(obj, field)
-                print val, type(val)
+                #print val, type(val)
                 if callable(val):
                     val = val()
                     print "\t Her: ", val, type(val)
@@ -407,7 +408,7 @@ def sporsmal_detail_data(request):
             #print temp_dict #len(inn), len(ut)
     #print temp_ut_dict, temp_inn_dict
     #return HttpResponse(json.dumps({'person': persondata, 'inn': temp_inn_dict, 'ut' : temp_ut_dict}), mimetype='application/javascript')
-    return HttpResponse(json.dumps({'person': persondata, 'stiller': len(stiller), 'blir_stillt': len(blir_stillt), 'sesjon':str(sesjon)}), mimetype='application/javascript')
+    return HttpResponse(json.dumps({'person': persondata, 'stiller': len(stiller), 'blir_stillt': len(blir_stillt), 'sesjon':str(sesjon)}), mimetype='application/javascript', context_instance=RequestContext(request))
 
 def question_json2(request, format):
     # denne lager data til kant-grafen 

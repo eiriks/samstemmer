@@ -76,7 +76,7 @@ class Command(BaseCommand):
                 partilikhet, created = Partilikhet.objects.get_or_create(person=person, parti=party_obj)
                 # print partilikhet, created # created is True/False (True if created new object)
                 partilikhet.materiale = materiale
-                partilikhet.prosentlikhet = prosentlikhet
+                partilikhet.prosentlikhet = str(prosentlikhet)
                 # try:
                 #     # update
                 #     partilikhet = Partilikhet.objects.filter(person=person).filter(parti=party_obj)
@@ -140,7 +140,7 @@ class Command(BaseCommand):
             fylkelikhet, created = Fylkeikhet.objects.get_or_create(person=person, fylke=fylke_obj)
             #print created # false is update, true if insert
             fylkelikhet.materiale = materiale
-            fylkelikhet.prosentlikhet = prosentlikhet
+            fylkelikhet.prosentlikhet = str(prosentlikhet)
             fylkelikhet.save()
             self.stdout.write('Successfully county sim for: " %s based on %s : %s - %s"\n' % (person, fylkelikhet.materiale, fylkelikhet.fylke, fylkelikhet.prosentlikhet))
 

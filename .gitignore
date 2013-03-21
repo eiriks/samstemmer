@@ -6,4 +6,5 @@
 design/
 migrations/
 scripts/
+fylkesperspektiv_gammel/
 local_settings.py
