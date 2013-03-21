@@ -8,3 +8,5 @@ migrations/
 scripts/
 fylkesperspektiv_gammel/
 local_settings.py
+models_lagret_gammel.py
+data.json
