@@ -54,17 +54,27 @@
 <ol>
 {% for h in holmgang|slice:":6"  %}
 	{% if h.deltager1 != h.deltager2 %}
-		<li> <a href="{{ STATIC_URL }}/person/{{ h.deltager2.id }}">{{ h.deltager2 }}</a>  ({{ h.deltager2.parti_id }}) {{ h.prosentlikhet }}%</li>
+		{% if h.prosentlikhet %}
+			<li> <a href="{{ STATIC_URL }}/person/{{ h.deltager2.id }}">{{ h.deltager2 }}</a>  ({{ h.deltager2.parti_id }}) {{ h.prosentlikhet }}%</li>
+		{% endif %}
+
 	{% endif %}
 
 {% endfor %}
+
+{% if holmgang|slice:":6" %}
+{% else %}	
+{% endif %}
+
 </ol>
 
 <h2>Stemmer minst som:</h2>
 <ol>
 {% for h in holmgang|dictsort:"prosentlikhet"|slice:"5" %} {# reversed|slice:":7" #}
 	{% if h.deltager1 != h.deltager2 %}
-		<li> <a href="{{ STATIC_URL }}/person/{{ h.deltager2.id }}">{{ h.deltager2 }}</a> ({{ h.deltager2.parti_id }}) {{ h.prosentlikhet }}%</li>
+{# 		{% if h.prosentlikhet %} #}
+			<li> <a href="{{ STATIC_URL }}/person/{{ h.deltager2.id }}">{{ h.deltager2 }}</a> ({{ h.deltager2.parti_id }}) {{ h.prosentlikhet }}%</li>
+{# 		{% endif %} #}
 	{% endif %}
 {% endfor %}
 </ol>

@@ -194,7 +194,7 @@ def person_detail(request, rep_id):
 
     fylkeikhet = Fylkeikhet.objects.filter(person=rep_id).order_by('-prosentlikhet')
     partilikhet = Partilikhet.objects.filter(person=rep_id).order_by('-prosentlikhet')
-    holmgang = Holmgang.objects.filter(deltager1=rep_id).order_by('-prosentlikhet').select_related()
+    holmgang = Holmgang.objects.filter(deltager1=rep_id).exclude(prosentlikhet__isnull=True).order_by('-prosentlikhet').select_related()
 
     #KomiteeMedlemskap
     rep = Representanter.objects.filter(person=rep_id).order_by('-stortingsperiode__til').select_related()

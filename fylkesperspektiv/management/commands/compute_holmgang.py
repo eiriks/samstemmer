@@ -18,6 +18,8 @@ class Command(BaseCommand):
     lookup['mot'] = 2
     lookup['ikke_tilstede'] = 0
 
+    antall_avstemninger = 400
+
     desimaler = 2
 
     def compute_holmgang(self):
@@ -34,12 +36,12 @@ class Command(BaseCommand):
 
         # if I need about 100 votes to compute on, and absent-rate is about 40%, I need to query for about 200 votations, 
         #exclude unanimous stuff as of http://data.stortinget.no/upload/TekniskDokumentasjon.pdf point 4.16 & 4.13.1
-        latest_200_votation = Votering.objects.all().values('votering_id').order_by('-votering_tid').exclude(votering_resultat_type_tekst='Enstemmig vedtatt')[:200]
+        latest_n_votation = Votering.objects.all().values('votering_id').order_by('-votering_tid').exclude(votering_resultat_type_tekst='Enstemmig vedtatt')[:self.antall_avstemninger]
         #print latest_200_votation   # [{'votering_id': 3224L}, {'votering_id': 3222L}, ...]
 
         # create large dict for all relevant votations..
         votes_results = {} # {1888:{'est':'for', 'jst':'mot', ...}, 1889: {... }}
-        for vot in latest_200_votation:
+        for vot in latest_n_votation:
             #print Voteringsresultat.objects.values('votering_avgitt','representant_id').filter(votering=vot['votering_id'])
             #values = Voteringsresultat.objects.values('representant_id', 'votering_avgitt').filter(votering=vot['votering_id'])
             # as seen here: http://stackoverflow.com/questions/4781242/django-query-results-as-associative-dict
@@ -63,11 +65,12 @@ class Command(BaseCommand):
                 except:
                     print "this should never happen. person: %s, votering: %s" % (rep['person'], vot)
 
-        # print mp_vector
+        print mp_vector
         print len(mp_vector)
         # alle mot alle
+        
         now = datetime.now()
-        materiale = "Siste 200 avstemninger i databasen, oppdatert %s" % (now.strftime("%Y %m %d %H:%M"))
+        materiale = "Siste %s avstemninger i databasen, oppdatert %s" % (self.antall_avstemninger, now.strftime("%Y %m %d %H:%M"))
         for mp in mp_vector:
             #if len(mp_vector[a]) != 200:
             #    print a, len(mp_vector[a]), mp_vector[a]
@@ -82,21 +85,45 @@ class Command(BaseCommand):
                 holmgang.materiale = materiale
                 # compute prosentlikhet
 
+                # org løsning, tar ikke nok hensyn til tilfeller der en folkevalgt har mye fravær:
+                # prosentlikhet = round(float(len([(i,j) for i,j in zip(mp_vector[mp],mp_vector[mp2]) if i==j])) / len(mp_vector[mp]) * 100, self.desimaler)
+                
 
-                #prosentlikhet = round(float(len([(i,j) for i,j in zip(mp_vector[mp],mp_vector[mp2]) if i==j])) / len(mp_vector[mp]) * 100, self.desimaler)
                 # justerte ikke slik at å ikke være der samtidig ikke betyr enighet...
                 # prosent = antall avstemninger der de to stemmer likt og mp1s stemme ikke er ikke_tilstede / siste200 * 100
                 #                                                                                               |
                 #                                                                                          burde være avtemninger der de begge var..
-
                 
-                prosentlikhet = round(float(len([(i,j) for i,j in zip(mp_vector[mp],mp_vector[mp2]) if i==j and i!=0])) / len(mp_vector[mp]) * 100, self.desimaler)
+                # print "\n \n"
+                # de stemmer det samme
+                # print len([(i,j) for i,j in zip(mp_vector[mp],mp_vector[mp2]) if i==j ]) #, [(i,j) for i,j in zip(mp_vector[mp],mp_vector[mp2]) if i==j ]
+                # de stammer det samme og det er ikke 0 aka 
+                # print len([(i,j) for i,j in zip(mp_vector[mp],mp_vector[mp2]) if i==j and i != 0]) #, [(i,j) for i,j in zip(mp_vector[mp],mp_vector[mp2]) if i==j and i != 0] # and mp was there
 
-                #print [(i,j) for i,j in zip(mp_vector[mp],mp_vector[mp2]) if i==j ]
-                #print [(i,j) for i,j in zip(mp_vector[mp],mp_vector[mp2]) if i==j and i != 0] # and mp was there
+                # hva med å bruke de gangene mp var der, som base? 
+                # print len([(i,j) for i,j in zip(mp_vector[mp],mp_vector[mp2]) if i!=0]), [(i,j) for i,j in zip(mp_vector[mp],mp_vector[mp2]) if i!=0]
+                
+                # nei, kun tilfeller der begge var der ved samme avstanming:
+                # print len([(i,j) for i,j in zip(mp_vector[mp],mp_vector[mp2]) if i!=0 and j!= 0]) #, [(i,j) for i,j in zip(mp_vector[mp],mp_vector[mp2]) if i!=0 and j!= 0]
+
+                # lag base med par der de begge var til stede:
+                both_are_there = [(i,j) for i,j in zip(mp_vector[mp],mp_vector[mp2]) if i!=0 and j!= 0]
+                # print len(both_are_there), both_are_there
+
+                #print len([(i,j) for i, j in both_are_there if i==j]), [(i,j) for i, j in both_are_there if i==j]
+
+                if len(both_are_there) > 0:         # they've been at least at one vote at the same time
+                    prosentlikhet = round(float(len([(i,j) for i, j in both_are_there if i==j])) / len(both_are_there) * 100, self.desimaler)
+                else:
+                    prosentlikhet = None
+                
+                # sammenlikne gammel og ny metode:
+                # gammel_prosentlikhet = round(float(len([(i,j) for i,j in zip(mp_vector[mp],mp_vector[mp2]) if i==j and i!=0])) / len(mp_vector[mp]) * 100, self.desimaler)
+                # print "Før: %s /t Etter: %s" % (gammel_prosentlikhet, prosentlikhet)
 
 
-                holmgang.prosentlikhet = str(prosentlikhet) # funker ikke uten str i python 2.6
+
+                holmgang.prosentlikhet = prosentlikhet # funker ikke uten str i python 2.6 # bruker 2.7 nå..
                 holmgang.save()
                 self.stdout.write('Successfully computed homgang for %s og %s, likhet: " %s "\n' % (deltager1, deltager2, holmgang.prosentlikhet))
 
