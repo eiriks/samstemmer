@@ -52,7 +52,7 @@ urlpatterns = patterns('samstemmer.fylkesperspektiv.views',
     url(r'^kantgraf/detaljer/$', 'sporsmal_detail_data'), # brukes til kantgrafen
     url(r'^kantgraf/(?P<format>\w+)/$','question_json2'),
 
-
+    url(r'^finn/$', 'search'),
     # scatterplot utgår
     # url(r'^scatter/$', 'fylkesperspektiv.views.scatter'),
     # url(r'^scatter/(?P<format>\w+)/$', 'fylkesperspektiv.views.age_scatter'), # xml json

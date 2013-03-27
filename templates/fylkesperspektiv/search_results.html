@@ -1,0 +1,68 @@
+
+{% extends "default.html" %}
+{% load storting_extras %}
+{% block page_title %} Personsøk - {{ query_string }} {% endblock page_title %}
+{% block content %}
+
+
+<h1 id="metode" title="her">Finn en folkevalgt</h1>
+
+<div class="grid_8">
+<form action="/finn/" method="get">
+	<label for="id_q">Person:</label>
+           <input id="id_q" name="q" type="text">
+           <input type="submit" value="Søk">
+
+           
+</form>
+</div>
+
+
+<div class="grid_16" id="metode2">
+
+	
+
+
+<p>Du søkte etter <em>"{{ query_string }}"</em>.
+
+
+{% for f in found_entries %}
+
+	<li> <a href="{{ STATIC_URL }}/person/{{ f.id }}"> {{ f.fornavn }} {{ f.etternavn }}</a></li>	
+{% endfor %}
+
+
+
+
+
+
+</div>
+
+<div class="clear"></div> 
+
+
+
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+{% endblock %}
+
+
+{% block css %}
+<style type="text/css">
+
+</style>
+{% endblock css %}
+
+{% block javascript %}
+<script>
+
+
+</script>
+
+
+
+
+{% endblock javascript %}
+
+

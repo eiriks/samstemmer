@@ -247,29 +247,33 @@ Samstemmer - stortingsdata under lupen
 	<h3>Nysgjerrigper </h3>
 	<a href="{{ STATIC_URL }}/nysgjerrigper"><img src="{{ STATIC_URL }}/static/img/nysgjerrigper.png"></a>
 </div>
+<div class="clear"></div>
+<div class="grid_8">
+  <h3>Finn folkevalgt</h3>
+<form action="/finn/" method="get">
+  <label for="id_q">Søk:</label>
+           <input id="id_q" name="q" type="text">
+           <input type="submit" value="Finn 'an">
+</form>
+</div>
+
 
 <!--  
 
   # to-do:
   - cron job
-  - compute_holmgang fix
-  - download dagens storting (feiler litt på andre maskiner...)
+  - download dagens storting (feiler litt på andre maskiner...) (hjemme)
   - oppmøte-lista
-
   - maile journalister (min 6 stk) min 5 ulike redaksjoner
-  - fikse og maile vit-teori (se helles input)
-
 
   ideer:
   / kantgraf
     klikk på linjer og se kommuniké
   ordsky med full db støtte.
-  søkefunksjon...
+  
 
 
-
-
-
+  done søkefunksjon...
 
   done  http://samstemmer.net/kantgraf/
   done   klikking funker ikke crsf...
