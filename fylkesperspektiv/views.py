@@ -88,9 +88,26 @@ def search(request):
 
         found_entries = Personer.objects.filter(entry_query) #.order_by('-pub_date')
 
+    dagens = Representanter.objects.filter(dagens_representant=True).values('person')
+    random_name = Personer.objects.filter(id__in=dagens).order_by('?').select_related()[0] 
+
+        #random_name = Representanter.objects.filter(dagens_representant=True).order_by('?').select_related()[0]
+
     return render_to_response('fylkesperspektiv/search_results.html',
-                          { 'query_string': query_string, 'found_entries': found_entries }
+                          { 'query_string': query_string, 'found_entries': found_entries, 'random_name':random_name }
                           ) #,context_instance=RequestContext(request))
+
+
+def oppmote(request):
+    '''rangere folk etter oppmøte'''
+
+    # hent dagens
+    # current_reps = Representanter.objects.values('person').filter(dagens_representant=1)
+    # current_personer = Personer.objects.filter(pk__in=[p['person'] for p in current_reps])
+
+    #latest_n_votation = Votering.objects.all().values('votering_id').order_by('-votering_tid').exclude(votering_resultat_type_tekst='Enstemmig vedtatt')[:400]
+    # kopier fra holmgang ca ln 44 ++ 
+    pass
 
 
 def index(request):
@@ -103,9 +120,12 @@ def index(request):
     siste_saker = Saker.objects.all().order_by('-sist_oppdatert_dato')[:10]
 
     nyeste_analyse_id = Wnominateanalyser.objects.values('id').latest('dato')
+
+    dagens = Representanter.objects.filter(dagens_representant=True).values('person')
+    random_name = Personer.objects.filter(id__in=dagens).order_by('?').select_related()[0] 
     
     #return render_to_response('fylkesperspektiv/index.html', {'siste_saker':siste_saker, 'siste_sporsmal':siste_sporsmal, 'current_reps': current_reps, 'fylker': fylker })
-    return render_to_response('fylkesperspektiv/index.html', {'nyeste_analyse_id':nyeste_analyse_id, 'siste_saker':siste_saker, 'siste_sporsmal':siste_sporsmal, 'current_reps': current_reps, 'fylker': fylker })
+    return render_to_response('fylkesperspektiv/index.html', {'nyeste_analyse_id':nyeste_analyse_id, 'siste_saker':siste_saker, 'siste_sporsmal':siste_sporsmal, 'current_reps': current_reps, 'fylker': fylker,'random_name':random_name })
 
 def metode(request):
     return render_to_response('fylkesperspektiv/metode.html')
@@ -267,6 +287,7 @@ def person_detail(request, rep_id):
 
     return render_to_response('fylkesperspektiv/person_detail.html', {'nyeste_analyse_id':nyeste_analyse_id, 'fylkeikhet':fylkeikhet, 'partilikhet':partilikhet, 'holmgang':holmgang, 'deltegelse':deltegelse, 'lix':lix, 'rep': rep, 'sf': sf, 'st': st, 'person': person, 'v': v})
     #return render_to_response('fylkesperspektiv/person_detail.html', {'rep': p, 'sf': sf, 'person': person}, context_instance=RequestContext(request))
+
 
 
 

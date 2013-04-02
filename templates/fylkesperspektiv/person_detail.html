@@ -5,6 +5,17 @@
 
 {% block content %}
 
+<div class="grid_24">
+
+
+{% if not rep.0.dagens_representant %}
+<p class="nb">NB: {{ person.fornavn }}  {{ person.etternavn }} sitter <strong>ikke</strong> på Stortinget denne perioden.</p>
+{% endif %}
+
+
+</div>
+
+
 <div class="grid_5">
 <h1>{{ person.fornavn }}  {{ person.etternavn }} ({{person.parti.id}}) </h1>
 </div>

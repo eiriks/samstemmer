@@ -47,6 +47,13 @@ h2 {
 	color:#44494c;
 }
 
+div > h3:first-child{
+	margin-top: 40px;
+}
+
+.defaultText { /*width: 300px;*/ }
+.defaultTextActive { color: #a1a1a1; font-style: italic; }
+
 #topmenu li{
 	margin-left: 10px;
 }
@@ -76,6 +83,13 @@ a:hover {
   text-decoration: underline;
 }
 
+p.nb{
+	font-style: italic;
+	font-size: 1.5em;
+
+	margin: 10px 0 60px 0;
+}
+
 footer{
 /*	background-color: rgb(64, 64, 64);*/
 	padding-top: 20px;
@@ -94,6 +108,7 @@ footer p {
 }
 footer h2 {
 	margin: 0 0 0 20px;
+	color: white;
 }
 footer a{
 	color:white;

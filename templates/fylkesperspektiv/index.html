@@ -228,6 +228,11 @@ Samstemmer - stortingsdata under lupen
 <div class="clear"></div>
 
 <div class="grid_8">
+  <h3>Nysgjerrigper </h3>
+  <a href="{{ STATIC_URL }}/nysgjerrigper"><img src="{{ STATIC_URL }}/static/img/nysgjerrigper.png"></a>
+</div>
+
+<div class="grid_8">
   <h3>Siste spørsmål</h3>
  {% for s in siste_sporsmal %}
   <div class="sporsmaal">
@@ -243,16 +248,15 @@ Samstemmer - stortingsdata under lupen
 	<a href="{{ STATIC_URL }}/kantgraf"><img src="{{ STATIC_URL }}/static/img/kantgraf_corner.png"></a>
 </div>
 
-<div class="grid_8">
-	<h3>Nysgjerrigper </h3>
-	<a href="{{ STATIC_URL }}/nysgjerrigper"><img src="{{ STATIC_URL }}/static/img/nysgjerrigper.png"></a>
-</div>
+
+
 <div class="clear"></div>
+
 <div class="grid_8">
   <h3>Finn folkevalgt</h3>
 <form action="/finn/" method="get">
   <label for="id_q">Søk:</label>
-           <input id="id_q" name="q" type="text">
+           <input id="id_q" title="{{ random_name }}" name="q" class="defaultText" type="text">
            <input type="submit" value="Finn 'an">
 </form>
 </div>
@@ -261,7 +265,7 @@ Samstemmer - stortingsdata under lupen
 <!--  
 
   # to-do:
-  - cron job
+  - redusere minne på populate_tables (uten all)
   - download dagens storting (feiler litt på andre maskiner...) (hjemme)
   - oppmøte-lista
   - maile journalister (min 6 stk) min 5 ulike redaksjoner
@@ -272,7 +276,7 @@ Samstemmer - stortingsdata under lupen
   ordsky med full db støtte.
   
 
-
+  done   - cron job minne
   done søkefunksjon...
 
   done  http://samstemmer.net/kantgraf/
@@ -338,6 +342,32 @@ Samstemmer - stortingsdata under lupen
 <script type="text/javascript" src="{{ STATIC_URL }}/static/jquery.svgdom.min.js"></script>
 <script type="text/javascript" charset="utf-8">
 
+
+// søkefelt
+$(document).ready(function(){
+    $(".defaultText").focus(function(srcc)
+    {
+        if ($(this).val() == $(this)[0].title)
+        {
+            $(this).removeClass("defaultTextActive");
+            $(this).val("");
+        }
+    });
+    
+    $(".defaultText").blur(function()
+    {
+        if ($(this).val() == "")
+        {
+            $(this).addClass("defaultTextActive");
+            $(this).val($(this)[0].title);
+        }
+    });
+    
+    $(".defaultText").blur();        
+});     
+
+
+// interaktivt kart
 $("#fylker li").hover(function(){
   $("path#"+$(this).attr("class")).addClass("map_highlited");
   $(this).addClass("list_highlighted");

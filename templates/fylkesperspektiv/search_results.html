@@ -9,8 +9,8 @@
 
 <div class="grid_8">
 <form action="/finn/" method="get">
-	<label for="id_q">Person:</label>
-           <input id="id_q" name="q" type="text">
+	<label for="id_q">F.eks.</label>
+           <input title="{{ random_name }}" class="defaultText" id="id_q" name="q" type="text">
            <input type="submit" value="Søk">
 
            
@@ -20,7 +20,8 @@
 
 <div class="grid_16" id="metode2">
 
-	
+
+
 
 
 <p>Du søkte etter <em>"{{ query_string }}"</em>.
@@ -56,7 +57,28 @@
 
 {% block javascript %}
 <script>
-
+$(document).ready(function()
+{
+    $(".defaultText").focus(function(srcc)
+    {
+        if ($(this).val() == $(this)[0].title)
+        {
+            $(this).removeClass("defaultTextActive");
+            $(this).val("");
+        }
+    });
+    
+    $(".defaultText").blur(function()
+    {
+        if ($(this).val() == "")
+        {
+            $(this).addClass("defaultTextActive");
+            $(this).val($(this)[0].title);
+        }
+    });
+    
+    $(".defaultText").blur();        
+});
 
 </script>
 
