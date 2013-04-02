@@ -1,0 +1,106 @@
+
+{% extends "default.html" %}
+{% load storting_extras %}
+{% block page_title %}Oppmøte til voteringer {% endblock page_title %}
+
+{% block content %}
+
+<div class="grid_24">
+
+<h2>Oppmøte til voteringer</h2>
+<p>Vanligvis holder det at <em><a href="http://www.stortinget.no/no/Stortinget-og-demokratiet/Arbeidet/Voteringer/">mer enn halvparten av Stortingsrepresentantene deltar</a></em> i en votering, og en Stortingsrepresentant <a href="http://www.stortinget.no/no/Stortinget-og-demokratiet/Representantene/Hva-gjor-en-representant/">har mange oppgaver</a>. Videre er ikke oppmøteprosent anbefalt "<a href="http://data.stortinget.no/upload/TekniskDokumentasjon.pdf">som uttrykk forrepresentantenes aktivitetsnivå</a>". </p>
+
+<p>Men, er det noen som sjeldent eller aldri dukker opp for å stemme?</p>
+
+
+
+<form style="float:left;padding-left:0px;margin-bottom:20px;">
+Data fra og med: {{ y }}
+	<select>
+		<option value="">Velg startår</option>
+		{% for s in years %}
+	  		<option value="{{ s }}"> {{ s }}</option>
+		{% endfor %}
+	</select>
+</form>
+
+<div style="clear"></div>
+
+  <table id="oppmote_tabell" class="tablesorter">
+    <thead>
+      <tr> <th>Person</th> <th>Parti</th> <th>Fravær</th><th>Ikke tilstede</th><th>for/mot</th> <th>Voteringer totalt</th> </tr>        
+    </thead>
+    <tbody> 
+
+  	{% for key,v in rep_stats.items %}
+  	<tr>
+  		<td><a href="{{ STATIC_URL }}/person/{{ key }}">{{ v.navn }}</a></td>
+
+  		<td>{{ v.p }}</td>
+  		<td>{{ v.ikke_tilstede|percentage:v.sum }}</td>
+  		<td> {% if v.ikke_tilstede %} {{ v.ikke_tilstede }} {% else %} 0 {% endif %}</td>
+  		
+  		<td>{{ v.for }}/{{ v.mot }}</td>
+  		<td>{{ v.sum }}</td>
+
+
+  		
+
+
+
+
+     <!--<td><a href="{{ STATIC_URL }}/person/{{r.sporsmal_fra_id}}"> {{ r.sporsmal_fra_id__fornavn }} {{ r.sporsmal_fra_id__etternavn }}</a> {{ r.sporsmal_fra_id__parti }} {{ r.sporsmal_fra_id__fylke__navn }}</td> 
+     <td><a href="{{ STATIC_URL }}/person/{{r.sporsmal_til_id}}">{{ r.sporsmal_til_id__fornavn }} {{ r.sporsmal_til_id__etternavn }}</a> {{ r.sporsmal_til_id__parti }} {{ r.sporsmal_til_id__fylke__navn }}</td> 
+     <td class="">{{ r.value }}</td>-->
+
+  </tr>
+  {% endfor %}
+</tbody> 
+  </table>
+
+</div>
+
+
+
+<div class="clear"></div>
+
+
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% endblock %}
+
+
+
+
+{% block javascript %}
+<!-- <script type="text/javascript" src="{{ STATIC_URL }}/static/js/jquery-expander/jquery.expander.min.js"></script> -->
+<script type="text/javascript" src="{{ STATIC_URL }}/static/js/tablesorter/jquery.tablesorter.min.js"></script>
+
+
+<script>
+$(document).ready(function() {
+  // [3,1] -> 4th col desc. [[3,1][0,0]] -> 4th desc, 1st asc
+  $("#oppmote_tabell").tablesorter({sortList:[[3,1]], widgets: ['zebra']}); 
+}); // end documen ready
+
+$("select").change(function(){
+	goToPage()
+    //$('select :first-child').attr('selected','selected');
+});
+    function goToPage() {
+      var baseUrl = '{{ STATIC_URL }}/oppmote/';
+      window.location.href = baseUrl + $('select').val()
+     }
+
+
+</script>
+
+{% endblock javascript %}
+
+
+{% block css %}
+<link rel="stylesheet" href="{{ STATIC_URL }}/static/js/tablesorter/themes/blue/style.css" />
+<style type="text/css" media="screen">
+
+</style>
+{% endblock css %}

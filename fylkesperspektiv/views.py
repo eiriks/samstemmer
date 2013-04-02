@@ -98,16 +98,66 @@ def search(request):
                           ) #,context_instance=RequestContext(request))
 
 
-def oppmote(request):
+def oppmote(request, year=None):
     '''rangere folk etter oppmøte'''
+    if year:
+        y = str(year) #print sesjon
+    else:
+        y = Sesjoner.objects.get(er_innevaerende=1)
+        y = str(y.til).split("-")[0]
+        y = int(y)-1     # for at vi skal få med alle voteringene fra årey y må vi sette datoen til siste dag året før:
+    
+    print y
 
     # hent dagens
     # current_reps = Representanter.objects.values('person').filter(dagens_representant=1)
-    # current_personer = Personer.objects.filter(pk__in=[p['person'] for p in current_reps])
+    # current_personer = Personer.objects.filter(pk__in=[p['person'] for p in current_reps]).select_related()
 
-    #latest_n_votation = Votering.objects.all().values('votering_id').order_by('-votering_tid').exclude(votering_resultat_type_tekst='Enstemmig vedtatt')[:400]
-    # kopier fra holmgang ca ln 44 ++ 
-    pass
+    # rep_stats = {}
+    # for r in current_personer:
+    #     stats = Voteringsresultat.objects.filter(representant_id=r.id).values('votering_avgitt').annotate(Count('votering_avgitt')).select_related()
+    #     rep_stats[r.id] = {}
+    #     rep_stats[r.id]['stats'] = {'person': r}
+
+    #     for n in stats:
+    #         #print n, n['votering_avgitt'], n['votering_avgitt__count']
+    #         rep_stats[r.id]['stats'][n['votering_avgitt']] = n['votering_avgitt__count']
+
+    #     try:
+    #         is_for =  rep_stats[r.id]['stats']['for']
+    #     except:
+    #         is_for = 0
+    #     try:
+    #         is_mot = rep_stats[r.id]['stats']['mot']
+    #     except:
+    #         is_mot = 0
+    #     rep_stats[r.id]['stats']['for_mot'] = '%s/%s' % (is_for, is_mot)
+        
+    sql = '''SELECT representant_id_id, votering_avgitt, count(votering_avgitt) as c, v.id, p.fornavn, p.etternavn, p.parti_id
+            FROM `fylkesperspektiv_voteringsresultat` v, `fylkesperspektiv_votering` vo, `fylkesperspektiv_personer` p
+            WHERE vo.votering_tid > '%s-12-31 23:59:59' AND  v.votering_id = vo.votering_id AND v.representant_id_id = p.id
+            GROUP BY v.votering_avgitt, v.representant_id_id 
+            ORDER BY representant_id_id, votering_avgitt
+        ''' % (y)
+    resultat = Voteringsresultat.objects.raw(sql)
+
+    rep_stats = {}
+    for r in resultat:
+        # print r.c, r.votering_avgitt, r.representant_id_id
+        # if this is the first loop for this mp, create key
+        if r.representant_id_id not in rep_stats:
+            rep_stats[r.representant_id_id] = {'p':r.parti_id}
+            rep_stats[r.representant_id_id]['navn'] = r.fornavn +' '+ r.etternavn
+            rep_stats[r.representant_id_id]['sum'] = 0
+        
+        rep_stats[r.representant_id_id][r.votering_avgitt] = r.c
+        rep_stats[r.representant_id_id]['sum'] += r.c
+
+    #print rep_stats
+
+    years = Votering.objects.raw('SELECT Year(votering_tid) as y, votering_id from fylkesperspektiv_votering group by y order by y desc ')
+    years = [int(yy.y)-1 for yy in years]
+    return render_to_response('fylkesperspektiv/oppmote.html', {'rep_stats':rep_stats, 'y':str(y), 'years': years })
 
 
 def index(request):
