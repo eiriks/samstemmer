@@ -26,8 +26,11 @@ class Command(BaseCommand):
     help = """Compute OC for latest n stuff'./manage.py compute_oc est eso jst'
     uses R code:    http://voteview.com/optimal_classification.htm
     """
-
-    number_of_votes = 200   # go back this many votes to construct analysis
+    # med mer enn 100 folkevalgte og voteringer > 500 er denne metoden svært presis. (p. 16)
+    # også med 200 voteringer blir dette bra, men kan jeg klemme til med 500 uten
+    # å bruke for mye minne på serveren? 
+    # prøver: 
+    number_of_votes = 500 #200   # go back this many votes to construct analysis
 
     lookup = {}
     lookup['for'] = 1

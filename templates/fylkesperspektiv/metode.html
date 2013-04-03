@@ -23,7 +23,7 @@ Samstemmer - metode
 	<p>Data som brukes kan lastes ned <a href="{{ STATIC_URL }}/nedlastinger">her</a> (i csv-format som kan åpnes i f.eks. Excel) og fra <a href="http://data.stortinget.no/">data.stortinget.no</a> for de mer teknisk orienterte.</p>
 	<p>Inneholder data under Norsk lisens for offentlige data (NLOD) tilgjengeliggjort av Stortingets datatjeneste.</p>
 	<h3>Automagi</h3>
-	<p>Denne nettsiden henter automatis ny data fra Stortinget, slik at tallene som vises her alltid er oppdatert med de siste endringene. </p>
+	<p>Denne nettsiden henter automatisk ny data fra Stortinget, slik at tallene som vises her alltid er oppdatert med de siste endringene. </p>
 </div>
 
 <div class="clear"></div> 
@@ -31,19 +31,26 @@ Samstemmer - metode
 <div class="grid_5"><span class="text_icon">OC</span></div>
 <div class="grid_15" id="oc">
 	<h2>Optimal klassifisering</h2>
-	<a href="http://voteview.com/optimal_classification.htm">lenke</a>
+	<p>Jeg har kalt det et <em>Folkerepresentasjonskart</em>, det er et bilde-som-oppsummering som viser representantenes foretrukne posisjon i forhold til hverandre basert på de siste n voteringene. Koden som regnes ut disse posisjonene kan du finne <a href="http://voteview.com/optimal_classification.htm">her</a> og en kort forklaring <a href="http://cran.r-project.org/web/packages/oc/vignettes/oc.pdf">her</a>, og en lengre en <a href="https://www.google.no/search?q=isbn+1139446754">her</a>.</p>
+	<p>Posisjonene er produsert ved å først lage en avstandsmatrise for alle representantene basert på vektror for hver representans stemmehistorikk. Denne matrisen oversettes til to dimensjoner (x og y i grafen) ved at skillelinjer (mellom de som stemmer for og i mot) deler en rute opp i flere og flere polygoner. Jo flere ganger en slik skillelinje trekkes jo flere golygoner skapes (så sant de som ikke er for/mot er nøyaktig de samme hevr gang), og posisjonene som genereres representerer disse polygonene.</p>
 
-	<h3>PRE</h3>
-	feilmargin? 
+	<img src="{{ STATIC_URL }}/static/img/rplot.png" style="">
+	<p>Øverst til venstre vises OC coordinates, som er just det samme som vises på denne siden under <a href="/oc">folkerepresentasjonskart</a>. Øverst til venstre i bildet vises distribusjonen over vinklene på skillelinjene som søylediagram. Nederst til venstre vises en <a href="http://en.wikipedia.org/wiki/Factor_analysis">scree plot</a> som indikerer forklaringskraften i demensjonene. Typisk for stemmedata er at to dimensjoner stort sett dekker det meste, og den første dimensjonen (høyre-venstre) dominerer voldsomt. Neders til høyre vises en Coombs mesh, eller skillelinjer (cutting lines) mellom for/mot. Legg merke til at i eksemplet over, som er basert på 200 avstemninger finnes det fortsatt enkelte relativt store polygoner. Legg derfor inn litt slingringsmon når du analyserer! </p>
+	
+
+	<h3>APRE</h3>
+	<p>Ved hvert folkerepresentasjonskart oppgis en APRE-verdi. APRE står for <em> Aggregate Proportional Reduction in Error</em> og er et mål for for hvor godt modellen dekker dataene. APRE er et tall fra 0 til 1, der 0 ikke dekker dataene i det hele tatt, men 1 viser til en perfekt klassifisering. Ved APRE 1 (eller 100%) vises alle representanter et sted i koordinatsystemet der de alltid står "riktig" i forhold til skillelinjene (slik de stemte). </p>
+	
 	<h3>CC</h3>
-	correctly_classified
+	<p>En CC-verdi oppgis også. CC står for <em>correctly classified</em> og er også et mål på hvor støtt graften står. Ved 100% er ingen av representantenes posisjon på noe tidspunkt på "feil side" av en skillelinje. </p>
+
 	<h3>Alle er ikke med!</h3>
 	<p>Nei.</p>
 	<ol>
 		<li>Folk vi gjerne skulle ha hatt med er statsrådene, men de sitter som kjent ikke på tinget, men i regjeringen.</li>
 		<li>Det mangler fortsatt noen!
 			<ul>
-				<li>For å minske feilmarginen til metoden lukes representanter som ikke stemmer ofte nok (har ikke stemt i mer enn n (20?) avstemninger i materialet som analyseres. <br />
+				<li>For å minske feilmarginen til metoden lukes representanter som ikke stemmer ofte nok (har ikke stemt i mer enn n (20) avstemninger i materialet som analyseres. <br />
 					Likeledes lukes saker som det er stor enighet (mindre enn 5% oposisjon) ut, slik at det er forskeldene, ikke likhetene som undersøkes.</li>
 
 			</ul></li>
@@ -64,7 +71,7 @@ Samstemmer - metode
 
 	<li><a href="http://www.sprakrad.no/nb-no/klarsprak/sprakhjelp/skriverad/om-liksberegning/">Språkrådets tekst om lix</a></li>
 
-	<li>Implementasjonen som er brukt er basert på kode (og erfaringer) fra <a href="http://www.mortengoodwin.net/publicationfiles/webmining_2007_reportgroup6.pdf">Thomas Jakobsen og Thomas Skardal </a>, nå som en del av <a href="https://github.com/nltk/nltk_contrib/tree/master/nltk_contrib/readability">nltk_contrib</a>.<br /> (min kode på github er skrevet om til å forvente unicode tekst)</li>
+	<li>Implementasjonen som er brukt er basert på kode (og erfaringer) fra <a href="http://www.mortengoodwin.net/publicationfiles/webmining_2007_reportgroup6.pdf">Thomas Jakobsen og Thomas Skardal </a>, nå som en del av <a href="https://github.com/nltk/nltk_contrib/tree/master/nltk_contrib/readability">nltk_contrib</a>.<br /> (min kode <a href="https://github.com/eiriks/samstemmer/blob/master/fylkesperspektiv/management/commands/textanalyzer_no.py">på github</a> er skrevet om til å forvente unicode tekst)</li>
 		</ul>
 </div>
 
@@ -86,7 +93,7 @@ Samstemmer - metode
 	<h2>Lenker</h2>
 	<ul>
 		<li><a href="http://www.partifinansiering.no/">partifinansiering.no</a></li>
-		<li><a href="holderdeord.no">holderdeord.no</a></li>
+		<li><a href="www.holderdeord.no">holderdeord.no</a></li>
 	</ul>
 
 </div>
@@ -151,6 +158,21 @@ Samstemmer - metode
 	<p>Kilde: www.ordnett.no, 2013</p>
 
 </div>
+
+
+<div class="clear"></div> 
+<div class="grid_5"><span class="text_icon">✳</span></div>
+<div class="grid_15" id="nettverk">
+	<h2>Nettverk</h2>
+	<p>Stortingsdataene inneholder nettverksinformasjon. F.eks. er hvem-stiller-spørsmål-til-hvem et nettverk av mennesker bundet sammen av spørsmål. </p>
+	<p>Stemmelikhet kan også bli et nettverk. Se f.eks. bildet under som viser et slikt nettverk der representanter som stemmer likt i mer enn 50% av voteringene får en kant (linje, relasjon). En layout-algoritme orienterer så nodene på en visuelt behagelig måte som separerer nodene etter relasjonene.</p>
+	<a href="{{ STATIC_URL }}/static/img/sprsmal_netverk.png"><img src="{{ STATIC_URL }}/static/img/sprsmal_netverk_s.png" style=""></a>
+	<p>Koden som tegnet bildet over er skrevet av <a href="http://pcbje.com/">Petter Christian Bjelland</a> og redigert av meg. Du finner den <a href="https://github.com/eiriks/stortinget-to-gephi">her</a>. Til å visualisere grafen trenger du <a href="https://gephi.org/">gephi</a>.
+	</p>
+	
+</div>
+
+
 
 <hr />
 
