@@ -23,12 +23,10 @@
 	<p><span class="bracket">Stikkord: {</span> 
 		{% if person.doedsdato|safe != "0001-01-01 00:00:00" %} Gikk bort: {{  person.doedsdato }} {% endif %}
 		{{person.kjoenn|capfirst}}<span class="bracket">, </span>
+		{{person.parti.id}}<span class="bracket">, </span>
 		{{person.foedselsdato|timesince}}<span class="bracket">, </span>
 		<a href="{{ STATIC_URL }}/fylke/{{person.fylke_id}}">{{person.fylke}}</a><span class="bracket">, </span>
-		{{ v|length }} avstemninger  ({{deltegelse}}% oppmøte)<span class="bracket">, </span>
-		Medlem av:	{% for k in  person.komiteer.all %}
-			<a href="{{ STATIC_URL }}/komite/{{ k.id }}">{{ k }}</a>		
-			{% endfor %}<span class="bracket">, </span>
+		{{ v|length }} avstemninger  ({{deltegelse}}% oppmøte) i {% if rep.count > 1 %} sine {% else %} sin {% endif %}
 		{{ rep.count }} 
 		{% if rep.count > 1 %}
 			perioder {% else %} periode
@@ -43,13 +41,14 @@
 				Vara for {{ r.vara_for }}
 			{% endif %}		
 			{{ r.stortingsperiode.fra|date:"Y" }} - {{ r.stortingsperiode.til|date:"Y" }}<span class="bracket">, </span>
-		
-
-		
-
 
 		{% endfor %}
-		)
+		)<span class="bracket">, </span>
+		Medlem av:	{% for k in  person.komiteer.all %}
+			<a href="{{ STATIC_URL }}/komite/{{ k.id }}">{{ k }}</a>		
+			{% endfor %}
+
+		
 
 	<span class="bracket">}</span>
 	</p>
@@ -61,7 +60,7 @@
 <div class="clear"></div>
 
 <div class="grid_8">
-<h2>Stemmer mest som:</h2>
+<h2>Stemmer mest <a href="{{ STATIC_URL }}/metode/#stemmelikhet">som</a>:</h2>
 <ol>
 {% for h in holmgang|slice:":6"  %}
 	{% if h.deltager1 != h.deltager2 %}
@@ -79,7 +78,7 @@
 
 </ol>
 
-<h2>Stemmer minst som:</h2>
+<h2>Stemmer minst <a href="{{ STATIC_URL }}/metode/#stemmelikhet">som</a>:</h2>
 <ol>
 {% for h in holmgang|dictsort:"prosentlikhet"|slice:"5" %} {# reversed|slice:":7" #}
 	{% if h.deltager1 != h.deltager2 %}
@@ -93,7 +92,7 @@
 
 
 <div class="grid_8">
-<h2>Stemmer overens med parti</h2>
+<h2>Stemmer overens med <a href="{{ STATIC_URL }}/metode/#stemmelikhet">parti</a></h2>
 	<ol>
 		{% for p in partilikhet %}
 		<li>{{ p.parti }} {{ p.prosentlikhet }}</li>	
@@ -107,7 +106,7 @@
 
 
 <div class="grid_8">
-<h2>Stemmer overens med fylke</h2>
+<h2>Stemmer overens med <a href="{{ STATIC_URL }}/metode/#stemmelikhet">fylke</a></h2>
 <ol>
 	{% for f in fylkeikhet %}
 	<li> <a href="{{ STATIC_URL }}/fylke/{{ f.fylke.id }} ">{{ f.fylke }}</a> {{ f.prosentlikhet }}%</li>
@@ -184,12 +183,12 @@
 	</div>
 
 	<div class="grid_10">
-	<h3>Frekvente ord</h3>
+	<h3><a href="{{ STATIC_URL }}/metode/#ordbruk">Frekvente</a> ord</h3>
 	{{person.top_words_in_questions|safe}}
 	</div>
 
 	<div class="grid_10">
-	<h3>Typiske ord</h3>
+	<h3><a href="{{ STATIC_URL }}/metode/#ordbruk">Typiske</a> ord</h3>
 	{{person.top_tfidf_words_in_questions|safe}}
 	</div>
 	

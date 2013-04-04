@@ -8,6 +8,7 @@ Samstemmer - representantkart
 
 
 <h2>Folkerepresentasjonskart</h2>
+
 <p>Analysert den {{ analyser.0.dato|date:"d/m-Y" }}. Metoden er brukes heter <em>Optimal Classification</em>.  {{ analyser.0.materiale }} pre= {{ analyser.0.pre }} cc={{ analyser.0.correctly_classified }}. Du kan lese mer om metoden under <a href="{{ STATIC_URL }}/metode/#oc">metode</a>.
 </p>
 
@@ -18,6 +19,9 @@ Samstemmer - representantkart
 </div>
 
 <div class="grid_8">
+	<div id="tip"><img src="{{ STATIC_URL }}/static/img/drag.png" style="float:left;">
+	<p>Klikk og dra for å markere representantene. </p></div>
+	
 	<ul>
 	{% for a in resultater %}
 		<li id="f_{{a.representant}}" class="representant_detalj"> <a href="{{ STATIC_URL }}/person/{{a.representant}}">{{a.representant__fornavn}} {{a.representant__etternavn}}</a><br />{{a.representant__parti__id}}, {{a.representant__fylke__navn}} </li>
@@ -196,6 +200,7 @@ Samstemmer - representantkart
 				//console.log("brushstart")
 				svg.classed("selecting", true);
 				$("li.representant_detalj:visible").hide();
+				$("#tip").show()
 			}
 	
 			function brush() {
@@ -224,6 +229,7 @@ Samstemmer - representantkart
 			function brushend() {
 				show_details(d3.selectAll("circle.selected"))
 				svg.classed("selecting", !d3.event.target.empty());
+				$("#tip").hide()
 			}
 	});
 	

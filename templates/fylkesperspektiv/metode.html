@@ -23,7 +23,8 @@ Samstemmer - metode
 	<p>Data som brukes kan lastes ned <a href="{{ STATIC_URL }}/nedlastinger">her</a> (i csv-format som kan åpnes i f.eks. Excel) og fra <a href="http://data.stortinget.no/">data.stortinget.no</a> for de mer teknisk orienterte.</p>
 	<p>Inneholder data under Norsk lisens for offentlige data (NLOD) tilgjengeliggjort av Stortingets datatjeneste.</p>
 	<h3>Automagi</h3>
-	<p>Denne nettsiden henter automatisk ny data fra Stortinget, slik at tallene som vises her alltid er oppdatert med de siste endringene. </p>
+	<p>Denne nettsiden henter automatisk ny data fra Stortinget, slik at tallene som vises her alltid er oppdatert med de siste endringene.</p>
+	<p>Ny data hentes hver klokketime, hvis der er noe nytt.</p>
 </div>
 
 <div class="clear"></div> 
@@ -31,11 +32,12 @@ Samstemmer - metode
 <div class="grid_5"><span class="text_icon">OC</span></div>
 <div class="grid_15" id="oc">
 	<h2>Optimal klassifisering</h2>
-	<p>Jeg har kalt det et <em>Folkerepresentasjonskart</em>, det er et bilde-som-oppsummering som viser representantenes foretrukne posisjon i forhold til hverandre basert på de siste n voteringene. Koden som regnes ut disse posisjonene kan du finne <a href="http://voteview.com/optimal_classification.htm">her</a> og en kort forklaring <a href="http://cran.r-project.org/web/packages/oc/vignettes/oc.pdf">her</a>, og en lengre en <a href="https://www.google.no/search?q=isbn+1139446754">her</a>.</p>
-	<p>Posisjonene er produsert ved å først lage en avstandsmatrise for alle representantene basert på vektror for hver representans stemmehistorikk. Denne matrisen oversettes til to dimensjoner (x og y i grafen) ved at skillelinjer (mellom de som stemmer for og i mot) deler en rute opp i flere og flere polygoner. Jo flere ganger en slik skillelinje trekkes jo flere golygoner skapes (så sant de som ikke er for/mot er nøyaktig de samme hevr gang), og posisjonene som genereres representerer disse polygonene.</p>
+	<p>Jeg har kalt det et <em>folkerepresentasjonskart</em>, det er et bilde-som-oppsummering som viser representantenes foretrukne posisjon i forhold til hverandre basert på de siste n voteringene. Koden som regnes ut disse posisjonene kan du finne <a href="http://voteview.com/optimal_classification.htm">her</a> og en kort forklaring <a href="http://cran.r-project.org/web/packages/oc/vignettes/oc.pdf">her</a>, og en lengre en <a href="https://www.google.no/search?q=isbn+1139446754">her</a>.</p>
+	<p>Posisjonene er produsert ved å først lage en avstandsmatrise for alle representantene basert på vektorer for hver representans stemmehistorikk. Denne matrisen oversettes til to dimensjoner (x og y i grafen) ved at skillelinjer (mellom de som stemmer for og i mot) deler en rute opp i flere og flere polygoner. Jo flere ganger en slik skillelinje trekkes jo flere polygoner skapes (så sant de som ikke er for/mot er nøyaktig de samme hver gang), og posisjonene som genereres representerer disse polygonene.</p>
 
 	<img src="{{ STATIC_URL }}/static/img/rplot.png" style="">
-	<p>Øverst til venstre vises OC coordinates, som er just det samme som vises på denne siden under <a href="/oc">folkerepresentasjonskart</a>. Øverst til venstre i bildet vises distribusjonen over vinklene på skillelinjene som søylediagram. Nederst til venstre vises en <a href="http://en.wikipedia.org/wiki/Factor_analysis">scree plot</a> som indikerer forklaringskraften i demensjonene. Typisk for stemmedata er at to dimensjoner stort sett dekker det meste, og den første dimensjonen (høyre-venstre) dominerer voldsomt. Neders til høyre vises en Coombs mesh, eller skillelinjer (cutting lines) mellom for/mot. Legg merke til at i eksemplet over, som er basert på 200 avstemninger finnes det fortsatt enkelte relativt store polygoner. Legg derfor inn litt slingringsmon når du analyserer! </p>
+	<p>Folkerepresentasjonskartet er én representasjon av dataen, men der er mer medadata. Bildet over viser mer data for en kjøring.</p>
+	<p>Øverst til venstre vises OC coordinates, som er just det samme som vises på denne siden under <a href="/oc">folkerepresentasjonskart</a>. Øverst til høyre i bildet vises distribusjonen over vinklene på skillelinjene som søylediagram. Nederst til venstre vises en <a href="http://en.wikipedia.org/wiki/Factor_analysis">scree plot</a> som indikerer forklaringskraften i demensjonene. Typisk for stemmedata er at to dimensjoner stort sett dekker det meste, og den første dimensjonen (høyre-venstre) dominerer voldsomt. Neders til høyre vises en Coombs mesh, eller skillelinjer (cutting lines) mellom for/mot. Legg merke til at i eksemplet over, som er basert på 200 avstemninger finnes det fortsatt enkelte relativt store polygoner. Legg derfor inn litt slingringsmon når du analyserer! </p>
 	
 
 	<h3>APRE</h3>
@@ -57,6 +59,24 @@ Samstemmer - metode
 	</ol>
  
 </div>
+
+
+
+<div class="clear"></div> 
+<div class="grid_5"><span class="text_icon">✑</span></div>
+<div class="grid_15" id="ordbruk">
+	<h2>Typiske og frekvente ord</h2>
+
+	<div id="wordcloud" style="width:300px; float:right">
+	<span class="size-2" name="tfidf: 0.0567497391095">Fjordane</span><span class="size-2" name="tfidf: 0.0561871546031">Sogn</span><span class="size-3" name="tfidf: 0.0469820983831">vert</span><span class="size-6" name="tfidf: 0.0286430187877">Førde</span><span class="size-6" name="tfidf: 0.0280916009786"> 
+</span><span class="size-7" name="tfidf: 0.0248597337136">syte</span><span class="size-7" name="tfidf: 0.0223465925254">Helse</span><span class="size-7" name="tfidf: 0.0218007256888">viser</span><span class="size-7" name="tfidf: 0.0217151928763">Nordfjordeid</span><span class="size-8" name="tfidf: 0.0192157161343">desse</span><span class="size-8" name="tfidf: 0.0184232827577">spørsmål</span><span class="size-8" name="tfidf: 0.0162646133282">midlar</span><span class="size-8" name="tfidf: 0.0162007147862">ei</span><span class="size-8" name="tfidf: 0.0154407737672">Statens</span><span class="size-8" name="tfidf: 0.0146042163423">datert</span><span class="size-8" name="tfidf: 0.0140271803398">må</span><span class="size-8" name="tfidf: 0.013690248817">får</span><span class="size-8" name="tfidf: 0.0134217882389">Vik</span><span class="size-8" name="tfidf: 0.013240098897">nr</span><span class="size-8" name="tfidf: 0.0131276057282">kommunane</span><span class="size-9" name="tfidf: 0.0127234553375">kommune</span><span class="size-9" name="tfidf: 0.0125690415515">få</span><span class="size-9" name="tfidf: 0.0125255791495">Vikafjellet</span><span class="size-9" name="tfidf: 0.012404215898">rusposten</span><span class="size-9" name="tfidf: 0.0122950572214">svar</span><span class="size-9" name="tfidf: 0.0118355847167">kjend</span><span class="size-9" name="tfidf: 0.0113175644412">år</span><span class="size-9" name="tfidf: 0.0113050260745">store</span></div>
+<p>Frekvente ord er ord som brukes ofte. En frekvensanalyse. Sier noen <em>Førde</em> ofte, så utheves ordet med større bokstaver. </p>
+<p>En begrenset frekvensordliste med <a href="http://en.wikipedia.org/wiki/Stop_words">stopp-ord</a> benyttes. </p>
+<p>Typiske ord er ord som en representant bruker ofte, som alle de andre representantene bruker mindre hyppig. Disse ordene er funnet ved <a href="http://en.wikipedia.org/wiki/Tf%E2%80%93idf">Tf–idf</a>, <em>term frequency–inverse document frequency</em>.</p>
+<p>Typiske og frekvente ord genereres basert på alle skriftlige spørsmål.</p>
+
+</div>
+
 
 
 <div class="clear"></div> 
