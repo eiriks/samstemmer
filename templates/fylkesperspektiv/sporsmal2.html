@@ -138,7 +138,7 @@ function getInfo(person_id){
 				console.log("error", data)
 			}else{
 				console.log("funker", data)
-				html = "<h4><a href={{ STATIC_URL }}/person/"+data.person.id+">"+ data.person.navn+ "</a></h4> For "+data.person.parti +" og "+data.person.fylke+".<ul><li>Stiller: "+data.stiller + "</li><li>Blit spurt: " + data.blir_stillt +"</li></ul> i inneværende sesjon <br />("+data.sesjon+")";
+				html = "<h4><a href={{ STATIC_URL }}/person/"+data.person.id+">"+ data.person.navn+ "</a></h4> For "+data.person.parti +" og "+data.person.fylke+".<ul><li>Stiller: "+data.stiller + "</li><li>Blit stilt: " + data.blir_stillt +"</li></ul> i inneværende sesjon <br />("+data.sesjon+")";
 				$('#info').html(html)
 			}
 		},

@@ -36,7 +36,7 @@ Samstemmer - metode
 	<p>Posisjonene er produsert ved å først lage en avstandsmatrise for alle representantene basert på vektorer for hver representans stemmehistorikk. Denne matrisen oversettes til to dimensjoner (x og y i grafen) ved at skillelinjer (mellom de som stemmer for og i mot) deler en rute opp i flere og flere polygoner. Jo flere ganger en slik skillelinje trekkes jo flere polygoner skapes (så sant de som ikke er for/mot er nøyaktig de samme hver gang), og posisjonene som genereres representerer disse polygonene.</p>
 
 	<img src="{{ STATIC_URL }}/static/img/rplot.png" style="">
-	<p>Folkerepresentasjonskartet er én representasjon av dataen, men det er mer medadata. Bildet over viser mer data for en kjøring.</p>
+	<p>Folkerepresentasjonskartet er én representasjon av dataen, men det er mer metadata. Bildet over viser mer data for en kjøring.</p>
 	<p>Øverst til venstre vises OC coordinates, som er akkurat det samme som vises på denne siden under <a href="/oc">folkerepresentasjonskart</a>. Øverst til høyre i bildet vises distribusjonen over vinklene på skillelinjene som søylediagram. Nederst til venstre vises en <a href="http://en.wikipedia.org/wiki/Factor_analysis">scree plot</a> som indikerer forklaringskraften i dimensjonene. Typisk for stemmedata er at to dimensjoner stort sett dekker det meste, og den første dimensjonen (høyre-venstre) dominerer voldsomt. Neders til høyre vises en Coombs mesh, eller skillelinjer (cutting lines) mellom for/mot. Legg merke til at i eksemplet over, som er basert på 200 avstemninger finnes det fortsatt enkelte relativt store polygoner. Legg derfor inn litt slingringsmon når du analyserer! </p>
 	
 
@@ -46,7 +46,7 @@ Samstemmer - metode
 	<h3>CC</h3>
 	<p>En CC-verdi oppgis også. CC står for <em>correctly classified</em> og er også et mål på hvor støtt grafen står. Ved 100% er ingen av representantenes posisjon på noe tidspunkt på "feil side" av en skillelinje. </p>
 
-	<h3>Alle er ikke med!</h3>
+	<h3>Ikke alle er med!</h3>
 	<p>Nei.</p>
 	<ol>
 		<li>Folk vi gjerne skulle ha hatt med er statsrådene, men de sitter som kjent ikke på tinget, men i regjeringen.</li>
@@ -123,8 +123,8 @@ Samstemmer - metode
 <div class="grid_15" id="stemmelikhet">
 	<h2>Stemmelikhet</h2>
 	<p>Hvor likt stemmer representant x og y?</p>
-	<p>Utregningen for hvor likt to representanter stemmer tra følgende prosedyre:<br />
-		Stemmeresultatetne for de to representantenes siste 400 voteringer sammenliknes ved at kun de voteringene der de begge var til stede brukes, slik at hvis begge ikke var frahverende teller dette hverken som enighet eller uenighet. Representanter som sjeldent voterer kan da ende opp med 0% likhet (og ulikhet) med alle andre hvis de to aldri var på samme votering innen de siste n voteringer. 
+	<p>Utregningen for hvor likt to representanter stemmer følger denne prosedyren:<br />
+		Voteringsresultatene for de to representantenes siste 400 voteringer sammenliknes ved at kun de voteringene der de begge var til stede brukes. Samtidig fravær teller altså ikke som likhet. Representanter som sjeldent voterer kan da ende opp med 0% likhet (og ulikhet) med alle andre hvis de to aldri var på samme votering innen de siste n voteringer. 
 	</p>
 	<h3>Likhet med parti</h3>
 	<p>For å finne likhet mellom representanter og partier brukes "median-stemmen" eller flertallet for et parti som sammenlikningsgrunnlag. Sammenligningen viser altså hvor ofte en representant stemmer med flertallet i partiene.</p>
