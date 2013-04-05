@@ -7,9 +7,10 @@ Samstemmer - representantkart
 {% block content %}
 
 
-<h2>Folkerepresentasjonskart</h2>
+<h2>Folkerepresentasjonskart - {{ analyser.0.dato|date:"d/m-Y" }}</h2>
 
-<p>Analysert den {{ analyser.0.dato|date:"d/m-Y" }}. Metoden er brukes heter <em>Optimal Classification</em>.  {{ analyser.0.materiale }} pre= {{ analyser.0.pre }} cc={{ analyser.0.correctly_classified }}. Du kan lese mer om metoden under <a href="{{ STATIC_URL }}/metode/#oc">metode</a>.
+<p>Metoden som brukes her heter <em>Optimal Classification</em>.  {{ analyser.0.materiale }} pre={{ analyser.0.pre }} cc={{ analyser.0.correctly_classified }}. Les en kort forklaring <a href="#info">her</a>, og mer detaljert om metoden under <a href="{{ STATIC_URL }}/metode/#oc">metode</a>.
+
 </p>
 
 <div class="clear"></div>
@@ -30,22 +31,30 @@ Samstemmer - representantkart
 </div>
 
 <div id="info" class="grid_16">
-	<h2>Hva kan jeg lese ut av dette?</h2>
+	<h2 id="info">Hva kan jeg lese ut av dette?</h2>
 	<p>Denne grafen viser representantenes preferanser i forhold til hverandre basert på hva de stemmer, ikke hva de sier.</p>
 	<p>Representantkartet viser representantenes prefererte posisjon i forhold til hverandre. Metoden har vist seg å fange opp høyre-venstre dimensjonen i politikk på x-aksen og andre (ulike) dimensjoner på y-aksen. Det vil si at representanten lengst til venstre i grafen er den som stemmer lengst til venstre politisk (og vice versa). </p>
-	<p>Y-aksen fanger opp den nest (nr2) mest forklarende dimensjonen i datasettet. Pr 12/3-2013 ligger enkelte KrF-representanter langt nede i grafen. Dette gjenspeiler et saksområde som skiller KRF fra de andre partiene.</p>
-	<p>En nevneverdig karakteristikk ved norske data sammenliknet med andre land (metoden er utviklet i USA, men er brukt i mange andre land, så vell som i EU og FN), er at de Norske partiene stemmer svært likt, som kan bety at "partipisken" i Norge er svært sterk.</p>
+	<p>Y-aksen fanger opp den nest (nr2) mest forklarende dimensjonen i datasettet. Per 12/3-2013 ligger enkelte KrF-representanter langt nede i grafen. Dette gjenspeiler et saksområde som skiller KrF fra de andre partiene.</p>
+	<p>En nevneverdig karakteristikk ved norske data sammenliknet med andre lands politisk forsamlinger (metoden er utviklet i USA, men er brukt i mange andre land, så vell som i EU og FN), er at de Norske partiene stemmer svært likt, som kan bety at "partipisken" i Norge er svært sterk.</p>
 	<p>Les mer under <a href="{{ STATIC_URL }}/metode#oc">metode</a>.</p>
 </div>
 
 <div class="grid_8">
-<h2>Tidligere utregninger</h2>
-{% for a in analyser %}
-	<li><b>{{a.dato}}</b> {{a.id}} (<a href="{{a.id}}">se detaljer</a>)</li>
+	<h2>Tidligere utregninger</h2>
+	{% for a in analyser %}
+		<li><b>{{a.dato}}</b> (<a href="{{a.id}}">se detaljer</a>)</li>
+	{% endfor %}
+</div>
+
+
+<div class="clear"></div>
+<div>
+	<h3>Ikke nok data på disse {{ ikke_med.count }}:</h3>
+{% for i in ikke_med %}
+	<a href="{{ STATIC_URL }}/person/{{ i.representant }}">{{ i.representant__fornavn }} {{ i.representant__etternavn }}</a> {{i.representant__parti__id}} {{i.representant__Voteringsresultat__votering_avgitt.count }} , 
 {% endfor %}
 
 </div>
-
 
 
 <div class="clear"></div>

@@ -7,31 +7,16 @@ Samstemmer - LIX, Lesbarhetsindeks
 
 {% block content %}
 
-    <div class="grid_24">
+    <div class="grid_16">
       <h2>Dagens representanter etter lesbarhet</h2>
-      <p>Tabellen kan rangeres via tabellens overskrifter. <a href="#lix">Info</a></p>
+      <p>Tabellen kan rangeres via tabellens overskrifter.</p><p> Hold inne shift for å rangere på flere overskrifter. </p>
+
     </div>
 
-    <div class="grid_24">
-      <table id="lix_tabell" class="tablesorter">
-        <thead>
-          <tr> <th>Navn</th> <th>Parti</th> <th>Materiale</th> <th>LIX-Verdi</th> </tr>        
-        </thead>
-        <tbody> 
-      {% for rep in lix_list %} 
-      <tr>
-         <td><a href="{{ STATIC_URL }}/person/{{rep.person.id}}">{{ rep.person }}</a></td> <td>{{ rep.person.parti }}</td> 
-         <td>{{ rep.materiale }}</td> <td class="{{ rep.value|lixcategory }}">{{ rep.value }}</td>
-      </tr>
-      {% endfor %}
-    </tbody> 
-      </table>
+    <div class="grid_8">
+          <h4>LIX: Lesbarhetsindeks</h4>
+            <p>Disse verdiene er basert på representantens skriftlige spørsmål, og beskriver kun hvor lettlest spørsmålstekstene er. <a href="http://no.wikipedia.org/wiki/Lesbarhetsindeks"></a>LIX</a> er omdiskutert, og er ikke et mål for kvalitet. Se <a href="{{ STATIC_URL }}/metode#lix">metodesiden</a> for mer info.</p>
     </div>
-
-    <div class="clear"></div>
-
-     <h2 id="lix">LIX: Lesbarhetsindeks</h2>
-      <p>Disse verdiene er basert på representantens skriftlige spørsmål, og beskriver kun hvor lettlest spørsmålstekstene er. <a href="http://no.wikipedia.org/wiki/Lesbarhetsindeks"></a>LIX</a> er omdiskutert, og er ikke et mål for kvalitet. Se <a href="{{ STATIC_URL }}/metode#lix">metodesiden</a> for mer info.</p>
 
       <h4>Fargekoder:</h4>
       <div class="avhandling fargekode">
@@ -58,6 +43,28 @@ Samstemmer - LIX, Lesbarhetsindeks
 
       <div class="clear"></div>
       <br />
+
+
+
+    <div class="grid_24">
+      <table id="lix_tabell" class="tablesorter">
+        <thead>
+          <tr> <th>Navn</th> <th>Parti</th> <th>Materiale</th> <th>LIX-Verdi</th> </tr>        
+        </thead>
+        <tbody> 
+      {% for rep in lix_list %} 
+      <tr>
+         <td><a href="{{ STATIC_URL }}/person/{{rep.person.id}}">{{ rep.person }}</a></td> <td>{{ rep.person.parti }}</td> 
+         <td>{{ rep.materiale }}</td> <td class="{{ rep.value|lixcategory }}">{{ rep.value }}</td>
+      </tr>
+      {% endfor %}
+    </tbody> 
+      </table>
+    </div>
+
+    <div class="clear"></div>
+
+
 
 {% endblock %}
 

@@ -248,7 +248,7 @@ class Command(BaseCommand):
         
         correctly_classified = round(a[5][4][0]*100, 2)
         pre = round(a[5][4][1], 3)
-        materiale = "Analysen er basert på de %s siste avstemningene i Stortinget. " % self.number_of_votes
+        materiale = "Analysen er basert på de %s siste voteringene i Stortinget. " % self.number_of_votes
         w_analyse, created = Wnominateanalyser.objects.get_or_create(polarity1=conservative_1D, polarity2=conservative_1D, materiale=materiale, correctly_classified=str(correctly_classified), pre=str(pre))
         #print created # True if insert, false is update 
 

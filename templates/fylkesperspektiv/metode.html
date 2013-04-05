@@ -10,7 +10,7 @@ Samstemmer - metode
 <div class="grid_15" id="metode2">
 	<div></div>
 	<h1 id="metode" title="her">Metode</h1><!--  aka "nerdesiden"-->
-	<p>Det er ikke alltid klart hvordan en datamaskin kommer fram til svaret den gir oss. 42 er som kjent svaret på Spørsmålet om livet, universet og alt mulig, i følge <em>Haikerens guide til galaksen.</em> Ikke bare er spørsmålt uklart, men metoden er også ukjent og umulig å etterprøve. </p>
+	<p>Det er ikke alltid klart hvordan en datamaskin kommer fram til svaret den gir oss. 42 er som kjent svaret på Spørsmålet om livet, universet og alt mulig, i følge <em><a href="http://en.wikipedia.org/wiki/The_Hitchhiker%27s_Guide_to_the_Galaxy">Haikerens guide til galaksen</a>.</em> Ikke bare er spørsmålet uklart, men metoden er også ukjent og umulig å etterprøve. </p>
 	<p>På denne siden finner du beskrivelser av hvordan denne nettsiden regner seg fram til de svarene den gir.</p>
 </div>
 
@@ -24,7 +24,7 @@ Samstemmer - metode
 	<p>Inneholder data under Norsk lisens for offentlige data (NLOD) tilgjengeliggjort av Stortingets datatjeneste.</p>
 	<h3>Automagi</h3>
 	<p>Denne nettsiden henter automatisk ny data fra Stortinget, slik at tallene som vises her alltid er oppdatert med de siste endringene.</p>
-	<p>Ny data hentes hver klokketime, hvis der er noe nytt.</p>
+	<p>Nye data hentes hver klokketime, hvis det er noe nytt.</p>
 </div>
 
 <div class="clear"></div> 
@@ -32,19 +32,19 @@ Samstemmer - metode
 <div class="grid_5"><span class="text_icon">OC</span></div>
 <div class="grid_15" id="oc">
 	<h2>Optimal klassifisering</h2>
-	<p>Jeg har kalt det et <em>folkerepresentasjonskart</em>, det er et bilde-som-oppsummering som viser representantenes foretrukne posisjon i forhold til hverandre basert på de siste n voteringene. Koden som regnes ut disse posisjonene kan du finne <a href="http://voteview.com/optimal_classification.htm">her</a> og en kort forklaring <a href="http://cran.r-project.org/web/packages/oc/vignettes/oc.pdf">her</a>, og en lengre en <a href="https://www.google.no/search?q=isbn+1139446754">her</a>.</p>
+	<p>Jeg har kalt det et <em>folkerepresentasjonskart</em>, det er et bilde-som-oppsummering som viser representantenes foretrukne posisjon i forhold til hverandre basert på de siste n voteringene. Koden som regner ut disse posisjonene kan du finne <a href="http://voteview.com/optimal_classification.htm">her</a> og en kort forklaring <a href="http://cran.r-project.org/web/packages/oc/vignettes/oc.pdf">her</a>, og en lengre en <a href="https://www.google.no/search?q=isbn+1139446754">her</a>.</p>
 	<p>Posisjonene er produsert ved å først lage en avstandsmatrise for alle representantene basert på vektorer for hver representans stemmehistorikk. Denne matrisen oversettes til to dimensjoner (x og y i grafen) ved at skillelinjer (mellom de som stemmer for og i mot) deler en rute opp i flere og flere polygoner. Jo flere ganger en slik skillelinje trekkes jo flere polygoner skapes (så sant de som ikke er for/mot er nøyaktig de samme hver gang), og posisjonene som genereres representerer disse polygonene.</p>
 
 	<img src="{{ STATIC_URL }}/static/img/rplot.png" style="">
-	<p>Folkerepresentasjonskartet er én representasjon av dataen, men der er mer medadata. Bildet over viser mer data for en kjøring.</p>
-	<p>Øverst til venstre vises OC coordinates, som er just det samme som vises på denne siden under <a href="/oc">folkerepresentasjonskart</a>. Øverst til høyre i bildet vises distribusjonen over vinklene på skillelinjene som søylediagram. Nederst til venstre vises en <a href="http://en.wikipedia.org/wiki/Factor_analysis">scree plot</a> som indikerer forklaringskraften i demensjonene. Typisk for stemmedata er at to dimensjoner stort sett dekker det meste, og den første dimensjonen (høyre-venstre) dominerer voldsomt. Neders til høyre vises en Coombs mesh, eller skillelinjer (cutting lines) mellom for/mot. Legg merke til at i eksemplet over, som er basert på 200 avstemninger finnes det fortsatt enkelte relativt store polygoner. Legg derfor inn litt slingringsmon når du analyserer! </p>
+	<p>Folkerepresentasjonskartet er én representasjon av dataen, men det er mer medadata. Bildet over viser mer data for en kjøring.</p>
+	<p>Øverst til venstre vises OC coordinates, som er akkurat det samme som vises på denne siden under <a href="/oc">folkerepresentasjonskart</a>. Øverst til høyre i bildet vises distribusjonen over vinklene på skillelinjene som søylediagram. Nederst til venstre vises en <a href="http://en.wikipedia.org/wiki/Factor_analysis">scree plot</a> som indikerer forklaringskraften i dimensjonene. Typisk for stemmedata er at to dimensjoner stort sett dekker det meste, og den første dimensjonen (høyre-venstre) dominerer voldsomt. Neders til høyre vises en Coombs mesh, eller skillelinjer (cutting lines) mellom for/mot. Legg merke til at i eksemplet over, som er basert på 200 avstemninger finnes det fortsatt enkelte relativt store polygoner. Legg derfor inn litt slingringsmon når du analyserer! </p>
 	
 
 	<h3>APRE</h3>
 	<p>Ved hvert folkerepresentasjonskart oppgis en APRE-verdi. APRE står for <em> Aggregate Proportional Reduction in Error</em> og er et mål for for hvor godt modellen dekker dataene. APRE er et tall fra 0 til 1, der 0 ikke dekker dataene i det hele tatt, men 1 viser til en perfekt klassifisering. Ved APRE 1 (eller 100%) vises alle representanter et sted i koordinatsystemet der de alltid står "riktig" i forhold til skillelinjene (slik de stemte). </p>
 	
 	<h3>CC</h3>
-	<p>En CC-verdi oppgis også. CC står for <em>correctly classified</em> og er også et mål på hvor støtt graften står. Ved 100% er ingen av representantenes posisjon på noe tidspunkt på "feil side" av en skillelinje. </p>
+	<p>En CC-verdi oppgis også. CC står for <em>correctly classified</em> og er også et mål på hvor støtt grafen står. Ved 100% er ingen av representantenes posisjon på noe tidspunkt på "feil side" av en skillelinje. </p>
 
 	<h3>Alle er ikke med!</h3>
 	<p>Nei.</p>
@@ -53,7 +53,7 @@ Samstemmer - metode
 		<li>Det mangler fortsatt noen!
 			<ul>
 				<li>For å minske feilmarginen til metoden lukes representanter som ikke stemmer ofte nok (har ikke stemt i mer enn n (20) avstemninger i materialet som analyseres. <br />
-					Likeledes lukes saker som det er stor enighet (mindre enn 5% oposisjon) ut, slik at det er forskeldene, ikke likhetene som undersøkes.</li>
+					Likeledes lukes saker som det er stor enighet (mindre enn 5% oposisjon) ut, slik at det er forskjellene, ikke likhetene som undersøkes.</li>
 
 			</ul></li>
 	</ol>
@@ -113,7 +113,7 @@ Samstemmer - metode
 	<h2>Lenker</h2>
 	<ul>
 		<li><a href="http://www.partifinansiering.no/">partifinansiering.no</a></li>
-		<li><a href="www.holderdeord.no">holderdeord.no</a></li>
+		<li><a href="http://www.holderdeord.no">holderdeord.no</a></li>
 	</ul>
 
 </div>
@@ -124,10 +124,10 @@ Samstemmer - metode
 	<h2>Stemmelikhet</h2>
 	<p>Hvor likt stemmer representant x og y?</p>
 	<p>Utregningen for hvor likt to representanter stemmer tra følgende prosedyre:<br />
-		Stemmeresultatetne for de to representantenes siste 400 voteringer sammenliknes ved at kun de voteringene der de begge var til stede brukes, slik at hvis begge ikke var frahverende teller dette hverken som enighet eller uenighet. Representanter som sjeldent voterer kan da endre opp med 0% likhet (og ulikhet) med alle andre hvis de to aldri var på samme votering innen de siste n voteringer. 
+		Stemmeresultatetne for de to representantenes siste 400 voteringer sammenliknes ved at kun de voteringene der de begge var til stede brukes, slik at hvis begge ikke var frahverende teller dette hverken som enighet eller uenighet. Representanter som sjeldent voterer kan da ende opp med 0% likhet (og ulikhet) med alle andre hvis de to aldri var på samme votering innen de siste n voteringer. 
 	</p>
 	<h3>Likhet med parti</h3>
-	<p>For å finne likhet mellom representanter og partier brukes "median-stemmen" eller flertallet for et parti som sammenlikningsgrunnlag. Sammenlkiningen viser altså hvor ofte en representant stemmer med flertallet i partiene.</p>
+	<p>For å finne likhet mellom representanter og partier brukes "median-stemmen" eller flertallet for et parti som sammenlikningsgrunnlag. Sammenligningen viser altså hvor ofte en representant stemmer med flertallet i partiene.</p>
 	<h3>Likhet med fylke</h3>
 	<p>Likhet for fylke er regnet ut likt som parti, der "fylkets stemme" regnes som medianstemmen for hvert fylke. NB: Noen fylker har svært ulik representasjon (med stor overvekt av et parti eller blokk).</p>
 </div>
@@ -184,7 +184,7 @@ Samstemmer - metode
 <div class="grid_5"><span class="text_icon">✳</span></div>
 <div class="grid_15" id="nettverk">
 	<h2>Nettverk</h2>
-	<p>Stortingsdataene inneholder nettverksinformasjon. F.eks. er hvem-stiller-spørsmål-til-hvem et nettverk av mennesker bundet sammen av spørsmål. </p>
+	<p>Stortingsdatasamlingen inneholder nettverksinformasjon. F.eks. er hvem-stiller-spørsmål-til-hvem et nettverk av mennesker bundet sammen av spørsmål. </p>
 	<p>Stemmelikhet kan også bli et nettverk. Se f.eks. bildet under som viser et slikt nettverk der representanter som stemmer likt i mer enn 50% av voteringene får en kant (linje, relasjon). En layout-algoritme orienterer så nodene på en visuelt behagelig måte som separerer nodene etter relasjonene.</p>
 	<a href="{{ STATIC_URL }}/static/img/sprsmal_netverk.png"><img src="{{ STATIC_URL }}/static/img/sprsmal_netverk_s.png" style=""></a>
 	<p>Koden som tegnet bildet over er skrevet av <a href="http://pcbje.com/">Petter Christian Bjelland</a> og redigert av meg. Du finner den <a href="https://github.com/eiriks/stortinget-to-gephi">her</a>. Til å visualisere grafen trenger du <a href="https://gephi.org/">gephi</a>.

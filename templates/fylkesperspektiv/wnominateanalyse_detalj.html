@@ -9,12 +9,12 @@ Samstemmer - representantkart
 {% block content %}
 
 
+
 {# {{ resultater }} #}
 <div class="grid_24">
-<h2>Optimal Classification </h2>
-<p> Analysert den {{ analyser.0.dato|date:"d/m-Y" }} .  {{ analyser.0.materiale }} pre= {{ analyser.0.pre }} cc={{ analyser.0.correctly_classified }}
+<h2>Optimal Classification - {{ analyser.0.dato|date:"d/m-Y" }}</h2>
+<p> {{ analyser.0.materiale }} pre= {{ analyser.0.pre }} cc={{ analyser.0.correctly_classified }}
 </p>
-
 </div>
 
 <div class="clear"></div>
@@ -29,6 +29,15 @@ Samstemmer - representantkart
 	</ul>
 </div>
 
+
+<div class="grid_8">
+	<h2>Tidligere utregninger</h2>
+	{% for a in analyser %}
+		<li><b>{{a.dato}}</b> (<a href="{{a.id}}">se detaljer</a>)</li>
+	{% endfor %}
+</div>
+
+
 <div class="clear"></div>
 <div>
 	<h3>Ikke nok data på disse {{ ikke_med.count }}:</h3>
@@ -37,6 +46,10 @@ Samstemmer - representantkart
 {% endfor %}
 
 </div>
+
+<div class="clear"></div>
+<br />
+<p>Les mer om metoden under <a href="{{ STATIC_URL }}/metode">metode</a>.</p>
 
 
 

@@ -366,7 +366,8 @@ def oc(request):
     analyse_id = Wnominateanalyser.objects.latest('dato')
     resultater = Wnominateanalyserposisjoner.objects.values('representant', 'analyse', 'representant__parti__id', "representant__fylke__navn", "representant__fornavn", "representant__etternavn").filter(analyse=analyse_id)
     analyser = Wnominateanalyser.objects.all().order_by('-dato')
-    return render_to_response('fylkesperspektiv/wnominateanalyser.html', {'resultater':resultater, 'analyser': analyser })
+    ikke_med = Wnominateanalyserposisjoner.objects.values('representant', 'analyse', 'representant__parti__id', "representant__fylke__navn", "representant__fornavn", "representant__etternavn").filter(analyse=analyse_id).filter(x__isnull=True).order_by('representant')
+    return render_to_response('fylkesperspektiv/wnominateanalyser.html', {'resultater':resultater, 'ikke_med': ikke_med, 'analyser': analyser })
 
 def oc_detalj(request, analyse_id):
     #Wnominateanalyser, Wnominateanalyserposisjoner
@@ -374,14 +375,12 @@ def oc_detalj(request, analyse_id):
     #resultater = Wnominateanalyserposisjoner.objects.values('representant', 'analyse', 'representant__parti__navn', "representant__fylke__navn", "representant__fornavn", "representant__etternavn").filter(analyse=analyse_id)
     #dir(resultater)
     ikke_med = Wnominateanalyserposisjoner.objects.values('representant', 'analyse', 'representant__parti__id', "representant__fylke__navn", "representant__fornavn", "representant__etternavn").filter(analyse=analyse_id).filter(x__isnull=True).order_by('representant')
-
     ikke_med2 = Wnominateanalyserposisjoner.objects.values('representant').filter(analyse=analyse_id).filter(x__isnull=True)
     
     #ikke_stats = select *, count(`votering_avgitt`) as c from `fylkesperspektiv_voteringsresultat` group by `representant_id_id`, `votering_avgitt`;
-
     ikke_stats = Voteringsresultat.objects.values('representant_id', 'votering_avgitt').order_by().annotate(count=Count('votering_avgitt')).filter(representant_id__in=ikke_med2).order_by('representant_id')
     #ikke_stats = Voteringsresultat.objects.filter(representant_id__in=ikke_med2).order_by().annotate(Count('votering_avgitt'))
-    analyser = Wnominateanalyser.objects.all()
+    analyser = Wnominateanalyser.objects.all().order_by('-dato')
     return render_to_response('fylkesperspektiv/wnominateanalyse_detalj.html', {'ikke_stats':ikke_stats,'ikke_med':ikke_med, 'resultater':resultater, 'analyser': analyser})
 
 def oc_data(request, analyse_id, format):
