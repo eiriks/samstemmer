@@ -14,8 +14,36 @@ Samstemmer - kantgraf
 		<div id="chart" style="float:left;font-size:18px;"></div>
 
 	</div>
+
+<div style="position:relative; top:-150px; float:left;">
+  <div style="float:left; margin-right:5px;">
+    <div style="width:20px; height:20px; diplay: inline;" class="SV">. </div>SV
+  </div>
+  <div style="float:left; margin-right:5px;">
+    <div style="width:20px; height:20px; diplay: inline;" class="Sp">. </div>Sp
+  </div>
+  <div style="float:left; margin-right:5px;">
+    <div style="width:20px; height:20px; diplay: inline;" class="A">. </div>Ap
+  </div>
+  <div style="float:left; margin-right:5px;">
+    <div style="width:20px; height:20px; diplay: inline;" class="H">. </div>H
+  </div>
+  <div style="float:left; margin-right:5px;">
+    <div style="width:20px; height:20px; diplay: inline;" class="V">. </div>V
+  </div>  
+  <div style="float:left; margin-right:5px;">
+    <div style="width:20px; height:20px; diplay: inline;" class="KrF">. </div>KrF
+  </div>
+  <div style="float:left; margin-right:5px;">
+    <div style="width:20px; height:20px; diplay: inline;" class="FrP">. </div>FrP
+  </div>
+</div>
+
 	<p>Grafen viser spørsmål i Stortinget. Bruk musepekeren til å finne kommunikasjon mellom folk, klikk på navn for å få opp mer info. Data er fra inneværende sesjon. Røde linjer viser spørsmål som stilles, grønne er rettet mot. Blå farge i linjene indikerer høy frekvens mellom avsender og mottager.</p>
-	<div class="clear"></div>
+  <div class="clear"></div>
+  
+
+
 {% endblock %}
 
 {% block javascript %}
@@ -25,6 +53,31 @@ Samstemmer - kantgraf
 {# <script type="text/javascript" src="{{ STATIC_URL }}/static/d3.layout.js"></script> #}
 <script type="text/javascript" src="{{ STATIC_URL }}/static/packages.js"></script>
 <script type="text/javascript" charset="utf-8">
+
+var partifarger = {}        // aka new Object()
+partifarger['A']  = '#da383f';  //'#fd0000' fra logo
+partifarger['ALP']  = '#f6f6f6';  // finnes ikke lenher
+partifarger['B']  = '#008140';  // samme som Sp
+partifarger['DNF']  = '#f6f6f6';  // finnes ikke lenher. Det Nye Folkepartiet het også det liberale forlepartiet og nye venste. 
+partifarger['FFF']  = '#f6f6f6';  // finnes ikke lenher
+partifarger['FrP']  = '#393d87';
+partifarger['H']  = '#0f658d';
+partifarger['Kp']   = '#286d6d';  //'#f6f6f6' // finnes ikke lenher, stilte dog til valg i 2011 ...
+partifarger['KrF']  = '#efae52';
+partifarger['NKP']  = '#e40202';  // fra logo
+partifarger['RV']   = '#a61e20';
+partifarger['SF']   = '#f6f6f6';  // finnes ikke lenher
+partifarger['Sp']   = '#008767';  //'#008140'
+partifarger['SV']   = '#bb234a';  //'#cf0036'
+partifarger['SVf']  = '#f6f6f6';  // finnes ikke lenher
+partifarger['TF']   = '#f6f6f6';  // finnes ikke lenher
+partifarger['Uav']  = '#f6f6f6';  // finnes ikke lenher
+partifarger['V']  = '#81b45f';  //'#006c6e' // de under her hadde NRK med i 2011-valget, selv om de ikke kom inn
+partifarger['DEMN'] = '#003366';   // demokratene er ikke inne
+partifarger['PP']   = '#000000';  // pensjonistpartiet er ikke inne
+partifarger['MDG']  = '#3b7346';  // miljøpartiet de grønne er ikke inne
+partifarger['R']  = '#7c2629';  // rødt er ikke inne
+
 
 var w = 960,
     h = 800,
@@ -99,15 +152,17 @@ d3.json("{{ STATIC_URL }}/kantgraf/json/", function(json) {
 	  svg.selectAll("g.node")
 	      .data(nodes.filter(function(n) { return !n.children; }))
 	    .enter().append("svg:g")
-	      .attr("class", "node")
+	      .attr("class", function(d) {return "node "+ d.parti })
 	      .attr("id", function(d) { return "node-" + d.key; })
-	      .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
+	      .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")";  })
 	    .append("svg:text")
+        //.attr("class", function(d) {return d.parti })
 	      .attr("dx", function(d) { return d.x < 180 ? 8 : -8; })
 	      .attr("dy", ".31em")
+        .attr("fill", function(d) { return partifarger[d.parti] })
 	      .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
 	      .attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })
-	      .text(function(d) {  return d.full_name;  }) // console.log(d);
+	      .text(function(d) {  return d.full_name  ; }) // + ' - '+d.parti // console.log(d);
 		  .on("mouseup", function(data){ getInfo(data.name) } ) // info
 	      .on("mouseover", mouseover)
 	      .on("mouseout", mouseout);

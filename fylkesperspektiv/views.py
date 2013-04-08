@@ -553,9 +553,11 @@ def question_json2(request, format):
     
     data = []
     for n in nodes:
+        #print n
         person = {}
         person['full_name'] = n['fornavn'] + ' ' + n['etternavn'] 
         person['name'] = n['name']
+        person['parti'] = n['group']
         
         #print person['name'], big_askers[person['name']], sum(big_askers[person['name']].values())
 
