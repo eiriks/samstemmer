@@ -1039,25 +1039,35 @@ class Command(BaseCommand):
     def get_often(self):
         #current_stortingsperiode = self.get_current_stortingsperiode()
         sesjonid = self.get_current_sesjon()
+        
         nye_sporretimesporsmal = self.get_sporsmal(sesjonid, 'sporretimesporsmal')
-        nye_skriftligesporsmal = self.get_sporsmal(sesjonid, 'skriftligesporsmal')
+        del nye_sporretimesporsmal          # frigjør dette minne?
         nye_interpellasjoner = self.get_sporsmal(sesjonid, 'interpellasjoner')
+        del nye_interpellasjoner            # frigjør dette minne?
+
+        nye_skriftligesporsmal = self.get_sporsmal(sesjonid, 'skriftligesporsmal')        
+        
         nye_saker = self.get_saker(sesjonid, 'saker')
-        self.get_voteringer()  # voteringer på saker
+        del nye_saker                       # frigjør dette minne?
+        
+        self.get_voteringer()       # voteringer over saker
         nye_voteringer = self.get_voteringsresultat('new') # resultatet på disse pr person. (new/all for hyppig eller første innsamling)
         # her bør det vel returneres en rekke lister...
+
 
         if len(nye_skriftligesporsmal)>0:
             print len(nye_skriftligesporsmal)
             management.call_command('compute_lix', *nye_skriftligesporsmal)
             management.call_command('compute_top_words', *nye_skriftligesporsmal) # dette kan ta litt tid..
 
+        del nye_skriftligesporsmal # frigjør dette minne?
+
         if len(nye_voteringer)>0:
             management.call_command('compute_oc')
             management.call_command('compute_holmgang')
             management.call_command('compute_sim', *nye_voteringer)
 
-        return nye_interpellasjoner, nye_sporretimesporsmal
+        #return nye_interpellasjoner, nye_sporretimesporsmal
 
 
     def handle(self, *args, **options):

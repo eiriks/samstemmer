@@ -16,7 +16,7 @@ def question_queryset_to_unicode_text(queryset):
     lang = "no"
     t = textanalyzer_no.Textanalyzer(lang)
     pure_words = t.getWords(" ".join([te['tittel'] for te in queryset]))
-    pure_words = [w for w in pure_words if w not in ['', ' ', '" ', ' "', '"', '\n']]
+    pure_words = [w for w in pure_words if w.strip() not in ['', ' ', '" ', ' "', '"', '\n', '(', ')', '_']]
     return pure_words
 
 def create_weigted_list(queryset):
@@ -39,7 +39,7 @@ def create_weigted_list(queryset):
         result = [{'tag': x,  'freq': y, 'size': functions.font_size_from_percent(round(float(y)/max_value*100,2)) } for x, y in sorted_stems]       # round(n,2) <- rounds off float.
     else:
         # too little data to do this
-        result = [{'tag': 'for lite data til å lage ordsky', 'freq': 0, 'size': 7}]
+        result = [{'tag': 'For lite data til å lage ordsky, ingen enkeltord er brukt mer enn 3 ganger.', 'freq': 0, 'size': 7}]
     return result
 
 def top_tfidf_words(queryset_person, document_collection):
@@ -62,7 +62,7 @@ def top_tfidf_words(queryset_person, document_collection):
         max_tfidf = sorted_words[0][1]
         result = [{'tag': x, 'tfidf': y, 'size': functions.font_size_from_percent(round(float(y)/max_tfidf*100,2)) } for x, y in sorted_words]
     else:
-        result = [{'tag': 'for lite data til å lage ordsky', 'tfidf': 0, 'size': 7}]
+        result = [{'tag': 'For lite data til å lage ordsky.', 'tfidf': 0, 'size': 7}]
     return result
 
 
