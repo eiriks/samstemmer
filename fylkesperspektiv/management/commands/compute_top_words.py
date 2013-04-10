@@ -82,7 +82,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         # create documen_collection of all questions..
-        queryset_everybody = Sporsmal.objects.all().values("tittel") # slow, so only do once..
+        queryset_everybody = Sporsmal.objects.filter(sesjonid=functions.get_current_session_nr()).values("tittel") # slow, so only do once..
         everybodys_words = question_queryset_to_unicode_text(queryset_everybody)
         document_collection = nltk.TextCollection(everybodys_words)          # create nltk object
         print "created document collection"
@@ -106,7 +106,8 @@ class Command(BaseCommand):
                 # finn personen (skal alltid finnes)
                 person = Personer.objects.get(pk=person_id)
                 # finn teksten i tittlene på spørsmål personen har stillt
-                text = Sporsmal.objects.filter(sporsmal_fra=person).values("tittel")
+                # her blir det en enorm tekstmengde, begrense til inneværende sesjon pga cpu bruk på serveren... 
+                text = Sporsmal.objects.filter(sporsmal_fra=person).filter(sesjonid=functions.get_current_session_nr()).values("tittel")
 
                 # create html "tag cloud" of top freq words
                 freq_words = create_weigted_list(text)
