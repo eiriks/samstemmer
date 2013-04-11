@@ -648,7 +648,7 @@ class Command(BaseCommand):
             spor.decompose() # er dette en tabbe? (eller genialt..)            
 
         soup.decompose()    # http://stackoverflow.com/questions/11284643/python-high-memory-usage-with-beautifulsoup
-        print "Ferdig med %s for sesjon %s. %s nye funnet." % (sporsmalstype, sesjonid, teller)
+        print "%s nye funnet. Ferdig med %s for sesjon %s. " % (teller, sporsmalstype, sesjonid)
         return nye_sporsmal_fra
 
 
@@ -744,7 +744,7 @@ class Command(BaseCommand):
             ny_sak_obj.save()
 
         soup.decompose()    # http://stackoverflow.com/questions/11284643/python-high-memory-usage-with-beautifulsoup
-        print "ferdig med å sette inn %s nye saker for sesjonen %s" % (teller, sesjonid.encode('utf8')) # hvofor må denne encodes?
+        print "%s nye saker for sesjonen %s" % (teller, sesjonid.encode('utf8')) # hvofor må denne encodes?
         return nye_saker
 
 
@@ -792,7 +792,7 @@ class Command(BaseCommand):
             voteringer = Votering.objects.exclude(votering_id__in=Voteringsresultat.objects.all().values('votering')).exclude(votering_resultat_type='enstemmig_vedtatt')
         else:
             voteringer = Votering.objects.all()
-        print len(voteringer)
+        #print len(voteringer)
         # sys.exit()
         teller = 0
         personer_med_nye_voteringer = []
@@ -888,7 +888,7 @@ class Command(BaseCommand):
                 
 
             soup.decompose() # http://stackoverflow.com/questions/11284643/python-high-memory-usage-with-beautifulsoup
-        print  "fant %s nye voteringsresultat. %s ersoner har nye voteringer" % (teller, len(personer_med_nye_voteringer))
+        print  "%s nye voteringsresultat. %s personer har nye voteringer" % (teller, len(personer_med_nye_voteringer))
         return personer_med_nye_voteringer
 
     def get_voteringsforslag(self):
@@ -1039,7 +1039,7 @@ class Command(BaseCommand):
     def get_often(self):
         #current_stortingsperiode = self.get_current_stortingsperiode()
         sesjonid = self.get_current_sesjon()
-        
+
         nye_sporretimesporsmal = self.get_sporsmal(sesjonid, 'sporretimesporsmal')
         del nye_sporretimesporsmal          # frigjør dette minne?
         nye_interpellasjoner = self.get_sporsmal(sesjonid, 'interpellasjoner')
@@ -1054,7 +1054,13 @@ class Command(BaseCommand):
         nye_voteringer = self.get_voteringsresultat('new') # resultatet på disse pr person. (new/all for hyppig eller første innsamling)
         # her bør det vel returneres en rekke lister...
 
+        if len(nye_voteringer)>0:
+            management.call_command('compute_oc')
+            management.call_command('compute_holmgang')
+            management.call_command('compute_sim', *nye_voteringer)
 
+
+        
         if len(nye_skriftligesporsmal)>0:
             print len(nye_skriftligesporsmal)
             management.call_command('compute_lix', *nye_skriftligesporsmal)
@@ -1062,10 +1068,7 @@ class Command(BaseCommand):
 
         del nye_skriftligesporsmal # frigjør dette minne?
 
-        if len(nye_voteringer)>0:
-            management.call_command('compute_oc')
-            management.call_command('compute_holmgang')
-            management.call_command('compute_sim', *nye_voteringer)
+
 
         #return nye_interpellasjoner, nye_sporretimesporsmal
 
