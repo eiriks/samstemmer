@@ -1,0 +1,102 @@
+
+{% extends "default.html" %}
+{% load storting_extras %}
+{% block page_title %}Aktivitetstopper {% endblock page_title %}
+
+{% block content %}
+
+<div class="grid_24">
+
+<h2>Aktivitetstopper</h2>
+<p>Hvilke måneder er det mest aktivitet?</p>
+<p>Er det slik at mye blir lagt til rett før ferier?</p>
+
+
+
+<div id="chart_voteringer" style="width: 950px; height: 500px;"></div>
+
+<div id="chart_saker" style="width: 950px; height: 500px;"></div>
+
+</div>
+
+
+
+
+
+
+<div class="clear"></div>
+
+
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% endblock %}
+
+
+
+
+{% block javascript %}
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        // var data = google.visualization.arrayToDataTable([
+        //   ['Year', 'Sales', 'Expenses'],
+        //   ['2004',  1000,      400],
+        //   ['2005',  1170,      460],
+        //   ['2006',  660,       1120],
+        //   ['2007',  1030,      540]
+        // ]);
+    
+        var data = google.visualization.arrayToDataTable([
+          ['Måned / år', 'antall'],
+          {% for el in saker_maaned_aar %}
+            ['{{ el.0|date:"M Y" }}', {{el.1}}]{% if not forloop.last %},{%endif%}
+          {% endfor %}
+
+        ]);
+
+        var options = {
+          title: 'Saker "sist oppdatert" pr måned',
+          hAxis: {title: 'Måned / år',  titleTextStyle: {color: 'black'}}
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_saker'));
+        chart.draw(data, options);
+      }
+
+      // trenger et til:
+      google.setOnLoadCallback(drawChart2);
+      function drawChart2(){
+        data2 = google.visualization.arrayToDataTable([
+          ['Måned / år', 'antall'],
+          {% for num in voteringer_maaned_aar %}
+            ['{{ num.0 }}', {{num.1}}] {% if not forloop.last %},{%endif%}
+          {% endfor %}
+        ]);
+
+        var options2 = {
+          title: 'Voteringer pr måned',
+          hAxis: {title: 'Måned / år',  titleTextStyle: {color: 'black'}}
+        };  
+
+        var chart2 = new google.visualization.ColumnChart(document.getElementById('chart_voteringer'));
+        chart2.draw(data2, options2);        
+      }
+    </script>
+
+<script>
+$(document).ready(function() {
+  // her
+}); // end documen ready
+
+
+</script>
+{% endblock javascript %}
+
+
+{% block css %}
+<style type="text/css" media="screen">
+
+</style>
+{% endblock css %}

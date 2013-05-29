@@ -7,32 +7,30 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.utils import simplejson # if the returned json is odd: http://stackoverflow.com/questions/6286192/using-json-in-django-template
 from django.http import HttpResponse
-
+from django.db.models import Count
+from django.db.models import Q
 
 #from django.core import serializers
 
 from django.core.serializers.json import DjangoJSONEncoder
 import json
-
-from django.db.models import Count
-from django.db.models import Q
-
 import re
+import csv
+import datetime
+import inspect  # to check if a something is of type class.
 
 from collections import defaultdict
 from operator import itemgetter
 
 from django.core.context_processors import csrf     #https://docs.djangoproject.com/en/1.3/ref/contrib/csrf/#ajax
 
-#import re
+
 import functions        # dette er min function.py fil
-#import itertools # ut med tfidf-tingene
 from itertools import chain
-#import nltk
-#tokenizer = nltk.tokenize.RegexpTokenizer("[\w’]+", flags=re.UNICODE) # old= "[\w’]+"
-import csv
+
+
 from django.template.defaultfilters import slugify
-import inspect  # to check if a something is of type class.
+
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -196,7 +194,23 @@ def nysgjerrigper(request,  sesjon=None):
     return render_to_response('fylkesperspektiv/nysgjerrigper.html', {'result_sesjon':s,'results':results, 'sesjoner':sesjoner})    
 
 
+def aktivitetstopper(request): 
+    # arg http://stackoverflow.com/questions/2909869/error-while-executing-query
+    from django.db import connection
+    cursor = connection.cursor()
 
+    cursor.execute("SELECT CONCAT(YEAR(votering_tid), ' ', MONTHNAME(votering_tid)) as tid, count(*) as antall FROM `fylkesperspektiv_votering` GROUP BY YEAR(`votering_tid`), MONTH(`votering_tid`)")
+    voteringer_maaned_aar = cursor.fetchall()
+    #voteringer_maaned_aar = Votering.objects.raw("SELECT CONCAT(YEAR(votering_tid), ' ', MONTHNAME(votering_tid)) as tid, count(*) as antall FROM `fylkesperspektiv_votering` GROUP BY YEAR(`votering_tid`), MONTH(`votering_tid`)") 
+    # print str(Questions.objects.filter(sesjonid='2011-2012').values('sporsmal_til', 'sporsmal_fra').annotate(count=Count('sporsmal_til')).query)
+    #SELECT *, CONCAT(YEAR(votering_tid), ' ', MONTHNAME(votering_tid)) as tid, count(*) as antall FROM `fylkesperspektiv_votering` GROUP BY YEAR(`votering_tid`), MONTH(`votering_tid`);
+
+
+    cursor.execute("SELECT sist_oppdatert_dato, count(*) AS antall FROM fylkesperspektiv_saker GROUP BY YEAR(sist_oppdatert_dato), MONTH(sist_oppdatert_dato)")
+    saker_maaned_aar = cursor.fetchall()
+    #saker_maaned_aar = Saker.objects.raw("SELECT sist_oppdatert_dato, count(*) AS antall FROM fylkesperspektiv_saker GROUP BY YEAR(sist_oppdatert_dato), MONTH(sist_oppdatert_dato)")
+
+    return render_to_response('fylkesperspektiv/aktivitetstopper.html', {'voteringer_maaned_aar': voteringer_maaned_aar, 'saker_maaned_aar': saker_maaned_aar})
 
 
 
@@ -429,6 +443,90 @@ def sporsmal_detail(request, sporsmal_id):
 def sporsmal2(request):
     return render_to_response('fylkesperspektiv/sporsmal2.html')
 
+def whats_new(request, format, days_back=30):
+    if format == 'xml':
+        mimetype = 'application/xml'
+    if format == 'json':
+        mimetype = 'application/json; charset=UTF-8'
+
+    today = datetime.date.today()
+    thirty_days_ago = today - datetime.timedelta(days=days_back)
+
+    saker = Saker.objects.filter(sist_oppdatert_dato__gte=thirty_days_ago).extra(select={'day' : "date(sist_oppdatert_dato)"}).values('sist_oppdatert_dato').annotate(created_count=Count('id')).order_by('-sist_oppdatert_dato')
+    sporsmal_besvart = Sporsmal.objects.filter(besvart_dato__gte=thirty_days_ago).extra(select={"day" : "date(besvart_dato)"}).values('besvart_dato').annotate(created_count=Count('id')).order_by('-besvart_dato')
+    sporsmal_sendt = Sporsmal.objects.filter(sendt_dato__gte=thirty_days_ago).extra(select={'day' : "date(sendt_dato)"}).values('sendt_dato').annotate(created_count=Count('id')).order_by('-sendt_dato')
+    sporsmal_datert = Sporsmal.objects.filter(datert_dato__gte=thirty_days_ago).extra(select={'day' : "date(datert_dato)"}).values('datert_dato').annotate(created_count=Count('id')).order_by('-datert_dato')
+    voteringer = Votering.objects.filter(votering_tid__gte=thirty_days_ago).extra(select={'day' : "date(votering_tid)"}).values('votering_tid').annotate(created_count=Count('votering_id')).order_by('-votering_tid')
+
+    # merger så likt som mulid løsningen question_type_by_year 
+    data = list(chain(saker, sporsmal_besvart, sporsmal_sendt,sporsmal_datert, voteringer))
+    
+
+
+    seq = ('saker', 'sporsmal_besvart', 'sporsmal_sendt', 'sporsmal_datert', 'voteringer')
+    #val = 0
+#    typer = dict.fromkeys(seq, 0)
+
+    ## dict.fromkeys lager bare krøll: http://stackoverflow.com/questions/15516413/dict-fromkeys-all-point-to-same-list?lq=1
+    #base = datetime.datetime.today()
+    #dateList = dict.fromkeys([ base.date() - datetime.timedelta(days=x) for x in range(0,days_back) ], dict((i, 0) for i in seq))
+
+    #dateList2 = dict(([ base.date() - datetime.timedelta(days=x) for x in range(0,days_back)]  )) # , dict((i, 0) for i in seq)
+    #print dateList2
+
+    dateList = {}
+
+    for d in data:
+        #print d
+
+        if 'sist_oppdatert_dato' in d:
+            if d['sist_oppdatert_dato'] not in dateList:
+                dateList[d['sist_oppdatert_dato'].date()] = dict((i, 0) for i in seq)
+            dateList[d['sist_oppdatert_dato'].date()]['saker'] = d['created_count']
+
+        if 'besvart_dato' in d:
+            if d['besvart_dato'].date() not in dateList:
+                dateList[d['besvart_dato'].date()] = dict((i, 0) for i in seq)
+            dateList[d['besvart_dato'].date()]['sporsmal_besvart'] = d['created_count']            
+
+        if 'votering_tid' in d:
+            if d['votering_tid'].date() not in dateList:
+                dateList[d['votering_tid'].date()] = dict((i, 0) for i in seq)
+            dateList[d['votering_tid'].date()]['voteringer'] = d['created_count']
+
+        if 'datert_dato' in d:
+            if d['datert_dato'].date() not in dateList:
+                dateList[d['datert_dato'].date()] = dict((i, 0) for i in seq)
+            dateList[d['datert_dato'].date()]['sporsmal_datert'] = d['created_count']
+
+        if 'sendt_dato' in d:
+            if d['sendt_dato'].date() not in dateList:
+                dateList[d['sendt_dato'].date()] = dict((i, 0) for i in seq)
+            dateList[d['sendt_dato'].date()]['sporsmal_sendt'] = d['created_count']
+
+    # make sure all dates are in
+    base = datetime.datetime.today()
+    dates = [ base.date() - datetime.timedelta(days=x) for x in range(0,days_back) ]
+    for date in dates:
+        if date not in dateList:
+            dateList[date] = dict((i, 0) for i in seq)  # add the missing dates
+        #print date
+
+    #print dateList, len(dateList)
+    # for i in dateList:
+    #     print i, dateList[i]
+
+    flat = list(dateList)
+    flat.sort()
+    data = []
+
+    for key in flat:
+        data.append((key, dateList[key]))
+
+
+    output = json.dumps(data, cls=DjangoJSONEncoder)
+    return HttpResponse(output, mimetype)
+
 def question_type_by_year(request, format):
     if format == 'xml':
         mimetype = 'application/xml'
@@ -439,9 +537,6 @@ def question_type_by_year(request, format):
     sporsmal = Sporsmal.objects.values('sesjonid', 'type').order_by('sesjonid').annotate(Count('sesjonid'), Count('type'))
     
     cathegories = set([s['type'] for s in sporsmal])
-    #print cathegories
-    #session = list(set([s['sesjonid'] for s in sporsmal]))
-    #session.sort()
     
     values = dict.fromkeys(cathegories)
     #years3 = dict.fromkeys(session)          #defaultdict(dict)
@@ -450,7 +545,8 @@ def question_type_by_year(request, format):
         if s['sesjonid'] not in years3:           # add year
             years3[s['sesjonid']] = values.copy()
         years3[s['sesjonid']][s['type']] = s['sesjonid__count']
-    
+    #print years3
+
     y = list(years3)
     y.sort()    
     data = []
@@ -458,15 +554,6 @@ def question_type_by_year(request, format):
         data.append((key, years3[key]))
     #print data
 
-    # # data = []
-    # # for n in nodes:
-    # #     person = {}
-    # #     person['full_name'] = n['fornavn'] + ' ' + n['etternavn'] 
-    # #     person['name'] = n['name']
-    # #     #print person['name'], big_askers[person['name']], sum(big_askers[person['name']].values())
-    # #     person['size'] = sum(big_askers[person['name']].values())
-    # #     person['imports'] = big_askers[person['name']]
-    # #     data.append(person)
     output = json.dumps(data, cls=DjangoJSONEncoder)
     return HttpResponse(output, mimetype)
 

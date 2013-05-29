@@ -34,6 +34,8 @@ urlpatterns = patterns('samstemmer.fylkesperspektiv.views',
 
     url(r'^metode/$', 'metode'),
 
+    url(r'^new_stuff/(?P<format>\w+)/$', 'whats_new'),
+
     url(r'^sporsmaal/type_by_year/(?P<format>\w+)/$', 'question_type_by_year'), # question_type_by_year
     url(r'^sporsmaal/$', 'sporsmal'),
     url(r'^sporsmaal/(?P<sporsmal_id>\d+)/$', 'sporsmal_detail'),
@@ -55,6 +57,8 @@ urlpatterns = patterns('samstemmer.fylkesperspektiv.views',
     url(r'^kantgraf/(?P<format>\w+)/$','question_json2'),
 
     url(r'^finn/$', 'search'),
+
+    url(r'^aktivitetstopper/$', 'aktivitetstopper'),
 
 
     

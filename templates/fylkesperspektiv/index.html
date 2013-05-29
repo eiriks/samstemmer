@@ -225,6 +225,11 @@ Samstemmer - stortingsdata under lupen
   <div id="question_by_year_graph"></div>
 </div>
 
+
+
+
+
+
 <div class="clear"></div>
 
 <div class="grid_8">
@@ -267,6 +272,19 @@ Samstemmer - stortingsdata under lupen
   <p>✓ <a href="/oppmote/">Avgi stemme</a></p>
 
 </div>
+
+<div class="grid_8">
+  <h3>Aktivitetstopper</h3>
+  <p> Legges uforholdsmessig mye aktivitet rett før ferien? -<a href="/aktivitetstopper/"> se selv</a>!</p>
+
+</div>
+
+
+
+<!--<div class="grid_24">
+  <h3>Aktivitet siste måned</h3>
+  <div id="aktivitet_siste_30"></div>
+</div>-->
 
 
 
@@ -554,8 +572,125 @@ var circle = svg.selectAll("circle")
 </script>
 
 <script type="text/javascript">
+// her lager jeg aktivitetsgraf
+var w = 960,
+    hh = 400,
+    pp = [60, 50, 55, 20],
+    x = d3.scale.ordinal().rangeRoundBands([0, w - pp[1] - pp[3]]),
+    y = d3.scale.linear().range([0, hh - pp[0] - pp[2]]),
+    //z = d3.scale.ordinal().range(["lightpink", "darkgray", "lightblue", "green", "blue", "red"]),
+    //z = d3.scale.ordinal().range(["#F2EABC", "#FF3B58", "#5A7F3C", "#54736E", "#194756", "#080000"]),
+    zz = d3.scale.ordinal().range(["#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c", "#98df8a", "#d62728", "#ff9896", "#9467bd", "#c5b0d5", "#8c564b", "#c49c94", "#e377c2", "#f7b6d2", "#7f7f7f", "#c7c7c7", "#bcbd22", "#dbdb8d", "#17becf", "#9edae5"]),
+
+
+    fix_date = d3.time.format("%Y-%m-%d").parse,
+    // parse = d3.time.format("%m/%Y").parse,
+    format = d3.time.format("%b");
+
+
+var activity_svg = d3.select("#aktivitet_siste_30").append("svg")
+    .attr("width", w)
+    .attr("height", hh - pp[0] - pp[2])
+  .append("svg:g")
+    .attr("transform", "translate(" + pp[3] + "," + (hh - pp[2]) + ")"); 
+
+d3.json("{{ STATIC_URL }}/new_stuff/json/", function(data) {
+
+  var typer_aktivitet = d3.keys(data[0][1]).filter(function(key) { return key !== "State"; }); 
+  // Transpose the data into layers by cause.
+  var causes = d3.layout.stack()(typer_aktivitet.map(function(cause) {    //console.log(cause)
+    return data.map(function(d) {                 
+      return {x: d[0], y: + d[1][cause]};            //console.log({x: parse(d[0]), y: +d[1][cause]});
+    });
+  }));
+
+
+  // Compute the x-domain (by date) and y-domain (by top).
+  x.domain(causes[0].map(function(d) { return d.x; }));
+ //console.log([0, d3.max(causes[causes.length - 1], function(d) { return d.y0 + d.y; console.log(d.y); })]);
+  y.domain([0, d3.max(causes[causes.length - 1], function(d) { return d.y0 + d.y;  })]); // console.log(d.y);
+
+
+  // Add a group for each cause.            //  console.log(causes);
+  var cause = activity_svg.selectAll("g.cause")
+      .data(causes)
+    .enter().append("svg:g")
+      .attr("class", "cause")
+      .style("fill", function(d, i) { return zz(i); })
+      //.style("fill", function(d, i) { console.log( i, z(i)); })
+    .on("mouseover", function(d, i){ highlight( typer_aktivitet[i] ); })
+    .style("stroke", function(d, i) { return d3.rgb(zz(i)).darker(); });
+
+  // Add a rect for each date.
+  var rect = cause.selectAll("rect")
+      .data(Object)
+    .enter().append("svg:rect")
+      .attr("x", function(d) { return x(d.x); })
+      .attr("y", function(d) { return -y(d.y0) - y(d.y); })
+      .attr("height", function(d) { return y(d.y); })
+    .on("mouseover", function(d){ }) // console.log(d.x, d.y); 
+      .attr("width", x.rangeBand());
+  // label the days..
+  var label = activity_svg.selectAll("text")
+      .data(x.domain())
+    .enter().append("svg:text")
+      // .attr("x", function(d) { return x(d) + x.rangeBand() / 2; })
+      // .attr("y", 6)
+      .attr("text-anchor", "top")
+      .attr("dy", ".71em")
+    .attr("transform", function(d) { return "translate(" + (x(d) + x.rangeBand() / 2) +", 5 )rotate(90)";})
+      .text(function(d){return d3.time.format('%d %b')(fix_date(d))}); // format // fix_date(d)
+
+
+  // Add y-axis rules.
+  var rule = activity_svg.selectAll("g.rule")
+      .data(y.ticks(5))
+    .enter().append("svg:g")
+      .attr("class", "rule")
+      .attr("transform", function(d) { return "translate(0," + -y(d) + ")"; });
+
+  rule.append("svg:line")
+      .attr("x2", w - pp[1] - pp[3])
+      .style("stroke", function(d) { return d ? "#fff" : "#000"; })
+      .style("stroke-opacity", function(d) { return d ? .7 : null; });
+
+  rule.append("svg:text")
+      .attr("x", w - pp[1] - pp[3] + 6)
+      .attr("dy", ".35em")
+      .text(d3.format(",d"));
+
+
+  // label your axes
+  //  var activity_svg = d3.select("#aktivitet_siste_30").append("svg")
+  var legend = activity_svg.selectAll(".legend")
+        .data(zz.domain().slice().reverse())
+      .enter().append("g")
+        .attr("class", "legend")
+        .attr("transform", function(d, i) { return "translate(0,-" + (hh-(pp[2]+10)-i * 10) + ")"; });
+
+    legend.append("rect")
+        .attr("x", 0)
+        .attr("width", 8)
+        .attr("height", 8)
+        .style("fill", zz);
+    //console.log(d3.keys(crimea[0][1])[0])
+    //console.log(function(d) { return d; })
+    legend.append("text")
+        .attr("x", pp[2])
+        .attr("y", 9)
+        .attr("dy", ".35em")
+    .attr("class", function(d) { return typer_aktivitet[d]; })
+        .style("text-anchor", "start")
+        .text(function(d) { return typer_aktivitet[d]; }); // feil sted å slå opp 
+
+});
+
+
+</script>
+
+<script type="text/javascript">
 function highlight(klasse) {
-	console.log(klasse)
+	//console.log(klasse)
 	$("g.legend text").removeClass("highlited")
 	$("text."+klasse).addClass("highlited");
 }
@@ -565,9 +700,7 @@ var w = 960,
     p = [20, 50, 55, 20],
     x = d3.scale.ordinal().rangeRoundBands([0, w - p[1] - p[3]]),
     y = d3.scale.linear().range([0, h - p[0] - p[2]]),
-    //z = d3.scale.ordinal().range(["lightpink", "darkgray", "lightblue", "green", "blue", "red"]),
     z = d3.scale.ordinal().range(["#F2EABC", "#FF3B58", "#5A7F3C", "#54736E", "#194756", "#080000"]),
-	
     parse = d3.time.format("%m/%Y").parse,
     format = d3.time.format("%b");
 
@@ -611,7 +744,7 @@ d3.json("{{ STATIC_URL }}/sporsmaal/type_by_year/json/", function(crimea) {
       .attr("x", function(d) { return x(d.x); })
       .attr("y", function(d) { return -y(d.y0) - y(d.y); })
       .attr("height", function(d) { return y(d.y); })
-	  .on("mouseover", function(d){ console.log(d.x, d.y); })
+	  .on("mouseover", function(d){ }) // console.log(d.x, d.y); 
       .attr("width", x.rangeBand());
 
 

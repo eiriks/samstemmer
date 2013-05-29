@@ -367,6 +367,46 @@ class Fylkeikhet(models.Model):
 # likhet avg(fylke), [person, fylke, materiale, likhet]
 
 
+# regjering finnes ikke i APIet, men ser omtrent slik ut: 
+# ref: http://data.stortinget.no/upload/Regjeringsdata_for_eksempelsiden.txt
+
+# Statsministerinitialer,statsministerfornavn,statsministeretternavn,fradato,tildato,regjering,regjeringsparti
+# KMB,Kjell Magne,Bondevik,19971017,20000317,Regjeringen Bondevik I,Krf
+# KMB,Kjell Magne,Bondevik,19971017,20000317,Regjeringen Bondevik I,Sp
+# KMB,Kjell Magne,Bondevik,19971017,20000317,Regjeringen Bondevik I,V
+# JES,Jens,Stoltenberg,20000317,20011019,Regjeringen Stoltenberg I,A
+# KMB,Kjell Magne,Bondevik,20011019,20051017,Regjeringen Bondevik II,Krf
+# KMB,Kjell Magne,Bondevik,20011019,20051017,Regjeringen Bondevik II,H
+# KMB,Kjell Magne,Bondevik,20011019,20051017,Regjeringen Bondevik II,V
+# JES,Jens,Stoltenberg,20051017,NULL,Regjeringen Stoltenberg II,A
+# JES,Jens,Stoltenberg,20051017,NULL,Regjeringen Stoltenberg II,Sv
+# JES,Jens,Stoltenberg,20051017,NULL,Regjeringen Stoltenberg II,Sp
+
+#aka, omtrentlig, utested:
+
+# class Regjering(models.Model):
+#     statsministerinitialer = models.ForeignKey(Personer, related_name='regjering_statsministerinitialer')
+#     fradato = models.DateField()
+#     tildato = models.DateField(blank=True, null=True)
+#     regjering = models.CharField()
+#     regjeringsparti = models.ForeignKey(Partier, related_name='regjering_aprti') #eller ikke nøkkel..
+#     # redundant...
+#     statsministerfornavn = models.CharField(max_length=300, blank=False)
+#     statsministeretternavn = models.CharField(max_length=300, blank=False)
+
+#     class Meta:
+#         verbose_name = _('Regjering')
+#         verbose_name_plural = _('Regjeringer')
+#         unique_together = ("regjering", "regjeringsparti") 
+
+#     def __unicode__(self):
+#         return u'%s under %s' % (self.regjering, self.statsministerfornavn)        
+    
+
+
+
+
+
 # class SakVotering(models.Model):                      #erstattet av Votering
 #     sak_id = models.IntegerField(primary_key=True)
 #     versjon = models.CharField(max_length=150, blank=True)

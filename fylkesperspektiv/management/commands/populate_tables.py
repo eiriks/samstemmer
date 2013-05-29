@@ -1076,17 +1076,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         start = datetime.now()
 
-        # if len(args)>0:                     # if there are args
-        #     use_args = []                   # need these to be unicode
-        #     for a in args:
-        #         use_args.append(unicode(a))
-
-        # if options['bootstrap']:            # if we need to compute for all current reps
-        #     current_reps = Representanter.objects.all().filter(dagens_representant=True).values("person")
-        #     use_args = []
-        #     for rep in current_reps:
-        #         use_args.append(rep['person'])      # these ARE unicode
-        
         if options['bootstrap']:
             print "Setter i gang innhøsting av alle typer data, og kalkulerer alle verdier:"
             self.populate_empty_tables()
@@ -1094,26 +1083,14 @@ class Command(BaseCommand):
             print "Kjører rutinemessig innhenting av data:"
             self.get_often()
 
-
-
         # # https://docs.djangoproject.com/en/dev/ref/django-admin/#running-management-commands-from-your-code
         # # http://stackoverflow.com/questions/10697133/django-admin-custom-commands-passing-a-list-of-strings-into-args
-        # 
-        # if len(personer_med_nye_sporsmal1) > 0:
-        #     print personer_med_nye_sporsmal1
-        #     management.call_command('compute_top_words',*personer_med_nye_sporsmal1)
 
-
-        # TODO:
-        # lag bootstrap && feq_update funksjoner
-        # la det være flag på scriptet for å kjøre disse
-        # la resultatet av innhøsting sette i gang comput_x-scriptene.
-
-
-
-        
         end = datetime.now()-start
-        self.stdout.write('Ferdig med innsamling av data, det tok: %s \n') % (end)
+        mins = divmod(end.total_seconds(), 60)[0]
+        secs = divmod(end.total_seconds(), 60)[1]
+        print 'Ferdig med innsamling av data, det tok: %s min %s sec \n' % (mins, secs)
+        #self.stdout.write('Ferdig med innsamling av data, det tok: %s min %s sec \n') % (mins, secs) # denne 
 
 
 

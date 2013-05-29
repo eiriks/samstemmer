@@ -163,7 +163,7 @@ class Command(BaseCommand):
 
         if len(args)>0 or options['bootstrap']:     # enten input verdier eller bootstrap... 
             for person_id in use_args:
-                print person_id
+                #print person_id
 
                 # finn personen (skal alltid finnes)
                 person = Personer.objects.get(pk=person_id)

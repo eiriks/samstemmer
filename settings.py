@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# encoding: utf-8
+
 # Django settings for samstemmer project.
 
 DEBUG = True
@@ -101,7 +104,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',          # https://github.com/django-debug-toolbar/django-debug-toolbar
-    'django.middleware.csrf.CsrfResponseMiddleware', # tregs dette?
+    # 'django.middleware.csrf.CsrfResponseMiddleware', # tregs dette? den er visstnok gåt ut av verden: http://stackoverflow.com/questions/11872029/django-python-error-improperlyconfigured-middleware-module-does-not-define
 )
 
 INTERNAL_IPS = ('127.0.0.1',)
@@ -139,7 +142,7 @@ INSTALLED_APPS = (
 #    'haystack',                     # http://django-haystack.readthedocs.org/en/latest/tutorial.html
 #    'polls',
     'fylkesperspektiv',
-    'tastypie',
+    #'tastypie',
     'south',
     'debug_toolbar',
    # 'boundaryservice',

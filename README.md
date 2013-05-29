@@ -12,6 +12,35 @@ Prosjekt for å automatisere innsamling og metode i analyser av stortingsdata
 * http://tablesorter.com/docs/#Examples
 * http://plugins.learningjquery.com/expander/index.html#getting-started
 
+
+
+### ideer til videreutvikling:
+
+
+- [denne](https://docs.google.com/spreadsheet/ccc?key=0AgAXDJuvjySMdDlVOWJIclRRTkhPTmxIRjVRU01jMEE):  beviser at [denne](http://www.nrk.no/valg2013/_-regjeringen-tommer-skuffene-1.11038459) er vinklet helt mot det dataene sier, og at det enten er feil i spørringen min* eller så tabber intervjuobjektene seg ut på overdreven negativ omtale av den vanlige tralten på Tinget på for-sommer'n.
+
+* 
+> SELECT *, count(*) AS "antall saker" FROM fylkesperspektiv_saker GROUP BY YEAR(sist_oppdatert_dato), MONTH(sist_oppdatert_dato);
+
+
+
+## Ubehagelige saker utsettes til rett før en ferie?
+> SELECT *, CONCAT(YEAR(votering_tid), ' ', MONTHNAME(votering_tid)) as tid, count(*) as antall FROM `fylkesperspektiv_votering` GROUP BY YEAR(`votering_tid`), MONTH(`votering_tid`);
+
+Desember og juni er topp-måneder, [google docs graf](https://docs.google.com/spreadsheet/ccc?key=0AgAXDJuvjySMdDlVOWJIclRRTkhPTmxIRjVRU01jMEE&usp=sharing) så ja, kanskje? Hvordan kan vi finne ut om disse toppene inneholder ubehageligheter for koalisjonene?
+
+
+
+
+
+
+
+
+## innmeldte bugs:
+- "se mer" javascript-knappene f.eks. på personer med mange spørsmål lukker seg selv etter egen vilje. 
+
+
+
 - [x] @mentions, #refs, [links](), **formatting**, and <del>tags</del> supported
 - [x] list syntax required (any unordered or ordered list supported)
 - [x] this is a complete item
@@ -25,6 +54,9 @@ Prosjekt for å automatisere innsamling og metode i analyser av stortingsdata
 #### H4
 ##### H5
 ###### H6
+
+
+
 
 
 Emphasis, aka italics, with *asterisks* or _underscores_.
