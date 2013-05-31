@@ -194,24 +194,6 @@ def nysgjerrigper(request,  sesjon=None):
     return render_to_response('fylkesperspektiv/nysgjerrigper.html', {'result_sesjon':s,'results':results, 'sesjoner':sesjoner})    
 
 
-def aktivitetstopper(request): 
-    # arg http://stackoverflow.com/questions/2909869/error-while-executing-query
-    from django.db import connection
-    cursor = connection.cursor()
-
-    cursor.execute("SELECT CONCAT(YEAR(votering_tid), ' ', MONTHNAME(votering_tid)) as tid, count(*) as antall FROM `fylkesperspektiv_votering` GROUP BY YEAR(`votering_tid`), MONTH(`votering_tid`)")
-    voteringer_maaned_aar = cursor.fetchall()
-    #voteringer_maaned_aar = Votering.objects.raw("SELECT CONCAT(YEAR(votering_tid), ' ', MONTHNAME(votering_tid)) as tid, count(*) as antall FROM `fylkesperspektiv_votering` GROUP BY YEAR(`votering_tid`), MONTH(`votering_tid`)") 
-    # print str(Questions.objects.filter(sesjonid='2011-2012').values('sporsmal_til', 'sporsmal_fra').annotate(count=Count('sporsmal_til')).query)
-    #SELECT *, CONCAT(YEAR(votering_tid), ' ', MONTHNAME(votering_tid)) as tid, count(*) as antall FROM `fylkesperspektiv_votering` GROUP BY YEAR(`votering_tid`), MONTH(`votering_tid`);
-
-
-    cursor.execute("SELECT sist_oppdatert_dato, count(*) AS antall FROM fylkesperspektiv_saker GROUP BY YEAR(sist_oppdatert_dato), MONTH(sist_oppdatert_dato)")
-    saker_maaned_aar = cursor.fetchall()
-    #saker_maaned_aar = Saker.objects.raw("SELECT sist_oppdatert_dato, count(*) AS antall FROM fylkesperspektiv_saker GROUP BY YEAR(sist_oppdatert_dato), MONTH(sist_oppdatert_dato)")
-
-    return render_to_response('fylkesperspektiv/aktivitetstopper.html', {'voteringer_maaned_aar': voteringer_maaned_aar, 'saker_maaned_aar': saker_maaned_aar})
-
 
 
 
@@ -336,6 +318,7 @@ def person_detail(request, rep_id):
 
     person = Personer.objects.get(pk=rep_id)
     v = Voteringsresultat.objects.filter(representant_id=rep_id).select_related()
+    v_tilstede = Voteringsresultat.objects.filter(representant_id=rep_id).exclude(votering_avgitt='ikke_tilstede').select_related()
     show_up = 0
     try:
         for a in v:
@@ -349,7 +332,7 @@ def person_detail(request, rep_id):
     nyeste_analyse_id = Wnominateanalyser.objects.values('id').latest('dato')
     #oc = Wnominateanalyserposisjoner.objects.values('representant', 'analyse', 'representant__parti__id', "representant__fylke__navn", "representant__fornavn", "representant__etternavn").filter(analyse=analyse_id)
 
-    return render_to_response('fylkesperspektiv/person_detail.html', {'nyeste_analyse_id':nyeste_analyse_id, 'fylkeikhet':fylkeikhet, 'partilikhet':partilikhet, 'holmgang':holmgang, 'deltegelse':deltegelse, 'lix':lix, 'rep': rep, 'sf': sf, 'st': st, 'person': person, 'v': v})
+    return render_to_response('fylkesperspektiv/person_detail.html', {'nyeste_analyse_id':nyeste_analyse_id, 'fylkeikhet':fylkeikhet, 'partilikhet':partilikhet, 'holmgang':holmgang, 'deltegelse':deltegelse, 'lix':lix, 'rep': rep, 'sf': sf, 'st': st, 'person': person, 'v': v, 'v_tilstede': v_tilstede})
     #return render_to_response('fylkesperspektiv/person_detail.html', {'rep': p, 'sf': sf, 'person': person}, context_instance=RequestContext(request))
 
 
@@ -448,6 +431,8 @@ def whats_new(request, format, days_back=30):
         mimetype = 'application/xml'
     if format == 'json':
         mimetype = 'application/json; charset=UTF-8'
+    if format == 'html':
+        mimetype = 'text/html; charset=utf-8'
 
     today = datetime.date.today()
     thirty_days_ago = today - datetime.timedelta(days=days_back)
@@ -523,9 +508,40 @@ def whats_new(request, format, days_back=30):
     for key in flat:
         data.append((key, dateList[key]))
 
+    # only do json dumps if format is json or xml
+    if format != 'html':
+        output = json.dumps(data, cls=DjangoJSONEncoder)
+        return HttpResponse(output, mimetype)
+    else:
+        # return normal
+        #return HttpResponse(data, mimetype)
+        return data
 
-    output = json.dumps(data, cls=DjangoJSONEncoder)
-    return HttpResponse(output, mimetype)
+def aktivitetstopper(request): 
+    # arg http://stackoverflow.com/questions/2909869/error-while-executing-query
+    from django.db import connection
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT CONCAT(YEAR(votering_tid), ' ', MONTHNAME(votering_tid)) as tid, count(*) as antall FROM `fylkesperspektiv_votering` GROUP BY YEAR(`votering_tid`), MONTH(`votering_tid`)")
+    voteringer_maaned_aar = cursor.fetchall()
+    #voteringer_maaned_aar = Votering.objects.raw("SELECT CONCAT(YEAR(votering_tid), ' ', MONTHNAME(votering_tid)) as tid, count(*) as antall FROM `fylkesperspektiv_votering` GROUP BY YEAR(`votering_tid`), MONTH(`votering_tid`)") 
+    # print str(Questions.objects.filter(sesjonid='2011-2012').values('sporsmal_til', 'sporsmal_fra').annotate(count=Count('sporsmal_til')).query)
+    #SELECT *, CONCAT(YEAR(votering_tid), ' ', MONTHNAME(votering_tid)) as tid, count(*) as antall FROM `fylkesperspektiv_votering` GROUP BY YEAR(`votering_tid`), MONTH(`votering_tid`);
+
+
+    cursor.execute("SELECT sist_oppdatert_dato, count(*) AS antall FROM fylkesperspektiv_saker GROUP BY YEAR(sist_oppdatert_dato), MONTH(sist_oppdatert_dato)")
+    saker_maaned_aar = cursor.fetchall()
+    #saker_maaned_aar = Saker.objects.raw("SELECT sist_oppdatert_dato, count(*) AS antall FROM fylkesperspektiv_saker GROUP BY YEAR(sist_oppdatert_dato), MONTH(sist_oppdatert_dato)")
+
+    # øker antallet saker?
+    cursor.execute("SELECT YEAR(sist_oppdatert_dato), count(*) AS antall FROM fylkesperspektiv_saker GROUP BY YEAR(sist_oppdatert_dato)")
+    saker_aar = cursor.fetchall()
+
+    new_stuff = whats_new(request, 'html', days_back=30)
+
+    return render_to_response('fylkesperspektiv/aktivitetstopper.html', {'voteringer_maaned_aar': voteringer_maaned_aar, 'saker_maaned_aar': saker_maaned_aar, 'saker_aar':saker_aar,'new_stuff': new_stuff})
+
+
 
 def question_type_by_year(request, format):
     if format == 'xml':

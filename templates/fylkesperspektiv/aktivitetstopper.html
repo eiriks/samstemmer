@@ -7,20 +7,24 @@
 
 <div class="grid_24">
 
+
 <h2>Aktivitetstopper</h2>
 <p>Hvilke måneder er det mest aktivitet?</p>
 <p>Er det slik at mye blir lagt til rett før ferier?</p>
-
-
 
 <div id="chart_voteringer" style="width: 950px; height: 500px;"></div>
 
 <div id="chart_saker" style="width: 950px; height: 500px;"></div>
 
+
+<p>Øker antallet saker over tid? Burde det øke? Er det fordelaktig hvis det øker? Er det et tak for hvor mange saker Stortinget kan prosessere i løpet av et år?</p>
+<div id="chart_saker_aar" style="width: 950px; height: 500px;"></div>
+
+
+<h2>Siste måned</h2>
+
+<div id="chart_last_month" style="width: 950px; height: 500px;"></div>
 </div>
-
-
-
 
 
 
@@ -83,11 +87,71 @@
         var chart2 = new google.visualization.ColumnChart(document.getElementById('chart_voteringer'));
         chart2.draw(data2, options2);        
       }
+
+      // og en til..
+      google.setOnLoadCallback(drawChart3);
+      function drawChart3(){
+        data3 = google.visualization.arrayToDataTable([
+          ['År', 'antall'],
+          {% for num in saker_aar %}
+            ['{{ num.0 }}', {{num.1}}] {% if not forloop.last %},{%endif%}
+          {% endfor %}
+        ]);
+
+        var options3 = {
+          title: 'Saker pr år',
+          hAxis: {title: 'År',  titleTextStyle: {color: 'black'}}
+          // ,
+          // seriesType: "bars",
+          // series: { {{ saker_aar.count }}: {type: "line"}}
+        };  
+
+        var chart3 = new google.visualization.ColumnChart(document.getElementById('chart_saker_aar')); // ComboChart
+        chart3.draw(data3, options3);        
+      }
+
     </script>
 
 <script>
 $(document).ready(function() {
+
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart4);
+      function drawChart4() {
+        var data4 = google.visualization.arrayToDataTable([
+          // ['Year', 'Sales', 'Expenses'],
+          // ['2004',  1000,      400],
+          // ['2005',  1170,      460],
+          // ['2006',  660,       1120],
+          // ['2007',  1030,      540]
+          {% for nuff in new_stuff %}
+             {% if forloop.first %}  
+                [ 'år', {% for key,value in nuff.1.items %}
+              '{{ key }}'{% if not forloop.last %},{%endif%}{% endfor %}],
+            {% endif %}
+
+            ['{{ nuff.0 }}',{% for key,value in nuff.1.items %}{{ value }}{% if not forloop.last %},{%endif%}{% endfor %}]{% if not forloop.last %},{%endif%}
+          {% endfor %}
+        ]);
+
+
+
+
+        var options4 = {
+          title: 'Aktivitet siste måned',
+          hAxis: {title: 'Siste måned', titleTextStyle: {color: 'black'}},
+          isStacked: true
+        };
+
+        var chart4 = new google.visualization.ColumnChart(document.getElementById('chart_last_month'));
+        chart4.draw(data4, options4);
+      }
+
+
+
   // her
+
+
 }); // end documen ready
 
 

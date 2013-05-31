@@ -59,6 +59,12 @@
 
 <div class="clear"></div>
 
+
+
+
+
+
+
 <div class="grid_8">
 <h2>Stemmer mest <a href="{{ STATIC_URL }}/metode/#stemmelikhet">som</a>:</h2>
 <ol>
@@ -88,7 +94,19 @@
 	{% endif %}
 {% endfor %}
 </ol>
+
+
+<h2>Siste avtrykk på voteringsknappen</h2>
+<p>{{ person.fornavn }}  {{ person.etternavn }} voterte sist  
+<em>{% for vv in v_tilstede %}
+	{% if forloop.last %}
+		{{ vv.votering.votering_tid|tid_siden }}
+	{% endif %}
+{% endfor %}</em>
+ siden. 
+</p>
 </div>
+
 
 
 <div class="grid_8">

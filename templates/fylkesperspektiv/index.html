@@ -9,6 +9,31 @@ Samstemmer - stortingsdata under lupen
 
 
 
+<div class="grid_8">
+  <h3>Finn folkevalgt</h3>
+<form action="/finn/" method="get">
+  <label for="id_q">Søk:</label>
+           <input id="id_q" title="{{ random_name }}" name="q" class="defaultText" type="text">
+           <input type="submit" value="Finn 'an">
+</form>
+</div>
+
+
+<div class="grid_8">
+  <h3>Oppmøte ved votering</h3>
+  <p>✓ <a href="/oppmote/">Avgi stemme</a></p>
+
+</div>
+
+<div class="grid_8">
+  <h3>Aktivitetstopper</h3>
+  <p> Legges uforholdsmessig mye aktivitet rett før ferien? -<a href="/aktivitetstopper/"> se selv</a>!</p>
+
+</div>
+
+<div class="clear"></div>
+
+
 <div class="grid_10">
     <h3>På folkerepresentasjonskartet</h3>
   <a href="{{ STATIC_URL }}/oc">
@@ -257,101 +282,18 @@ Samstemmer - stortingsdata under lupen
 
 <div class="clear"></div>
 
-<div class="grid_8">
-  <h3>Finn folkevalgt</h3>
-<form action="/finn/" method="get">
-  <label for="id_q">Søk:</label>
-           <input id="id_q" title="{{ random_name }}" name="q" class="defaultText" type="text">
-           <input type="submit" value="Finn 'an">
-</form>
-</div>
-
-
-<div class="grid_8">
-  <h3>Oppmøte ved votering</h3>
-  <p>✓ <a href="/oppmote/">Avgi stemme</a></p>
-
-</div>
-
-<div class="grid_8">
-  <h3>Aktivitetstopper</h3>
-  <p> Legges uforholdsmessig mye aktivitet rett før ferien? -<a href="/aktivitetstopper/"> se selv</a>!</p>
-
-</div>
 
 
 
-<!--<div class="grid_24">
+<!-- <div class="grid_24">
   <h3>Aktivitet siste måned</h3>
   <div id="aktivitet_siste_30"></div>
-</div>-->
+</div> -->
 
 
 
 
 <!--  
-
-  # to-do:
-  - redusere minne på populate_tables (uten all)
-  - download dagens storting (feiler litt på andre maskiner...) (hjemme)
-  - oppmøte-lista
-  - maile journalister (min 6 stk) min 5 ulike redaksjoner
-
-  ideer:
-  / kantgraf
-    klikk på linjer og se kommuniké
-  ordsky med full db støtte.
-  
-
-  done   - cron job minne
-  done søkefunksjon...
-
-  done  http://samstemmer.net/kantgraf/
-  done   klikking funker ikke crsf...
-  
-  done fylker
-  done  css bug
-
-  /oc
-  done  prferanse skal med en f. x2
-  done  med andfe land / ved andre land
-  done  2. -> "andre"  dimensjon nr 2.
-  done  lengt / langt
-  done  komma i stede for punktum.
-  done vice versa.
-  
-  done Analysert den 19/03-2013. Analysen er "??!" basert på de 200 siste avstemningene i stortinget. pre= 0,98 cc=99,32
-      fikset i compute_oc.py
-
-  utgregninger -> utregninger
-
-  done /persondetaljer
-  done tjenestegjort.. sf
-
-
-  done /lix
-  done   preprsetentene
-
-  /oc
-  done   ny overskrift (ikke Optimal calssification)
-  done   (så oc som underoverskrift og metode intro)
-  done   - strortinget med stor S
-
-  done / mtode
-  done - musikker med en k?
-  done - ikke bare er spørsmålet uklart...
-
-
-  
-
-
-
-
-
-
-
-
-
   - hvordan kan vi best tilrettelegge for å være nyttig?
   - hva slags type data og analyser er mes relevant
   - hva slags saker/spørsmål kan dette brukes til?

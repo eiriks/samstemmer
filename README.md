@@ -24,6 +24,13 @@ Prosjekt for å automatisere innsamling og metode i analyser av stortingsdata
 
 
 
+
+- kantgraf
+    klikk på linjer og se kommuniké
+ 
+ - ordsky med full db støtte.
+
+
 ## Ubehagelige saker utsettes til rett før en ferie?
 > SELECT *, CONCAT(YEAR(votering_tid), ' ', MONTHNAME(votering_tid)) as tid, count(*) as antall FROM `fylkesperspektiv_votering` GROUP BY YEAR(`votering_tid`), MONTH(`votering_tid`);
 
@@ -39,7 +46,7 @@ Desember og juni er topp-måneder, [google docs graf](https://docs.google.com/sp
 ## innmeldte bugs:
 - "se mer" javascript-knappene f.eks. på personer med mange spørsmål lukker seg selv etter egen vilje. 
 
-
+  - download dagens storting (feiler litt på andre maskiner...) (hjemme)
 
 - [x] @mentions, #refs, [links](), **formatting**, and <del>tags</del> supported
 - [x] list syntax required (any unordered or ordered list supported)
