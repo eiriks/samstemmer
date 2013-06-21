@@ -15,19 +15,19 @@ Prosjekt for å automatisere innsamling og metode i analyser av stortingsdata
 ## Ideer og innspill fra erfarne Norske stortingsreportere
 Dette er ideer og features eksperter på politisk journalistikk har beskrevet, og som de kunne tenke seg å ha med i neste versjon av samstemmer.net
 
-o	Sammenlikne saker (sette opp mot hverandre)
-•	Særlig hvis forslagstekstene er svært like (hypotese om tyveri av saker)
-o	Tracke de 20 viktigste (eller “sine” folk, f.eks. fra et fylke)
-o	Hdo-sammenlikninger (vil ikke innlemme)
-o	Kjøns og aldersfordeling på voteringene
-o	Stemmelikhet mellom partiene (og over tid – er folk mer eller mindre enige nå en før?)
-o	Kostra-modell for data eksport
-o	Stemmelikhet basert på emneområder
-o	FB & LinkedInintegrasjon for netverk av kjennskap
-o	Identifisere provenyforslag (som pekere på framtidig politick for partier)
-o	Ansinitet I pensjonsformat (regneoppgaven en tid tilbake)
-o	Fylkesperspektiv – kan vi sammenlikne fylkesbenkene på en fornuftig mate?
-o	“liknende saker” for å finne u tom hvor konsistente MPene er
+- Sammenlikne saker (sette opp mot hverandre)
+- - Særlig hvis forslagstekstene er svært like (hypotese om tyveri av saker)
+- Tracke de 20 viktigste (eller “sine” folk, f.eks. fra et fylke)
+- Hdo-sammenlikninger (vil ikke innlemme)
+- Kjøns og aldersfordeling på voteringene
+- Stemmelikhet mellom partiene (og over tid – er folk mer eller mindre enige nå en før?)
+- Kostra-modell for data eksport
+- Stemmelikhet basert på emneområder
+- FB & LinkedInintegrasjon for netverk av kjennskap
+- Identifisere provenyforslag (som pekere på framtidig politick for partier)
+- Ansinitet I pensjonsformat (regneoppgaven en tid tilbake)
+- Fylkesperspektiv – kan vi sammenlikne fylkesbenkene på en fornuftig mate?
+- “liknende saker” for å finne u tom hvor konsistente MPene er
 
 
 
