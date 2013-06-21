@@ -12,9 +12,27 @@ Prosjekt for å automatisere innsamling og metode i analyser av stortingsdata
 * http://tablesorter.com/docs/#Examples
 * http://plugins.learningjquery.com/expander/index.html#getting-started
 
+## Ideer og innspill fra erfarne Norske stortingsreportere
+Dette er ideer og features eksperter på politisk journalistikk har beskrevet, og som de kunne tenke seg å ha med i neste versjon av samstemmer.net
+
+o	Sammenlikne saker (sette opp mot hverandre)
+•	Særlig hvis forslagstekstene er svært like (hypotese om tyveri av saker)
+o	Tracke de 20 viktigste (eller “sine” folk, f.eks. fra et fylke)
+o	Hdo-sammenlikninger (vil ikke innlemme)
+o	Kjøns og aldersfordeling på voteringene
+o	Stemmelikhet mellom partiene (og over tid – er folk mer eller mindre enige nå en før?)
+o	Kostra-modell for data eksport
+o	Stemmelikhet basert på emneområder
+o	FB & LinkedInintegrasjon for netverk av kjennskap
+o	Identifisere provenyforslag (som pekere på framtidig politick for partier)
+o	Ansinitet I pensjonsformat (regneoppgaven en tid tilbake)
+o	Fylkesperspektiv – kan vi sammenlikne fylkesbenkene på en fornuftig mate?
+o	“liknende saker” for å finne u tom hvor konsistente MPene er
 
 
-### ideer til videreutvikling:
+
+
+### andre ideer til videreutvikling:
 
 
 - [denne](https://docs.google.com/spreadsheet/ccc?key=0AgAXDJuvjySMdDlVOWJIclRRTkhPTmxIRjVRU01jMEE):  beviser at [denne](http://www.nrk.no/valg2013/_-regjeringen-tommer-skuffene-1.11038459) er vinklet helt mot det dataene sier, og at det enten er feil i spørringen min* eller så tabber intervjuobjektene seg ut på overdreven negativ omtale av den vanlige tralten på Tinget på for-sommer'n.
@@ -36,6 +54,9 @@ Prosjekt for å automatisere innsamling og metode i analyser av stortingsdata
 
 Desember og juni er topp-måneder, [google docs graf](https://docs.google.com/spreadsheet/ccc?key=0AgAXDJuvjySMdDlVOWJIclRRTkhPTmxIRjVRU01jMEE&usp=sharing) så ja, kanskje? Hvordan kan vi finne ut om disse toppene inneholder ubehageligheter for koalisjonene?
 
+
+## hva blir oposisjoenens kommende politikk/budsjett?
+> SELECT * FROM `fylkesperspektiv_sporsmal` WHERE `tittel` LIKE '%proveny%'
 
 
 
