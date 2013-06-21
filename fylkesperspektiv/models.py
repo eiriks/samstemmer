@@ -16,6 +16,7 @@
 
 
 from django.db import models
+from django.utils.translation import gettext as _
 
 class Fylker(models.Model):
     id = models.CharField(max_length=6, primary_key=True)
@@ -365,6 +366,31 @@ class Fylkeikhet(models.Model):
 # LIX float, dato?, materiale
 # likhet avg(parti), [person, parti, materiale, likhet]
 # likhet avg(fylke), [person, fylke, materiale, likhet]
+
+
+# class PartiHolmgang(models.Model):
+#     """dette er den modellen informantene etterspurte mest,
+#     her finner vi ut av 
+#     1 hvor stor avstand partiene og dermed blokkene har, og
+#     2 om avstanden søker eller minsker (altså blir det viktig å få med i hvilken grad dette øker eller minster over tid.) 
+#     Tidshorisont for materialet burde altså inngå i modellen.
+
+#     Denne er sålangt ikke implementert... 
+
+    
+#     """
+#     parti1 = models.ForeignKey(Partier, related_name='PartiHolmgang_parti1')
+#     parti2 = models.ForeignKey(Partier, related_name='PartiHolmgang_parti2')
+#     prosentlikhet = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+#     materiale = models.CharField(max_length=300, blank=True, null=True) # eg: "35 avstemninger"
+#     class Meta:
+#         verbose_name = _('PartiHolmgang')
+#         verbose_name_plural = _('PartiHolmganger')
+#     def __unicode__(self):
+#         pass
+    
+#         #return u'%s på %s' % (self.representant_id, self.votering_avgitt) 
+
 
 
 # regjering finnes ikke i APIet, men ser omtrent slik ut: 

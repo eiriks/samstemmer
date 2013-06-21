@@ -356,6 +356,11 @@ def sak(request):
     return render_to_response('fylkesperspektiv/sak.html', {'saker': saker })
 
 def sak_detail(request, sak_id):
+    #
+    # voteringer over denne saken
+    # vis tydelig represententer/partier som 
+    # går mot strømmen/er splittet
+    # 
     sak = Saker.objects.get(id=sak_id)
     return render_to_response('fylkesperspektiv/sak_detail.html', {'sak': sak})
 
